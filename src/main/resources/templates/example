@@ -1,0 +1,82 @@
+function fetchRequests() {
+    fetch('/mainpage/requestsList')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const requestList = document.getElementById('request-list');
+            requestList.innerHTML = '';
+
+            data.forEach(user => {
+                const listItem = document.createElement('li');
+                const userContainer = document.createElement('div');
+                userContainer.className = 'user-name-container';
+
+                const userName = document.createElement('div');
+                userName.className = 'user-name';
+                userName.textContent = user.name;
+
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.innerHTML = `
+                    <strong>Country:</strong> ${user.country}<br>
+                    <strong>English Level:</strong> ${user.englishLvl}<br>
+                    <strong>Main Career:</strong> ${user.mainCareer}<br>
+                    <strong>All Careers:</strong> ${user.allCareers}<br>
+                    <strong>Playing Hours:</strong> ${user.playingHours}<br>
+                    <strong>Playing Days:</strong> ${user.playingDays}<br>
+                    <strong>Difficulty:</strong> ${user.difficulty}<br>
+                    <strong>Game Mode:</strong> ${user.gameMode}
+                `;
+
+
+                userName.appendChild(tooltip);
+                userName.addEventListener('mouseenter', (event) => {
+                    tooltip.classList.add('visible');
+                    const rect = event.target.getBoundingClientRect();
+                    tooltip.style.top = `${rect.top + window.scrollY}px`;
+                    tooltip.style.left = `${rect.right + 10}px`;
+                });
+                userName.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('visible');
+                });
+
+
+                const approveButton = document.createElement('button');
+                approveButton.className = 'approve-btn';
+                approveButton.textContent = 'Add';
+                approveButton.style.display = 'inline-block';
+                approveButton.addEventListener('click', () => {
+                    addMemberToTeam(user.name);
+                });
+
+
+                const rejectButton = document.createElement('button');
+                rejectButton.className = 'reject-btn';
+                rejectButton.textContent = 'Reject';
+                rejectButton.style.display = 'inline-block';
+                rejectButton.addEventListener('click', () => {
+                    rejectUser(user.name);
+                });
+
+
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.style.display = 'flex';
+                buttonsContainer.style.width = '100%';
+                buttonsContainer.appendChild(approveButton);
+                buttonsContainer.appendChild(rejectButton);
+
+
+                userContainer.appendChild(userName);
+                userContainer.appendChild(buttonsContainer);
+                listItem.appendChild(userContainer);
+                requestList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
