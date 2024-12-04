@@ -29,6 +29,12 @@ fetch('http://localhost:8080/getallproducts')
     })
 })
 
+    document.getElementById('secondPageBtn').addEventListener('click', function() {
+            const userId = 123;  // Пример user_id, замените на нужный вам ID
+            window.location.href = '/secondpage/' + userId;
+        });
+
+
 // async function fetchData() {
 //     try {
 //         const response = await fetch('http://localhost:8080/getobjects'); // Надсилання GET-запиту
