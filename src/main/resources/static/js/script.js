@@ -1,7 +1,8 @@
 // id, category, description, image, price, title
 
 
-fetch('http://localhost:3001/items')
+// fetch('http://localhost:3001/items')
+fetch('http://localhost:8080/getallproducts')
 .then(res => res.json())
 .then(json => {
     const itemCatalog = document.querySelector('.item-catalog');
