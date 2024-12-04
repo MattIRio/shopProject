@@ -1,12 +1,43 @@
 * {
     margin: 0;
     padding: 0;
-    
+
 }
 
-p{
-    font-size: 100px;
-    line-height: 100px;
- height: 100%;
+p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+
+}
+
+.item-catalog {
+    display: flex;
+    width: 90%;
+    margin: 0 auto;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+li {
+    flex: 3;
+    list-style: none;
+    text-align: center;
+    border: solid, 2px, #000;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px, 20px;
+
+}
+
+.item-title {}
+
+.item-price {}
+
+.item-image {
+    height: 30vw;
+    width: auto;
+    justify-content: center;
 
 }

@@ -1,0 +1,22 @@
+{
+  "name": "shop",
+  "version": "1.0.0",
+  "description": "shop",
+  "main": "index.js",
+  "scripts": {
+    "start": "json-server --watch package.json --port 3001"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolKuchyn/shopProject.git"
+  },
+  "keywords": [
+    "shop"
+  ],
+  "author": "me",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VolKuchyn/shopProject/issues"
+  },
+  "homepage": "https://github.com/VolKuchyn/shopProject#readme"
+}
