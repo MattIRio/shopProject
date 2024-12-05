@@ -15,7 +15,7 @@ public class ProductModel {
 
     @Id
     @Column(name = "uniq_id")
-    private String uniq_id;
+    private String uniqId;
 
     @Column(name = "product_name")
     private String product_name;
@@ -30,10 +30,11 @@ public class ProductModel {
     @Column(name = "brand")
     private String brand;
 
+
     public ProductModel(){}
 
-    public ProductModel(String uniq_id, String product_name, int retail_price, int discounted_price, String image, String description, String brand) {
-        this.uniq_id = uniq_id;
+    public ProductModel(String uniqId, String product_name, int retail_price, int discounted_price, String image, String description, String brand) {
+        this.uniqId = uniqId;
         this.product_name = product_name;
         this.retail_price = retail_price;
         this.discounted_price = discounted_price;
