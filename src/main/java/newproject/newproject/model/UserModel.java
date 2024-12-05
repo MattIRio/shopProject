@@ -20,7 +20,9 @@ public class UserModel {
 
     private String password;
 
-    
+    private String email;
+
+    @ManyToMany
     @JoinTable(
             name = "user_bought_products",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -28,7 +30,7 @@ public class UserModel {
     )
     private List<ProductModel> boughtProducts;
 
-
+    @ManyToMany
     @JoinTable(
             name = "user_ordered_products",
             joinColumns = @JoinColumn(name = "user_id"),

@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ProductModel {
 
     @Id
-    @Column(name = "uniq_id")
+    @Column(name = "uniq_id", unique = true)
     private String uniqId;
 
     @Column(name = "product_name")

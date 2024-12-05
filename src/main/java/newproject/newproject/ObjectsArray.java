@@ -62,9 +62,7 @@ import java.util.List;
     @Transactional
     @GetMapping("/userinfo/{user_id}")
     public ResponseEntity<String> userinfo(@PathVariable int user_id){
-            UserModel user = usersRepository.findById(user_id).get();
-        System.out.println(user.getBoughtProducts().get(0).getBrand());
-            return ResponseEntity.ok(user.getBoughtProducts().get(0).getBrand());
+            return ResponseEntity.ok(usersRepository.findById(user_id).get().getBoughtProducts().get(0).getBrand());
     }
 
 
