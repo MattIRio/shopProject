@@ -1,38 +1,37 @@
 // id, category, description, image, price, title
 
+// fetch('http://localhost:8080/getallproducts')
+// // fetch('http://localhost:3000/items')
+// .then(res => res.json())
+// .then(json => {
+//     const itemCatalog = document.querySelector('.item-catalog');
+//     json.forEach((item) => {
+//         //creating elements
+//         const itemWrapper = document.createElement("li");
+//         const itemTitle = document.createElement('h4');
+//         const itemPrice = document.createElement("p");
+//         const itemImage = document.createElement("img");
+//         //appending elements
+//         itemTitle.innerHTML = item.product_name;
+//         itemPrice.innerHTML = item.retail_price;
 
-// fetch('http://localhost:3001/items')
-fetch('http://localhost:8080/getallproducts')
-.then(res => res.json())
-.then(json => {
-    const itemCatalog = document.querySelector('.item-catalog');
-    json.forEach((item) => {
-        //creating elements
-        const itemWrapper = document.createElement("li");
-        const itemTitle = document.createElement('h4');
-        const itemPrice = document.createElement("p");
-        const itemImage = document.createElement("img");
-        //appending elements
-        itemTitle.innerHTML = item.product_name;
-        itemPrice.innerHTML = item.retail_price;
+//         let imageArray = JSON.parse(item.image)
+//         itemImage.src = imageArray[0];
+//         //adding classes
+//         itemTitle.classList.add('item-title');
+//         itemPrice.classList.add('item-price');
+//         itemImage.classList.add('item-image');
+//         //inserting
+//         itemWrapper.append(itemTitle, itemImage, itemPrice);
+//         itemCatalog.appendChild(itemWrapper);
 
-        let imageArray = JSON.parse(item.image)
-        itemImage.src = imageArray[0];
-        //adding classes
-        itemTitle.classList.add('item-title');
-        itemPrice.classList.add('item-price');
-        itemImage.classList.add('item-image');
-        //inserting
-        itemWrapper.append(itemTitle, itemImage, itemPrice);
-        itemCatalog.appendChild(itemWrapper);
+//     })
+// })
 
-    })
-})
-
-    document.getElementById('secondPageBtn').addEventListener('click', function() {
-            const userId = 123;  // Пример user_id, замените на нужный вам ID
-            window.location.href = '/secondpage/' + userId;
-        });
+//     document.getElementById('secondPageBtn').addEventListener('click', function() {
+//             const userId = 123;  // Пример user_id, замените на нужный вам ID
+//             window.location.href = '/secondpage/' + userId;
+//         });
 
 
 // async function fetchData() {
@@ -64,4 +63,19 @@ fetch('http://localhost:8080/getallproducts')
 //     }
 // }
 
+const obj1 = {
+    name: "lalala",
+}
 
+const obj2 = {
+    name: "dick",
+    bonus(a, b, c) {
+        console.log(a, b, c);
+        console.log(this.name);
+
+    },
+
+
+}
+
+obj2.bonus.call(obj1, 1, 2, 3);

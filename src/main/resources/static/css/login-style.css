@@ -1,0 +1,101 @@
+@font-face {
+    font-family: 'Geomanist';
+    src: url('fonts/Geomanist-Regular.woff') format('woff2'),
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #3a77ff;
+    font-family: 'Geomanist', sans-serif;
+}
+
+.userform-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 6vw;
+
+}
+
+.formclass {
+
+    background-color: #ffffff;
+    width: 500px;
+    text-align: center;
+    padding: 40px 0vw;
+    border-radius: 4px;
+
+}
+
+.title {
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+#userForm input {
+    width: 70%;
+    height: 40px;
+    font-size: 20px;
+    border: none;
+    background-color: #f2f4f5;
+    border-radius: 4px;
+}
+
+#userForm p {
+    text-align: left;
+    transform: translateX(15%);
+    padding-bottom: 10px;
+}
+
+#userForm button {
+    background-color: #002F34;
+    color: white;
+    cursor: pointer;
+    border: 4px solid #002F34;
+    width: 70%;
+    height: 50px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+#userForm button:hover {
+    background-color: white;
+    color: #002F34;
+
+}
+
+.line {
+    height: 1px;
+    margin: 40px 15%;
+    border-bottom: 0.01vw solid #002F34;
+
+    /* transform: translateX(15%); */
+}
+
+.buttons-with-icon{
+    display: flex;
+    align-items: center; /* Центрування зображення і тексту по вертикалі */
+    justify-content: center;
+}
+
+.button-with-icon{
+    display: flex;
+    align-items: center; /* Центрування зображення і тексту по вертикалі */
+    justify-content: center;
+    color: #002F34;
+    cursor: pointer;
+    border: 4px solid #002F34;
+    width: 70%;
+    height: 50px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+
+}
