@@ -29,13 +29,17 @@ public class SecurityConfiguration{
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(registry -> {
-<<<<<<< Updated upstream
+
+                    registry.requestMatchers("/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html").permitAll();
+
+
                     registry.requestMatchers("/mainpage").permitAll();
+
                     registry.requestMatchers("/profileform", "/mainpage").authenticated();
-=======
+
                     registry.anyRequest().permitAll();
 
->>>>>>> Stashed changes
+
                 })
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -45,7 +49,7 @@ public class SecurityConfiguration{
                 )
                 .formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer
-                            .loginPage("/login")
+                            .loginPage("/loginPage")
                             .usernameParameter("email")
                             .failureUrl("/login?error=true")
                             .successHandler(new AuthenticationSuccessHandler())
@@ -54,7 +58,7 @@ public class SecurityConfiguration{
 
                 })
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
+                        .loginPage("/oauth-login")
                         .defaultSuccessUrl("/profileform", true)
                 )
                 .build();

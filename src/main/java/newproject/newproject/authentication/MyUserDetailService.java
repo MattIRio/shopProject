@@ -26,12 +26,11 @@ public class MyUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UserModel> user = usersRepository.findByEmail(email);
-        if (user.isPresent()) {
-            var userObj = user.get();
+        UserModel user = usersRepository.findByEmail(email);
+        if (user != null) {
             return User.builder()
-                    .username(userObj.getEmail())
-                    .password(userObj.getPassword())
+                    .username(user.getEmail())
+                    .password(user.getPassword())
                     .build();
         } else {
 
