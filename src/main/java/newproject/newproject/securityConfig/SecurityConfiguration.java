@@ -29,8 +29,13 @@ public class SecurityConfiguration{
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(registry -> {
+<<<<<<< Updated upstream
                     registry.requestMatchers("/mainpage").permitAll();
                     registry.requestMatchers("/profileform", "/mainpage").authenticated();
+=======
+                    registry.anyRequest().permitAll();
+
+>>>>>>> Stashed changes
                 })
                 .logout(logout -> logout
                         .logoutUrl("/logout")
