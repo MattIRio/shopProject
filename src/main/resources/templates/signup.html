@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/signup-style.css">
+    <title>Registration</title>
+</head>
+<body>
+    <div class="userform-wrapper">
+        <div class="formclass">
+            <p class="title">Sign Up</p>
+            <div class="line" style="margin-top: 0px;"></div>
+            <form id="userForm">
+                <p style="margin-top: 10px;">E-mail</p>
+                <label for="email"></label>
+                <input type="text" id="email" name="email" required>
+                <div class="email-error-text">Enter valid e-mail!</div>
+                <p style="margin-top: 10px;">Password</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" required>
+                <div class="password-error-text">Enter valid password</div>
+                <br>
+                <div class="passCondition" style="margin-top: 10px;">Your password must contain:</div>
+                <div class="passCondition">—  9 or more characters</div>
+                <div class="passCondition">—  A capital letter</div>
+                <div class="passCondition">—  Lowercase letter</div>
+                <div class="passCondition">—  At least one number</div>
+
+                <button type="submit">Sign up</button>
+            </form>
+            <div class="line"></div>
+            <div class="buttons-with-icon">
+                <button class="button-with-icon"><img src="../static/css/img/github.png" alt="icon"
+                    style="width: 30px; height: 30px; margin-right: 8px;">
+                Continue with GitHub</button>
+            <button class="button-with-icon"><img src="../static/css/img/google.webp" alt="icon"
+                style="width: 30px; height: 30px; margin-right: 8px;">
+            Continue with GitHub</button>
+            </div>
+
+        </div>
+
+    </div>
+    
+
+    <!-- Для роботи з динамічним js -->
+   <script src="../static/js/registration.js"></script>
+
+   <!-- Для роботи сервера -->
+    <!-- <script src="/js/script.js"></script> -->
+</body>
+</html>

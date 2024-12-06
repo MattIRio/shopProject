@@ -9,6 +9,10 @@
     box-sizing: border-box;
 }
 
+p{
+    margin: 0;
+}
+
 body {
     background-color: #3a77ff;
     font-family: 'Geomanist', sans-serif;
@@ -109,10 +113,18 @@ body {
     border: 5px solid #002F34;
 }
 
-.sign-up-text {
-    color: #002F34;
+.passCondition {
+    padding-bottom: 5px;
+    font-size: 13px;
+    text-align: left;
+    transform: translateX(15%);
 }
 
-.sign-up-text a{
-    color: #002F34;
+.email-error-text,
+.password-error-text {
+    text-align: left;
+    transform: translateX(15%);
+    display: none;
+    color: red;
+
 }
