@@ -23,9 +23,9 @@ public class ProductModel {
     private Integer  retail_price;
     @Column(name = "discounted_price")
     private Integer  discounted_price;
-    @Column(name = "image")
+    @Column(name = "image", columnDefinition = "text")
     private String image;
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
     @Column(name = "brand")
     private String brand;

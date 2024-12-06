@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UsersRepository extends JpaRepository<UserModel, String> {
-    Optional<UserModel> findById(Integer id);
-    Optional<UserModel> findByEmail(String email);
+    UserModel findById(Integer id);
+    UserModel findByEmail(String email);
 
 
 }

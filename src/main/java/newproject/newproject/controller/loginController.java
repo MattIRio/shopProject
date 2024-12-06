@@ -1,0 +1,17 @@
+package newproject.newproject.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class loginController {
+    @GetMapping("/loginPage")
+    public String loginPage(Model model, @RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("wro", "Wrong email or password");
+        }
+        return "login";
+    }
+}
