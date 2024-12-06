@@ -63,19 +63,19 @@
 //     }
 // }
 
-const obj1 = {
-    name: "lalala",
-}
+// const obj1 = {
+//     name: "lalala",
+// }
 
-const obj2 = {
-    name: "dick",
-    bonus(a, b, c) {
-        console.log(a, b, c);
-        console.log(this.name);
+// const obj2 = {
+//     name: "dick",
+//     bonus(a, b, c) {
+//         console.log(a, b, c);
+//         console.log(this.name);
 
-    },
+//     },
 
 
-}
+// }
 
-obj2.bonus.call(obj1, 1, 2, 3);
+// obj2.bonus.call(obj1, 1, 2, 3);

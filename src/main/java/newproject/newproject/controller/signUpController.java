@@ -31,6 +31,7 @@ public class signUpController {
     public String createUser(@RequestBody UserModel userModel,
                              RedirectAttributes redirectAttributes) {
             UserModel localUser = new UserModel();
+            System.out.println("started");
         if ( usersRepository.findByEmail(userModel.getEmail()) != null) {
             redirectAttributes.addFlashAttribute("EmailExist", "User with such email already exist");
             return "redirect:/register";
