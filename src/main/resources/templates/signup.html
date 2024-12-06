@@ -3,20 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="_csrf" content="${_csrf.token}" />
-    <meta name="_csrf_header" content="${_csrf.headerName}" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <link rel="stylesheet" href="/css/signup-style.css">
     <title>Registration</title>
 
-    <script>
-        // Получаем CSRF Header и Token из мета-тегов и сохраняем их в глобальных переменных
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 
-        window.csrfHeader = csrfHeader;
-        window.csrfToken = csrfToken;
-    </script>
 </head>
 <body>
 <div class="userform-wrapper">
@@ -24,6 +17,7 @@
         <p class="title">Sign Up</p>
         <div class="line" style="margin-top: 0px;"></div>
         <form id="userForm">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <p style="margin-top: 10px;">E-mail</p>
             <label for="email"></label>
             <input type="text" id="email" name="email" required>

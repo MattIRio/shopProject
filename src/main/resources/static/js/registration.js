@@ -1,3 +1,9 @@
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+console.log('CSRF Token12312:', csrfToken);
+console.log('CSRF Header123123:', csrfHeader);
+
 document.getElementById('userForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -39,18 +45,21 @@ document.getElementById('userForm').addEventListener('submit', function (event) 
         };
 
         console.log(formData);
-        console.log('CSRF Header:', window.csrfHeader); // Для отладки
-        console.log('CSRF Token:', window.csrfToken); // Для отладки
 
+console.log('CSRF Token12312:', csrfToken);
         // Отправка данных через POST-запрос
-        axios.post('/signUpUser', formData, {
+        fetch('/signUpUser', {
+            method: 'POST',
             headers: {
-                [window.csrfHeader]: window.csrfToken, // Убедитесь, что здесь всё корректно
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken // Убедитесь, что CSRF-токен правильный
             },
-            withCredentials: true
+            body: JSON.stringify(formData), // Преобразуем данные в строку JSON
+            credentials: 'include' // Убедитесь, что данные с куки отправляются с запросом
         })
-        .then(response => {
-            console.log('Данные успешно отправлены:', response.data);
+        .then(response => response.json()) // Обрабатываем ответ, преобразуя его в JSON
+        .then(data => {
+            console.log('Данные успешно отправлены:', data);
         })
         .catch(error => {
             console.error('Произошла ошибка при отправке данных:', error);
