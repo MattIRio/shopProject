@@ -34,7 +34,7 @@ body {
 
 .title {
     font-size: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 #userForm input {
@@ -115,4 +115,4 @@ body {
 
 .sign-up-text a{
     color: #002F34;
-}
+
