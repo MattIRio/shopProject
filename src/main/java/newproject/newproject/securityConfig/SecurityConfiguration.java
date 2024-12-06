@@ -30,7 +30,7 @@ public class SecurityConfiguration{
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(registry -> {
 
-                    registry.requestMatchers("/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html").permitAll();
+                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html").permitAll();
 
 
                     registry.requestMatchers("/mainpage").permitAll();
