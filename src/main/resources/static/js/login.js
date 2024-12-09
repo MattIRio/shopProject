@@ -1,57 +1,65 @@
-const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+const form = document.querySelector('#userForm');
 
-console.log('CSRF Token12312:', csrfToken);
-console.log('CSRF Header123123:', csrfHeader);
+form.addEventListener('submit', function (event) {
+    event.preventDefault(); // Запобігаємо стандартному відправленню форми
 
-document.getElementById('userForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-
+    // Отримуємо значення полів email і password
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
 
+    // Шаблони для перевірки
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{9,}$/;
 
+    // Логіка перевірки email
     if (!emailPattern.test(emailInput.value)) {
-        this.querySelector('.email-error-text').style.display = 'block';
+        emailInput.nextElementSibling.style.display = 'block'; // Показати повідомлення про помилку
     } else {
-        this.querySelector('.email-error-text').style.display = 'none';
+        emailInput.nextElementSibling.style.display = 'none'; // Сховати повідомлення про помилку
     }
 
+    // Логіка перевірки пароля
     if (!passwordPattern.test(passwordInput.value)) {
-        this.querySelector('.password-error-text').style.display = 'block';
-        console.log("Неправильный пароль");
+        passwordInput.nextElementSibling.style.display = 'block'; // Показати повідомлення про помилку
+        console.log("Неправильний пароль");
     } else {
-        this.querySelector('.password-error-text').style.display = 'none';
+        passwordInput.nextElementSibling.style.display = 'none'; // Сховати повідомлення про помилку
     }
 
-    if (passwordPattern.test(passwordInput.value) && emailPattern.test(emailInput.value)) {
-        this.querySelector('.email-error-text').style.display = 'none';
-        this.querySelector('.password-error-text').style.display = 'none';
+    // Якщо дані валідні, виконуємо відправку форми
+    if (emailPattern.test(emailInput.value) && passwordPattern.test(passwordInput.value)) {
+        // Створюємо FormData з форми
+        const formData = new FormData(form);
 
-        const formData = {
-            email: emailInput.value,
-            password: passwordInput.value,
-        };
+        // Лог для перевірки значень
+        formData.forEach((value, key) => {
+            console.log(key, value); // Виводимо значення для email та password
+        });
 
+        // Отримуємо CSRF токен та заголовок
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        // Виконуємо запит на сервер
         fetch('/loginPage', {
             method: 'POST',
+            body: formData,
             headers: {
-                'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken // 
-            },
-            body: JSON.stringify(formData),
-            credentials: 'include' 
+                [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+            }
         })
-            .then(data => {
-                console.log('Дані отримані:', data);
-                // window.location.href = data.url;
-            })
-            .catch(error => {
-                console.error('Произошла ошибка при отправке данных:', error);
-            });
-
+        
+        .then(response => {
+            if (response.ok) {
+                // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+                console.log('Login successful');
+            } else {
+                // Обробка помилок
+                console.log('Login failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch', error);
+        });
     }
-
-})
+});

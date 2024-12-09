@@ -42,7 +42,7 @@ public class SecurityConfiguration{
                 })
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/loginPage?logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )
@@ -50,7 +50,7 @@ public class SecurityConfiguration{
                     httpSecurityFormLoginConfigurer
                             .loginPage("/loginPage")
                             .usernameParameter("email")
-                            .failureUrl("/login?error=true")
+                            .failureUrl("/loginPage?error=true")
                             .successHandler(new AuthenticationSuccessHandler())
                             .defaultSuccessUrl("/profileform", true)
                             .permitAll();

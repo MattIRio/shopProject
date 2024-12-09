@@ -51,6 +51,7 @@ document.getElementById('userForm').addEventListener('submit', function (event) 
             .then(data => {
                 console.log('Данные успешно отправлены:', data);
                 window.location.href = data.url;
+                alert('You are registered!')
             })
             .catch(error => {
                 console.error('Произошла ошибка при отправке данных:', error);
