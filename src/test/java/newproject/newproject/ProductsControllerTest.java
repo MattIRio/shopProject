@@ -1,6 +1,7 @@
 package newproject.newproject;
 
 import jakarta.transaction.Transactional;
+import newproject.newproject.controller.ProductsController;
 import newproject.newproject.repositories.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ObjectsArrayTest {
+class ProductsControllerTest {
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
-    private ObjectsArray objectsArray;
+    private ProductsController productsController;
 
     @Test
     void userInfoTest(){
-        ResponseEntity<String> response = objectsArray.userinfo(3);
+        ResponseEntity<String> response = productsController.userinfo(3);
 
         assertEquals("Alisha", response.getBody());
 

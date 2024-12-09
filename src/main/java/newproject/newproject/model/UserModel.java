@@ -22,6 +22,10 @@ public class UserModel {
 
     private String email;
 
+    public enum UserType {
+        BUYER, SELLER
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_bought_products",
@@ -37,6 +41,14 @@ public class UserModel {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<ProductModel> orderedProducts;
+
+    @OneToMany
+    @JoinTable(
+            name = "user_published_products",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<ProductModel> publishedProducts;
 
 
 }

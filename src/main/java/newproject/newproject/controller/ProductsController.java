@@ -1,23 +1,22 @@
-package newproject.newproject;
+package newproject.newproject.controller;
 
 import jakarta.transaction.Transactional;
 import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.UUID;
 
 
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
-    public class ObjectsArray {
+    public class ProductsController {
     @Autowired
     ProductRepository productRepository;
     @Autowired
@@ -25,18 +24,23 @@ import java.util.List;
 
         @GetMapping("/getallproducts")
         public ResponseEntity<List<ProductModel>> allProducts() {
-
-
             List<ProductModel> productList = productRepository.findAll();
-
             return ResponseEntity.ok(productList.subList(0, 20));
         }
 
-        @PutMapping("/saveproduct")
-    public ResponseEntity<String> saveProduct(){
-            productRepository.save(new ProductModel("awdaw12", "Alisha Solid Women's Cycling Shorts", 999, 379, "url_to_image", "Описание продукта", "awdaw"));
+        @PutMapping("/")
+        public ResponseEntity<String> saveProduct(@RequestBody ProductModel product){
 
-            return ResponseEntity.ok("saved");
+            ProductModel productModel = new ProductModel();
+            productModel.setProductName(product.getProductName());
+            productModel.setBrand(product.getBrand());
+            productModel.setImage(product.getImage());
+            productModel.setDescription(product.getDescription());
+            productModel.setRetailPrice(product.getRetailPrice());
+            productModel.setDiscountedPrice(product.getDiscountedPrice());
+
+            productRepository.save(productModel);
+            return ResponseEntity.ok("Product saved");
         }
 
     @PutMapping("/saveuser")
@@ -53,7 +57,7 @@ import java.util.List;
         }
 
 
-        user.getBoughtProducts().add(productRepository.findByUniqId("c2d766ca982eca8304150849735ffef9").get());
+        user.getBoughtProducts().add(productRepository.findByUniqId(UUID.fromString("c2d766ca982eca8304150849735ffef9")).get());
 
         usersRepository.save(user);
         return ResponseEntity.ok("saved");

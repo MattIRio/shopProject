@@ -14,30 +14,33 @@ import java.util.UUID;
 public class ProductModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uniq_id", unique = true)
-    private String uniqId;
+    private UUID uniqId;;
 
     @Column(name = "product_name")
-    private String product_name;
+    private String productName;
     @Column(name = "retail_price")
-    private Integer  retail_price;
+    private Integer  retailPrice;
     @Column(name = "discounted_price")
-    private Integer  discounted_price;
+    private Integer  discountedPrice;
     @Column(name = "image", columnDefinition = "text")
     private String image;
     @Column(name = "description", columnDefinition = "text")
     private String description;
     @Column(name = "brand")
     private String brand;
+    @Column(name = "sellerId")
+    private Integer sellerId;
 
 
     public ProductModel(){}
 
-    public ProductModel(String uniqId, String product_name, int retail_price, int discounted_price, String image, String description, String brand) {
+    public ProductModel(UUID uniqId, String productName, int retailPrice, int discountedPrice, String image, String description, String brand) {
         this.uniqId = uniqId;
-        this.product_name = product_name;
-        this.retail_price = retail_price;
-        this.discounted_price = discounted_price;
+        this.productName = productName;
+        this.retailPrice = retailPrice;
+        this.discountedPrice = discountedPrice;
         this.image = image;
         this.description = description;
         this.brand = brand;

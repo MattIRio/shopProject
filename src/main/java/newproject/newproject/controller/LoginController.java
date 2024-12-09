@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class loginController {
+public class LoginController {
     @GetMapping("/loginPage")
     public String loginPage(Model model, @RequestParam(value = "error", required = false) String error) {
         if (error != null) {
