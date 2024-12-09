@@ -41,7 +41,7 @@ class signUpControllerTest {
     @Test
     void createUser_NullUserModel() {
         String result = signUpController.createUser(null, redirectAttributes);
-        assertEquals("redirect:/register", result);
+        assertEquals("redirect:/signUpPage", result);
     }
 
     @Test
@@ -54,7 +54,7 @@ class signUpControllerTest {
 
         String result = signUpController.createUser(user, redirectAttributes);
 
-        assertEquals("redirect:/register", result);
+        assertEquals("redirect:/signUpPage", result);
     }
 
     @Test
@@ -68,6 +68,6 @@ class signUpControllerTest {
         String result = signUpController.createUser(user, redirectAttributes);
 
         Mockito.verify(redirectAttributes).addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
-        assertEquals("redirect:/register", result);
+        assertEquals("redirect:/signUpPage", result);
     }
 }

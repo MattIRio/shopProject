@@ -115,4 +115,12 @@ body {
 
 .sign-up-text a{
     color: #002F34;
+}
 
+.email-error-text,
+.password-error-text {
+    text-align: left;
+    transform: translateX(15%);
+    display: none;
+    color: red;
+}

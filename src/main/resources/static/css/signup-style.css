@@ -24,16 +24,26 @@ body {
     align-items: center;
     margin-top: 6vw;
 
+
 }
 
-.formclass {
 
+
+.formclass {
+    position: relative;
     background-color: #ffffff;
     width: 500px;
     text-align: center;
     padding: 40px 0vw;
     border-radius: 8px;
+}
 
+#arrow-back {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 30px;
+    
 }
 
 .title {
@@ -126,5 +136,4 @@ body {
     transform: translateX(15%);
     display: none;
     color: red;
-
 }

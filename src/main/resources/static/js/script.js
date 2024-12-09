@@ -1,32 +1,34 @@
 // id, category, description, image, price, title
 
-// fetch('http://localhost:8080/getallproducts')
-// // fetch('http://localhost:3000/items')
-// .then(res => res.json())
-// .then(json => {
-//     const itemCatalog = document.querySelector('.item-catalog');
-//     json.forEach((item) => {
-//         //creating elements
-//         const itemWrapper = document.createElement("li");
-//         const itemTitle = document.createElement('h4');
-//         const itemPrice = document.createElement("p");
-//         const itemImage = document.createElement("img");
-//         //appending elements
-//         itemTitle.innerHTML = item.product_name;
-//         itemPrice.innerHTML = item.retail_price;
 
-//         let imageArray = JSON.parse(item.image)
-//         itemImage.src = imageArray[0];
-//         //adding classes
-//         itemTitle.classList.add('item-title');
-//         itemPrice.classList.add('item-price');
-//         itemImage.classList.add('item-image');
-//         //inserting
-//         itemWrapper.append(itemTitle, itemImage, itemPrice);
-//         itemCatalog.appendChild(itemWrapper);
 
-//     })
-// })
+fetch('http://localhost:8080/getallproducts')
+// fetch('http://localhost:3000/items')
+.then(res => res.json())
+.then(json => {
+    const itemCatalog = document.querySelector('.item-catalog');
+    json.forEach((item) => {
+        //creating elements
+        const itemWrapper = document.createElement("li");
+        const itemTitle = document.createElement('h4');
+        const itemPrice = document.createElement("p");
+        const itemImage = document.createElement("img");
+        //appending elements
+        itemTitle.innerHTML = item.product_name;
+        itemPrice.innerHTML = item.retail_price;
+
+        let imageArray = JSON.parse(item.image)
+        itemImage.src = imageArray[0];
+        //adding classes
+        itemTitle.classList.add('item-title');
+        itemPrice.classList.add('item-price');
+        itemImage.classList.add('item-image');
+        //inserting
+        itemWrapper.append(itemTitle, itemImage, itemPrice);
+        itemCatalog.appendChild(itemWrapper);
+
+    })
+})
 
 //     document.getElementById('secondPageBtn').addEventListener('click', function() {
 //             const userId = 123;  // Пример user_id, замените на нужный вам ID

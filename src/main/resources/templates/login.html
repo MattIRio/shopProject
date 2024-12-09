@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- Для роботи з динамічним css -->
-<!--    <link rel="stylesheet" href="../static/css/login-style.css">-->
-
+   <link rel="stylesheet" href="../static/css/login-style.css">
     <!-- Для роботи сервера -->
      <link rel="stylesheet" href="/css/login-style.css">
     <title>Login Page</title>
@@ -20,30 +21,41 @@
             <div class="line" style="margin-top: 0px;"></div>
             <form id="userForm">
                 <p>E-mail</p>
-                <label for="name"></label>
-                <input type="text" id="name" name="name" required><br><br>
-                <p>Password</p>
                 <label for="email"></label>
-                <input type="password" id="email" name="email" required><br><br>
-
+                <input type="text" id="email" name="email" required>
+                <div class="email-error-text" style="display: none;">Enter valid e-mail</div>
+                <div style="height: 20px;"></div>
+                <p>Password</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" required>
+                <div class="password-error-text" style="display: none;">Enter valid password</div>
                 <button type="submit">Log in</button>
             </form>
             <div class="line"></div>
             <div class="buttons-with-icon">
-                <button class="button-with-icon"><img src="css/img/github.png" alt="icon"
+                <button class="button-with-icon"><img src="../static/css/img/github.png" alt="icon"
                     style="width: 30px; height: 30px; margin-right: 8px;">
                 Continue with GitHub</button>
-            <button class="button-with-icon"><img src="css/img/google.webp" alt="icon"
+            <button class="button-with-icon"><img src="../static/css/img/google.webp" alt="icon"
                 style="width: 30px; height: 30px; margin-right: 8px;">
             Continue with GitHub</button>
             </div>
 
+            <!-- <p class="sign-up-text">Don't have an account? <a href="signup.html"><b>Sign up!</b></a></p> -->
+
+                <!-- Для роботи сервера -->
             <p class="sign-up-text">Don't have an account? <a href="/signUpPage"><b>Sign up!</b></a></p>
 
            
         </div>
 
     </div>
+
+    <!-- Для роботи локально -->
+    <script src="../static/js/login.js"></script>
+
+    <!-- Для роботи сервера -->
+    <script src="/js/login.js"></script>
 
 </body>
 

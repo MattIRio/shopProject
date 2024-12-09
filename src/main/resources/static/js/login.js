@@ -35,25 +35,23 @@ document.getElementById('userForm').addEventListener('submit', function (event) 
             password: passwordInput.value,
         };
 
-        console.log(formData);
-
-        console.log('CSRF Token12312:', csrfToken);
-        fetch('/signUpUser', {
+        fetch('/loginPage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken // Убедитесь, что CSRF-токен правильный
+                [csrfHeader]: csrfToken // 
             },
-            body: JSON.stringify(formData), // Преобразуем данные в строку JSON
-            credentials: 'include' // Убедитесь, что данные с куки отправляются с запросом
+            body: JSON.stringify(formData),
+            credentials: 'include' 
         })
-            // .then(response => response.json()) // Обрабатываем ответ, преобразуя его в JSON
             .then(data => {
-                console.log('Данные успешно отправлены:', data);
-                window.location.href = data.url;
+                console.log('Дані отримані:', data);
+                // window.location.href = data.url;
             })
             .catch(error => {
                 console.error('Произошла ошибка при отправке данных:', error);
             });
+
     }
-});
+
+})

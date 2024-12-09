@@ -6,14 +6,20 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-    <link rel="stylesheet" href="/css/signup-style.css">
+    <!-- Для роботи з динамічним css -->
+    <link rel="stylesheet" href="../static/css/signup-style.css">
+    <!-- Для роботи сервера -->
+     <link rel="stylesheet" href="/css/signup-style.css">
     <title>Registration</title>
 
 
 </head>
 <body>
 <div class="userform-wrapper">
+
     <div class="formclass">
+        <a href="login.html"><img id="arrow-back" src="../static/css/img/arrow.png" alt="arrow-back"></a>
+        
         <p class="title">Sign Up</p>
         <div class="line" style="margin-top: 0px;"></div>
         <form id="userForm">
@@ -21,11 +27,11 @@
             <p style="margin-top: 10px;">E-mail</p>
             <label for="email"></label>
             <input type="text" id="email" name="email" required>
-            <div class="email-error-text" style="display: none;">Enter valid e-mail!</div>
+            <div class="email-error-text" style="display: none;">E-mail is not valid</div>
             <p style="margin-top: 10px;">Password</p>
             <label for="password"></label>
             <input type="password" id="password" name="password" required>
-            <div class="password-error-text" style="display: none;">Enter valid password</div>
+            <div class="password-error-text" style="display: none;">Password is not valid</div>
             <br>
             <div class="passCondition" style="margin-top: 10px;">Your password must contain:</div>
             <div class="passCondition">—  9 or more characters</div>
@@ -37,14 +43,18 @@
         </form>
         <div class="line"></div>
         <div class="buttons-with-icon">
-            <button class="button-with-icon"><img src="/css/img/github.png" alt="icon" style="width: 30px; height: 30px; margin-right: 8px;"> Continue with GitHub</button>
-            <button class="button-with-icon"><img src="/css/img/google.webp" alt="icon" style="width: 30px; height: 30px; margin-right: 8px;"> Continue with Google</button>
+            <button class="button-with-icon"><img src="../static/css/img/github.png" alt="icon" style="width: 30px; height: 30px; margin-right: 8px;"> Continue with GitHub</button>
+            <button class="button-with-icon"><img src="../static/css/img/google.webp" alt="icon" style="width: 30px; height: 30px; margin-right: 8px;"> Continue with Google</button>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Для роботи локально -->
+     <!-- <script src="../static/js/registration.js"></script> -->
+
+     <!-- Для роботи сервера -->
      <script src="/js/registration.js"></script>
+
 
 </body>
 </html>

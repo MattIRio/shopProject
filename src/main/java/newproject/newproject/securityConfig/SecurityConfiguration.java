@@ -27,8 +27,8 @@ public class SecurityConfiguration{
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf
-                          .disable()
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        //   .disable()
+                       .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .authorizeHttpRequests(registry -> {
 

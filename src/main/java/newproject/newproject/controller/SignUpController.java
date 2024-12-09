@@ -27,13 +27,13 @@ public class SignUpController {
         try {
             if (userModel == null || userModel.getEmail() == null || userModel.getPassword() == null) {
                 redirectAttributes.addFlashAttribute("error", "Invalid user data provided");
-                return "redirect:/register";
+                return "redirect:/signUpPage";
             }
 
             UserModel existingUser = usersRepository.findByEmail(userModel.getEmail());
             if (existingUser != null) {
                 redirectAttributes.addFlashAttribute("EmailExist", "User with such email already exists");
-                return "redirect:/register";
+                return "redirect:/signUpPage";
 
             } else {
                 UserModel localUser = new UserModel();
@@ -46,7 +46,7 @@ public class SignUpController {
         } catch (Exception e) {
             System.err.println("An error occurred while creating a user: " + e.getMessage());
             redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
-            return "redirect:/register";
+            return "redirect:/signUpPage";
         }
     }
 
