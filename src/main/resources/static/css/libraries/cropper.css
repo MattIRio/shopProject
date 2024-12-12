@@ -46,10 +46,10 @@
      opacity: 0
  }
 
- .cropper-modal {
+ /* .cropper-modal {
      background-color: #000;
      opacity: .5
- }
+ } */
 
  .cropper-view-box {
      display: block;

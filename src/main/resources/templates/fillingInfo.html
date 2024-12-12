@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fill your info</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="../static/css/libraries/cropper.css" />
     <link rel="stylesheet" href="../static/css/fillingInfo.css">
 </head>
@@ -48,18 +50,19 @@
                 <p>Phone</p>
                 <label for="customerPhone"></label>
                 <input type="customerPhone" id="customerPhone" name="customerPhone" required>
-                <div class="phone-error-text" style="display: none;">Enter valid password</div>
+                <div class="phone-error-text" style="display: none;">Enter valid phone</div>
                 <button type="submit">Save info</button>
             </form>
 
 
             <form id="fillingInfoSeller">
 
-                <p>Your foto</p>
-                <input type="file" style="display: none;" id="fileInput" required accept="image/*" />
+                <p>Your photo</p>
+                <input type="file" style="opacity: 0; pointer-events: none;" id="fileInput" name="image" required accept="image/*" />
                 <div class="addPhotoImgContainer" disabled>
                     <label for="fileInput" id="file-upload-button">
                         <img src="../static/css/img/insertImage.png" id="addPhotoImg" alt="">
+                        <div class="photo-error" style="display: none;">Download your photo</div>
                         <img id="croppedImage" />
 
                     </label>
@@ -73,7 +76,7 @@
                 <p>Phone</p>
                 <label for="sellerPhone"></label>
                 <input type="text" id="sellerPhone" name="sellerPhone" required>
-                <div class="phone-error-text" style="display: none;">Enter valid password</div>
+                <div class="phone-error-text" style="display: none;">Enter valid phone</div>
                 <button type="submit">Save info</button>
 
             </form>
