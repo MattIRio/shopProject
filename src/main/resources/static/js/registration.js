@@ -4,7 +4,7 @@ const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttrib
 console.log('CSRF Token12312:', csrfToken);
 console.log('CSRF Header123123:', csrfHeader);
 
-document.getElementById('userForm').addEventListener('submit', function (event) {
+document.getElementById('registerForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
     const emailInput = document.getElementById('email');

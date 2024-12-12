@@ -28,13 +28,11 @@ form.addEventListener('submit', function (event) {
 
     // Якщо дані валідні, виконуємо відправку форми
     if (emailPattern.test(emailInput.value) && passwordPattern.test(passwordInput.value)) {
-        // Створюємо FormData з форми
-        const formData = new FormData(form);
 
-        // Лог для перевірки значень
-        formData.forEach((value, key) => {
-            console.log(key, value); // Виводимо значення для email та password
-        });
+        const formData = new FormData(form);
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
         // Отримуємо CSRF токен та заголовок
         const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -48,18 +46,19 @@ form.addEventListener('submit', function (event) {
                 [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
             }
         })
-        
-        .then(response => {
-            if (response.ok) {
-                // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-                console.log('Login successful');
-            } else {
-                // Обробка помилок
-                console.log('Login failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error during fetch', error);
-        });
+
+            .then(response => {
+                console.log(response);
+                if (response.ok) {
+                    // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+                    console.log('Login successful');
+                } else {
+                    // Обробка помилок
+                    console.log('Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error during fetch', error);
+            });
     }
 });

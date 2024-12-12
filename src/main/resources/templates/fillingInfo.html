@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill your info</title>
+    <link rel="stylesheet" href="../static/css/libraries/cropper.css" />
+    <link rel="stylesheet" href="../static/css/fillingInfo.css">
+</head>
+
+<body>
+
+    <div id="overlay" class="overlay"></div>
+    <div class="back-circle"></div>
+
+
+    <div class="cropContainerWrapper">
+        <div class="cropContainer">
+            <img src="../static/css/img/exitCross.png" alt="" id="exitCross">
+            <img id="image" style="max-width: 70%; display: none;" />
+            <button id="cropButton">Crop</button>
+
+        </div>
+
+    </div>
+
+
+    <div class="userform-wrapper">
+        <div class="formclass">
+            <p class="title"><b>Fill your info</b></p>
+            <div class="line" style="margin: 10px 15%;"></div>
+
+            <div class="chose-role-container">
+                <div class="chose-role-buttons">
+                    <button id="customerButton" class="pressed">I am Customer</button>
+                    <button id="sellerButton">I am Seller</button>
+                </div>
+            </div>
+
+
+
+            <form id="fillingInfoCustomer">
+                <p>Full Name</p>
+                <input type="text" id="customerName" name="customerName" required>
+                <div class="name-error-text" style="display: none;">Enter valid name</div>
+                <div style="height: 20px;"></div>
+                <p>Phone</p>
+                <label for="customerPhone"></label>
+                <input type="customerPhone" id="customerPhone" name="customerPhone" required>
+                <div class="phone-error-text" style="display: none;">Enter valid password</div>
+                <button type="submit">Save info</button>
+            </form>
+
+
+            <form id="fillingInfoSeller">
+
+                <p>Your foto</p>
+                <input type="file" style="display: none;" id="fileInput" required accept="image/*" />
+                <div class="addPhotoImgContainer" disabled>
+                    <label for="fileInput" id="file-upload-button">
+                        <img src="../static/css/img/insertImage.png" id="addPhotoImg" alt="">
+                        <img id="croppedImage" />
+
+                    </label>
+                </div>
+
+                <p>Full Name</p>
+                <input type="text" id="sellerName" name="sellerName" required>
+                <div class="name-error-text" style="display: none;">Enter valid name</div>
+                <div style="height: 20px;"></div>
+
+                <p>Phone</p>
+                <label for="sellerPhone"></label>
+                <input type="text" id="sellerPhone" name="sellerPhone" required>
+                <div class="phone-error-text" style="display: none;">Enter valid password</div>
+                <button type="submit">Save info</button>
+
+            </form>
+            <div class="line"></div>
+        </div>
+
+    </div>
+
+
+    <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+    <!-- Для роботи локально -->
+    <script src="../static/js/fillingInfo.js"></script>
+
+    <!-- Для роботи сервера -->
+    <!-- <script src="/js/fillingInfo.js"></script> -->
+</body>
+
+</html>
