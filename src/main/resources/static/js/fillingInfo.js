@@ -51,10 +51,11 @@ input.addEventListener('change', (event) => {
             if (cropper) cropper.destroy(); // Знищує попередній cropper
             cropper = new Cropper(image, {
                 aspectRatio: 1, // Співвідношення сторін (1 = квадрат)
-                viewMode: 1,    // Режим відображення
+                viewMode: 2,    // Режим відображення
                 movable: true,  // Можливість переміщення області
                 zoomable: false, // Масштабування
                 responsive: false,
+
             });
 
             exitCross.addEventListener('click', () => {
@@ -85,9 +86,11 @@ window.addEventListener('resize', () => {
             viewMode: 1,
             responsive: false
         });
-    }, 200);
+    }, 0);
 
 });
+
+const fileInput = document.getElementById('fileInput');
 
 // Обрізка зображення
 cropButton.addEventListener('click', () => {
@@ -99,6 +102,108 @@ cropButton.addEventListener('click', () => {
         croppedCanvas.toBlob((blob) => {
             const url = URL.createObjectURL(blob);
             croppedImage.src = url; // Відображення результату
+
+
+            const file = new File([blob], 'cropped_image.jpg', { type: 'image/jpeg' });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files; // Оновлюємо поле input
+            console.log(fileInput.files)
         });
+    }
+});
+
+
+//Відправка інформації користувача
+document.getElementById('fillingInfoCustomer').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+
+    const form = document.querySelector('#fillingInfoCustomer');
+    const nameInput = document.getElementById('customerName');
+    const phoneInput = document.getElementById('customerPhone');
+
+    const namePattern = /^[A-Za-z ]{6,}$/;
+    const phonePattern = /^\+(\d{10,15})$/;
+
+    if (!namePattern.test(nameInput.value)) {
+        this.querySelector('.name-error-text').style.display = 'block';
+    } else {
+        this.querySelector('.name-error-text').style.display = 'none';
+    }
+
+    if (!phonePattern.test(phoneInput.value)) {
+        this.querySelector('.phone-error-text').style.display = 'block';
+    } else {
+        this.querySelector('.phone-error-text').style.display = 'none';
+    }
+
+    if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
+
+        const formData = new FormData(form);
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        // Отримуємо CSRF токен та заголовок
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        // Виконуємо запит на сервер
+        fetch('/loginPage', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+            }
+        })
+
+            .then(response => {
+                console.log(response);
+                if (response.ok) {
+                    // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+                    console.log('Login successful');
+                } else {
+                    // Обробка помилок
+                    console.log('Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error during fetch', error);
+            });
+    }
+});
+
+
+//Відправка інформації продавцем
+document.getElementById('fillingInfoSeller').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const form = document.querySelector('#fillingInfoSeller');
+    const nameInput = document.getElementById('sellerName');
+    const phoneInput = document.getElementById('sellerPhone');
+
+    const namePattern = /^[A-Za-z ]{2,}$/;
+    const phonePattern = /^\+(\d{10,15})$/;
+
+    if (!namePattern.test(nameInput.value)) {
+        this.querySelector('.name-error-text').style.display = 'block';
+    } else {
+        this.querySelector('.name-error-text').style.display = 'none';
+    }
+
+    if (!phonePattern.test(phoneInput.value)) {
+        this.querySelector('.phone-error-text').style.display = 'block';
+    } else {
+        this.querySelector('.phone-error-text').style.display = 'none';
+    }
+
+    //Якщо все вірно
+    if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
+        const formData = new FormData(form);
+        formData.append('role', 'seller');
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
     }
 });

@@ -3,12 +3,13 @@
     src: url('fonts/Geomanist-Regular.woff') format('woff2'),
 }
 
+
+
 *,
 *::before,
 *::after {
     margin: 0;
     padding: 0;
-    /* box-sizing: border-box; */
 }
 
 p {
@@ -19,6 +20,7 @@ body {
     position: relative;
     background-color: #3a77ff;
     font-family: 'Geomanist', sans-serif;
+    overflow: hidden;
 }
 
 .userform-wrapper {
@@ -27,6 +29,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 6vw;
+    overflow: hidden;
 
 
 }
@@ -137,8 +140,9 @@ body {
     border: 5px solid #002F34;
 }
 
-.email-error-text,
-.password-error-text {
+.name-error-text,
+.phone-error-text,
+.photo-error {
     text-align: left;
     transform: translateX(15%);
     display: none;
@@ -180,6 +184,10 @@ body {
 
 #fileInput {
     background-color: #fff !important;
+    position: absolute;
+    right: 137px;
+    top: 1vw;
+
 }
 
 #fileInput::file-selector-button {
@@ -205,6 +213,14 @@ body {
   
 }
 
+#image {
+
+    display: flex;
+    max-width: 600px;
+    max-height: 600px;
+
+}
+
 .cropContainerWrapper{
     display: none;
     position: relative;;
@@ -220,12 +236,13 @@ body {
     margin: auto 0;
     width: 90vw;
     height: 90vw;
-    min-height: 900px;
-    min-width: 900px;
+    min-height: 1100px;
+    min-width: 1100px;
     max-width: 1400px;
     max-height: 1400px;
     border: 150px solid #CEDDFF;
     border-radius: 50%;
+    overflow: hidden;
 
     animation: grow-circle 2s ease-out forwards;
 
@@ -263,8 +280,8 @@ body {
     z-index: 2;
     background-color: white;
     text-align: center;
-    width: 80%;
-    transform: translateX(10%);
+    width: 60%;
+    transform: translateX(35%);
     border-radius: 12px;
     padding-bottom: 20px;
 
@@ -282,7 +299,12 @@ body {
 
 .cropper-modal {
     position: absolute;
-    opacity: 0;
+    /* opacity: 0; */
+    
+}
+
+.cropper-modal {
+    background-color: rgba(0, 0, 0, 0.5); /* затемнення з напівпрозорим чорним фоном */
 }
 
 #exitCross {
@@ -302,4 +324,7 @@ img[alt="The image to crop"] {
     display: block;
     max-width: 100%;
     height: auto;
+    background-color: black;
+    filter: brightness(70%);
+
 }
