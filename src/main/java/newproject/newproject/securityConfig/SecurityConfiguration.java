@@ -27,12 +27,12 @@ public class SecurityConfiguration{
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf
-                        //   .disable()
-                       .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                           .disable()
+//                       .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .authorizeHttpRequests(registry -> {
 
-                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/saveproduct").permitAll();
+                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata").permitAll();
 
                     registry.requestMatchers("/profileform", "/mainpage").authenticated();
 

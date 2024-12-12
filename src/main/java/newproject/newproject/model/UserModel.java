@@ -22,6 +22,13 @@ public class UserModel {
 
     private String email;
 
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
+
+    private String profilePicture;
+
     public enum UserType {
         BUYER, SELLER
     }

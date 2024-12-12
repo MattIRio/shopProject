@@ -6,9 +6,12 @@ import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,14 +25,34 @@ import java.util.UUID;
     @Autowired
     UsersRepository usersRepository;
 
-        @GetMapping("/getallproducts")
-        public ResponseEntity<List<ProductModel>> allProducts() {
-            List<ProductModel> productList = productRepository.findAll();
-            return ResponseEntity.ok(productList.subList(0, 20));
-        }
+    @GetMapping("/getallproducts")
+    public ResponseEntity<List<ProductModel>> allProducts() {
+        List<ProductModel> productList = productRepository.findAll();                 //returning first 20 products
+        int mimimal = Math.min(productList.size(), 20);
+        return ResponseEntity.ok(productList.subList(0, mimimal));
+    }
 
-        @PutMapping("/")
-        public ResponseEntity<String> saveProduct(@RequestBody ProductModel product){
+    @PostMapping("/saveproduct")
+    public ResponseEntity<String> saveProduct(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes) {
+        try {
+
+            if (product == null) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Product data is missing or invalid.");
+            }
+            if (product.getProductName() == null || product.getBrand() == null || product.getDescription() == null || product.getImage() == null || product.getRetailPrice() == null) {   //creating product
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Product data is missing or invalid.");
+            }
+            if (productRepository.findByProductName(product.getProductName()) != null) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Product with such name already exist.");
+            }
+
+            UserModel currentUser = usersRepository.findByEmail(principal.getName());
 
             ProductModel productModel = new ProductModel();
             productModel.setProductName(product.getProductName());
@@ -38,36 +61,97 @@ import java.util.UUID;
             productModel.setDescription(product.getDescription());
             productModel.setRetailPrice(product.getRetailPrice());
             productModel.setDiscountedPrice(product.getDiscountedPrice());
+            productModel.setSellerId(currentUser.getId());
 
             productRepository.save(productModel);
-            return ResponseEntity.ok("Product saved");
+
+        } catch (Exception e) {
+            System.err.println("An error occurred while creating a product: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred. Please try again later.");
         }
+        return ResponseEntity.ok("Product saved");
+    }
 
-    @PutMapping("/saveuser")
-    public ResponseEntity<String> saveUser(){
-        UserModel user = new UserModel();
-        user.setUserName("Test User");
-        user.setPassword("testpassword");
+    @PutMapping("/changeproductinfo")
+    public ResponseEntity<String> changeProductInfo(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes) {
+        try {
 
+            if (product == null) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Product data is missing or invalid.");
+            }
 
+            ProductModel productModel = productRepository.findByUniqId(product.getUniqId());
 
+            if (productModel == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Product is missing or invalid.");
+            }
 
-        if (user.getBoughtProducts() == null) {
-            user.setBoughtProducts(new ArrayList<>());
+            productModel.setProductName(product.getProductName());
+            productModel.setBrand(product.getBrand());
+            productModel.setImage(product.getImage());
+            productModel.setDescription(product.getDescription());
+            productModel.setRetailPrice(product.getRetailPrice());
+            productModel.setDiscountedPrice(product.getDiscountedPrice());
+
+            productRepository.save(productModel);
+
+        } catch (Exception e) {
+            System.err.println("An error occurred while changing the product info: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred. Please try again later.");
         }
-
-
-        user.getBoughtProducts().add(productRepository.findByUniqId(UUID.fromString("c2d766ca982eca8304150849735ffef9")).get());
-
-        usersRepository.save(user);
-        return ResponseEntity.ok("saved");
+        return ResponseEntity.ok("Product info changed");
     }
 
-    @Transactional
-    @GetMapping("/userinfo/{user_id}")
-    public ResponseEntity<String> userinfo(@PathVariable int user_id){
-            return ResponseEntity.ok(usersRepository.findById(user_id).getBoughtProducts().get(0).getBrand());
+    @PutMapping("/deleteproduct")
+    public ResponseEntity<String> changeProductInfo(@PathVariable UUID productId, RedirectAttributes redirectAttributes) {
+        ProductModel localProduct = productRepository.findByUniqId(productId);
+
+        try {
+
+            if (productId == null) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Product data is missing or invalid.");
+            }
+            if (localProduct == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Product is missing or invalid.");
+            }
+            productRepository.delete(localProduct);
+            return ResponseEntity.ok("Product deleted");
+        }catch (Exception e){
+            System.err.println("An error occurred while deleting a product: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred. Please try again later.");
+        }
+    }
+
+    @GetMapping("/getprodutcsbyname/{searchedProductName}")
+    public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String searchedProductName){
+        List<ProductModel> productList = productRepository.findByProductNameContainingIgnoreCase(searchedProductName);
+
+        if (productList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        int limit = Math.min(productList.size(), 20);
+        return ResponseEntity.ok(productList.subList(0,limit));
     }
 
 
-    }
+
+}
