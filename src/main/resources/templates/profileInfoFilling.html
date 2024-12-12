@@ -7,8 +7,10 @@
     <title>Fill your info</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" href="../static/css/libraries/cropper.css" />
-    <link rel="stylesheet" href="../static/css/fillingInfo.css">
+<!--    <link rel="stylesheet" href="../static/css/libraries/cropper.css" />-->
+    <link rel="stylesheet" href="/css/libraries/cropper.css" />
+<!--    <link rel="stylesheet" href="../static/css/fillingInfo.css">-->
+    <link rel="stylesheet" href="/css/fillingInfo.css">
 </head>
 
 <body>
@@ -19,7 +21,8 @@
 
     <div class="cropContainerWrapper">
         <div class="cropContainer">
-            <img src="../static/css/img/exitCross.png" alt="" id="exitCross">
+<!--            <img src="../static/css/img/exitCross.png" alt="" id="exitCross">-->
+            <img src="/css/img/exitCross.png" alt="" id="exitCross">
             <img id="image" style="max-width: 70%; display: none;" />
             <button id="cropButton">Crop</button>
 
@@ -61,7 +64,8 @@
                 <input type="file" style="opacity: 0; pointer-events: none;" id="fileInput" name="image" required accept="image/*" />
                 <div class="addPhotoImgContainer" disabled>
                     <label for="fileInput" id="file-upload-button">
-                        <img src="../static/css/img/insertImage.png" id="addPhotoImg" alt="">
+<!--                        <img src="../static/css/img/insertImage.png" id="addPhotoImg" alt="">-->
+                        <img src="/css/img/insertImage.png" id="addPhotoImg" alt="">
                         <div class="photo-error" style="display: none;">Download your photo</div>
                         <img id="croppedImage" />
 
@@ -88,10 +92,10 @@
 
     <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
     <!-- Для роботи локально -->
-    <script src="../static/js/fillingInfo.js"></script>
+<!--    <script src="../static/js/fillingInfo.js"></script>-->
 
     <!-- Для роботи сервера -->
-    <!-- <script src="/js/fillingInfo.js"></script> -->
+     <script src="/js/fillingInfo.js"></script>
 </body>
 
 </html>

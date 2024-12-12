@@ -1,5 +1,8 @@
 const sellerButton = document.getElementById("sellerButton");
 const customerButton = document.getElementById("customerButton");
+// Отримуємо CSRF токен та заголовок
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 sellerButton.addEventListener("click", (event) => {
     if (!sellerButton.classList.contains('pressed')) {
@@ -145,9 +148,7 @@ document.getElementById('fillingInfoCustomer').addEventListener('submit', functi
             console.log(key, value);
         }
 
-        // Отримуємо CSRF токен та заголовок
-        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 
         // Виконуємо запит на сервер
         fetch('/loginPage', {
@@ -205,5 +206,27 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
         for (let [key, value] of formData.entries()) {
             console.log(key, value);
         }
+        // Виконуємо запит на сервер
+                fetch('/saveuserinfo', {
+                    method: 'PUT',
+                    body: formData,
+                    headers: {
+                        [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+                    }
+                })
+
+                    .then(response => {
+                        console.log(response);
+                        if (response.ok) {
+                            // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+                            console.log('Login successful');
+                        } else {
+                            // Обробка помилок
+                            console.log('Login failed');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error during fetch', error);
+                    });
     }
 });

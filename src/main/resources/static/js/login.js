@@ -52,6 +52,7 @@ form.addEventListener('submit', function (event) {
                 if (response.ok) {
                     // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
                     console.log('Login successful');
+                    window.location.href = response.url;
                 } else {
                     // Обробка помилок
                     console.log('Login failed');

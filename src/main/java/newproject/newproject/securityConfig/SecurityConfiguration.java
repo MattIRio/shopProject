@@ -32,9 +32,9 @@ public class SecurityConfiguration{
                 )
                 .authorizeHttpRequests(registry -> {
 
-                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata").permitAll();
+                    registry.requestMatchers("/signUpUser","/profileform", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata").permitAll();
 
-                    registry.requestMatchers("/profileform", "/mainpage").authenticated();
+                    registry.requestMatchers( "/mainpage").authenticated();
 
                     registry.anyRequest().permitAll();
 
