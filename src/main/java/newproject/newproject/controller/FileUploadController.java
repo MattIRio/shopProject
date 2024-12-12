@@ -1,5 +1,6 @@
 package newproject.newproject.controller;
 
+import jakarta.transaction.Transactional;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,18 @@ public class FileUploadController {
 
 
     public static String uploadDirecotry = System.getProperty("user.dir")+"/uploads/";
-
+    @Transactional
     @PostMapping("/upload")
     public ResponseEntity<String>  upload(Model model, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, Principal principal) {
         String fileName = file.getOriginalFilename();
         Path fileNameAndPath = Paths.get(uploadDirecotry, fileName);
         try {
+            Path currentProfilePic = Path.of(usersRepository.findByEmail(principal.getName()).getProfilePicture());
+            if(Files.exists(currentProfilePic)) {
+                Files.delete(currentProfilePic);
+            }
             Files.write(fileNameAndPath, file.getBytes());
             UserModel localUser = usersRepository.findByEmail(principal.getName());
-            Files.delete(fileNameAndPath);
             localUser.setProfilePicture(uploadDirecotry + fileName);
             usersRepository.save(localUser);
             redirectAttributes.addFlashAttribute("uploadingResult", "Successfully uploaded file: " + fileName);

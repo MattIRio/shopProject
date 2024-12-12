@@ -201,41 +201,46 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
 
     //Якщо все вірно
     if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
-
+         const userData = {
+                userName: nameInput.value,
+                phoneNumber: phoneInput.value,
+                userType: 'SELLER'
+            };
         const formData = new FormData();
         
-        // // Перебираємо всі елементи форми, пропускаючи перший
-        // const formElements = this.elements;
+         // Перебираємо всі елементи форми, пропускаючи перший
+         const formElements = this.elements;
         
-        // for (let i = 1; i < formElements.length; i++) { // починаємо з другого елемента
-        //     const field = formElements[i];
-        //     if (field.name) { // додаємо тільки елементи з атрибутом name
-        //         formData.append(field.name, field.value);
-        //     }
-        // }
-        // formData.append('role', 'SELLER');
-        // for (let [key, value] of formData.entries()) {
-        //     console.log(key, value);
-        // }
-        // // Виконуємо запит на сервер
-        // fetch('/saveuserinfo', {
-        //     method: 'PUT',
-        //     body: formData,
-        //     headers: {
-        //         [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-        //     }
-        // }).then(response => {
-        //     console.log(response);
-        //     if (response.ok) {
-        //         // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-        //         console.log('Login successful');
-        //     } else {
-        //         // Обробка помилок
-        //         console.log('Login failed');
-        //     }
-        // }).catch(error => {
-        //     console.error('Error during fetch', error);
-        // });
+         for (let i = 1; i < formElements.length; i++) { // починаємо з другого елемента
+             const field = formElements[i];
+             if (field.name) { // додаємо тільки елементи з атрибутом name
+                 formData.append(field.name, field.value);
+             }
+         }
+         formData.append('role', 'SELLER');
+         for (let [key, value] of formData.entries()) {
+             console.log(key, value);
+         }
+         // Виконуємо запит на сервер
+         fetch('/saveuserinfo', {
+                 method: 'PUT',
+                 body: JSON.stringify(userData),
+                 headers: {
+                     'Content-Type': 'application/json',
+                     [csrfHeader]: csrfToken // CSRF токен
+                 }
+         }).then(response => {
+             console.log(response);
+             if (response.ok) {
+                 // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+                 console.log('Login successful');
+             } else {
+                 // Обробка помилок
+                 console.log('Login failed');
+             }
+         }).catch(error => {
+             console.error('Error during fetch', error);
+         });
 
 
 
