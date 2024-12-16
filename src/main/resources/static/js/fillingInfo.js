@@ -65,12 +65,11 @@ input.addEventListener('change', (event) => {
                 document.querySelector('.cropContainerWrapper').style.display = 'none';
                 document.querySelector('.overlay').style.display = 'none';
                 if (cropper) cropper.destroy();
-                input.value = "";
+
             })
         };
         reader.readAsDataURL(file);
     }
-    input.value = "";
 });
 
 let resizeTimeout;
@@ -143,12 +142,13 @@ document.getElementById('fillingInfoCustomer').addEventListener('submit', functi
 
     if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
 
-        const formData = new FormData(form);
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
+        const formData = new FormData();
+
+        formData = {
+            name: nameInput.value,
+            phone: phoneInput.value,
+            role: "BUYER",
         }
-
-
 
         // Виконуємо запит на сервер
         fetch('/loginPage', {

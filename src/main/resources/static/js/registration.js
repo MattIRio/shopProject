@@ -1,9 +1,6 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-console.log('CSRF Token12312:', csrfToken);
-console.log('CSRF Header123123:', csrfHeader);
-
 document.getElementById('registerForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -58,3 +55,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
             });
     }
 });
+
+function goBack() {
+    window.history.back();
+}

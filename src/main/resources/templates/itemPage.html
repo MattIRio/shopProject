@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/itemPage.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div class="header-wrapper">
+            <div class="logo">
+                <img src="../static/css/img/logo.png" alt="logo">
+            </div>
+            <div class="search-wrapper">
+                
+                <input type="text" id="search-bar" placeholder="Search...">
+                <img src="../static/css/img/search-icon.png" alt="" id="search-icon" >
+                <button id="search-button">Search</button>
+    
+            </div>
+            <div class="cart-container">
+                <img src="../static/css/img/cart-icon.png" alt="Cart" class="cart-icon" id="cart-icon">
+                <span class="cart-badge">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span id="close-cart" class="close">&times;</span>
+            <h2>Your Cart</h2>
+            <ul id="cart-items"></ul>
+            <p id="cart-total">Total Price: 0$</p>
+            <div class="buttons">
+                <button id="checkout-button">Make an order</button>
+                <button id="clear-cart-btn">Clear your Cart</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="product-wrapper">
+
+        <div class="product-container">
+            <div class="product-image" id="product-image">
+                <!-- Фото товару -->
+            </div>
+            <div class="product-details" id="product-details">
+                <!-- Деталі товару -->
+            </div>
+        </div>
+    </div>
+    <script src="../static/js/shoppingCart.js"></script>
+    <script src="../static/js/itemPage.js"></script>
+
+</body>
+</html>

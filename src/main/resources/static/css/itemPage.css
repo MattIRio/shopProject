@@ -1,0 +1,103 @@
+@font-face {
+    font-family: 'Geomanist';
+    src: url('fonts/Geomanist-Regular.woff') format('woff2'),
+}
+
+* {
+    font-family: 'Geomanist';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.product-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-container {
+    display: flex;
+    width: 90%;
+}
+
+/* Блок з фото */
+.product-image {
+    flex: 1;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Блок з деталями */
+.product-details {
+    flex: 1;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+strong {
+    font-weight: normal; /* Забираємо жирний стиль */
+    font-family: 'Geomanist', sans-serif; /* Явно задаємо шрифт */
+}
+
+.product-details h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.product-details p {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #555;
+}
+
+/* Стилізація статичних слів */
+.product-details strong {
+    font-weight: bold;
+    color: #1a73e8; /* Синій для акценту */
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d9534f; /* Червоний для ціни */
+}
+
+.price del {
+    color: #888; /* Сірий для закресленої ціни */
+}
+
+#add-to-cart-btn {
+    padding: 12px 24px;
+    background-color: #00a046;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #135aba;
+}
+
+button:active {
+    background-color: #0d3e84;
+}
+

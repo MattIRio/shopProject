@@ -14,17 +14,55 @@ p{
 }
 
 body {
+    position: relative;
     background-color: #3a77ff;
     font-family: 'Geomanist', sans-serif;
+    overflow: hidden;
 }
 
 .userform-wrapper {
+    height: 800px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 6vw;
 
 
+}
+
+.userform-wrapper::before {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    width: 90vw;
+    height: 90vw;
+    min-height: 1100px;
+    min-width: 1100px;
+    max-width: 1400px;
+    max-height: 1400px;
+    border: 150px solid #CEDDFF;
+    border-radius: 50%;
+    overflow: hidden;
+
+    animation: grow-circle 2s ease-out forwards;
+
+}
+
+@keyframes grow-circle {
+    0% {
+        transform: scale(0); /* Початковий стан: невидимий */
+        opacity: 0; /* Початкова прозорість */
+    }
+    50% {
+        transform: scale(1.2); /* Збільшення до 110vw */
+        opacity: 1; /* Повна видимість */
+    }
+    100% {
+        transform: scale(1); /* Повернення до звичайного розміру */
+    }
 }
 
 
