@@ -6,6 +6,10 @@ import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,16 +36,23 @@ public class FileUploadController {
     public static String uploadDirecotry = System.getProperty("user.dir")+"/uploads/";
     @Transactional
     @PostMapping("/upload")
-    public ResponseEntity<String>  upload(Model model, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, Principal principal) {
+    public ResponseEntity<String>  upload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        UserModel currentUser = null;
+        if (principal instanceof OAuth2AuthenticationToken){
+            currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
+        } else if (principal instanceof UsernamePasswordAuthenticationToken){
+            currentUser = usersRepository.findByEmail(principal.getName());
+        }
+
         String fileName = file.getOriginalFilename();
-        Path fileNameAndPath = Paths.get(uploadDirecotry, fileName);
+        Path fileNameAndPath = Paths.get(uploadDirecotry, currentUser.getUserName() + "_" + fileName );
         try {
-            Path currentProfilePic = Path.of(usersRepository.findByEmail(principal.getName()).getProfilePicture());
+            Path currentProfilePic = Path.of(usersRepository.findByEmail(currentUser.getUserName()).getProfilePicture());
             if(Files.exists(currentProfilePic)) {
                 Files.delete(currentProfilePic);
             }
             Files.write(fileNameAndPath, file.getBytes());
-            UserModel localUser = usersRepository.findByEmail(principal.getName());
+            UserModel localUser = usersRepository.findByEmail(currentUser.getUserName());
             localUser.setProfilePicture(uploadDirecotry + fileName);
             usersRepository.save(localUser);
             redirectAttributes.addFlashAttribute("uploadingResult", "Successfully uploaded file: " + fileName);

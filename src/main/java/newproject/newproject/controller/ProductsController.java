@@ -8,6 +8,10 @@ import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,8 +37,14 @@ import java.util.UUID;
     }
 
     @PostMapping("/saveproduct")
-    public ResponseEntity<String> saveProduct(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> saveProduct(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes, @AuthenticationPrincipal OAuth2User authentication) {
         try {
+            UserModel currentUser = null;
+            if (principal instanceof OAuth2AuthenticationToken){
+                currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
+            } else if (principal instanceof UsernamePasswordAuthenticationToken){
+                currentUser = usersRepository.findByEmail(principal.getName());
+            }
 
             if (product == null) {
                 return ResponseEntity
@@ -52,7 +62,7 @@ import java.util.UUID;
                         .body("Product with such name already exist.");
             }
 
-            UserModel currentUser = usersRepository.findByEmail(principal.getName());
+
 
             ProductModel productModel = new ProductModel();
             productModel.setProductName(product.getProductName());
@@ -76,7 +86,7 @@ import java.util.UUID;
     }
 
     @PutMapping("/changeproductinfo")
-    public ResponseEntity<String> changeProductInfo(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> changeProductInfo(@RequestBody ProductModel product, RedirectAttributes redirectAttributes) {
         try {
 
             if (product == null) {
@@ -101,6 +111,7 @@ import java.util.UUID;
             productModel.setDiscountedPrice(product.getDiscountedPrice());
 
             productRepository.save(productModel);
+            return ResponseEntity.ok("Product info changed");
 
         } catch (Exception e) {
             System.err.println("An error occurred while changing the product info: " + e.getMessage());
@@ -109,7 +120,6 @@ import java.util.UUID;
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred. Please try again later.");
         }
-        return ResponseEntity.ok("Product info changed");
     }
 
     @PutMapping("/deleteproduct")

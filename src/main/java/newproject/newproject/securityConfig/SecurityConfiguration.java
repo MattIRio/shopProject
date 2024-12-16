@@ -32,10 +32,10 @@ public class SecurityConfiguration{
                 )
                 .authorizeHttpRequests(registry -> {
 
-                    registry.requestMatchers("/signUpUser","/profileform", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata").permitAll();
-
-                    registry.requestMatchers( "/mainpage").authenticated();
-
+                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata").permitAll();
+                    registry.requestMatchers( "/mainpage", "/profileform").authenticated();
+                    registry.requestMatchers("").hasRole("BUYER");
+                    registry.requestMatchers("/postproduct").hasRole("SELLER");
                     registry.anyRequest().permitAll();
 
 
@@ -50,14 +50,14 @@ public class SecurityConfiguration{
                     httpSecurityFormLoginConfigurer
                             .loginPage("/loginPage")
                             .usernameParameter("email")
-                            .failureUrl("/loginPage?error=true")
                             .successHandler(new AuthenticationSuccessHandler())
                             .defaultSuccessUrl("/profileform", true)
                             .permitAll();
 
                 })
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth-login")
+                        .successHandler(new AuthenticationSuccessHandler())
+                        .loginPage("/loginPage")
                         .defaultSuccessUrl("/profileform", true)
                 )
                 .build();
