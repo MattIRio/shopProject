@@ -37,12 +37,11 @@ const croppedImage = document.getElementById('croppedImage');
 const exitCross = document.getElementById('exitCross');
 let cropper;
 
-
-
 // Завантаження зображення
 input.addEventListener('change', (event) => {
     document.querySelector('.cropContainerWrapper').style.display = 'block';
     document.querySelector('.overlay').style.display = 'block';
+
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -69,6 +68,8 @@ input.addEventListener('change', (event) => {
             })
         };
         reader.readAsDataURL(file);
+    } else {
+        input.value = "";
     }
 });
 
@@ -151,10 +152,11 @@ document.getElementById('fillingInfoCustomer').addEventListener('submit', functi
         }
 
         // Виконуємо запит на сервер
-        fetch('/loginPage', {
-            method: 'POST',
-            body: formData,
+        fetch('/saveuserinfo', {
+            method: 'PUT',
+            body: JSON.stringify(formData),
             headers: {
+                'Content-Type': 'application/json',
                 [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
             }
         })
@@ -206,21 +208,21 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
                 phoneNumber: phoneInput.value,
                 userType: 'SELLER'
             };
-        const formData = new FormData();
+        // const formData = new FormData();
         
-         // Перебираємо всі елементи форми, пропускаючи перший
-         const formElements = this.elements;
+        //  // Перебираємо всі елементи форми, пропускаючи перший
+        //  const formElements = this.elements;
         
-         for (let i = 1; i < formElements.length; i++) { // починаємо з другого елемента
-             const field = formElements[i];
-             if (field.name) { // додаємо тільки елементи з атрибутом name
-                 formData.append(field.name, field.value);
-             }
-         }
-         formData.append('role', 'SELLER');
-         for (let [key, value] of formData.entries()) {
-             console.log(key, value);
-         }
+        //  for (let i = 1; i < formElements.length; i++) { // починаємо з другого елемента
+        //      const field = formElements[i];
+        //      if (field.name) { // додаємо тільки елементи з атрибутом name
+        //          formData.append(field.name, field.value);
+        //      }
+        //  }
+        //  formData.append('role', 'SELLER');
+        //  for (let [key, value] of formData.entries()) {
+        //      console.log(key, value);
+        //  }
          // Виконуємо запит на сервер
          fetch('/saveuserinfo', {
                  method: 'PUT',
