@@ -15,6 +15,9 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
     ProductModel findByUniqId(UUID uniqId);
     ProductModel findByProductName(String productName);
 
-    @Query("SELECT p FROM ProductModel p WHERE p.productName ILIKE %:name%")
-    List<ProductModel> findByProductNameContainingIgnoreCase(@Param("name") String name);
+    @Query("SELECT p FROM ProductModel p WHERE LOWER(p.productName) LIKE LOWER(CONCAT(:name, '%'))")
+    List<ProductModel> findByProductNameStartingWithIgnoreCase(@Param("name") String name);
+
+    @Query("SELECT p FROM ProductModel p WHERE p.category LIKE %:name%")
+    List<ProductModel> findByCategory(@Param("name") String name);
 }

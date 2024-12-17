@@ -50,6 +50,7 @@ public class MyUserDetailService implements UserDetailsService {
             return User.builder()
                     .username(user.getEmail())
                     .password(user.getPassword())
+                    .authorities(authorities)
                     .build();
         }
 

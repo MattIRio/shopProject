@@ -20,6 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
+import static newproject.newproject.model.UserModel.UserType.BUYER;
+import static newproject.newproject.model.UserModel.UserType.SELLER;
+
 @Controller
 public class UserController {
     @Autowired
@@ -93,7 +96,7 @@ public class UserController {
             if (principal instanceof OAuth2AuthenticationToken){
                 currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
             } else if (principal instanceof UsernamePasswordAuthenticationToken){
-                currentUser = usersRepository.findByEmail(principal.getName());                                                                          //returning current logged user model logged by Form-Based Authentication and oauth2
+                currentUser = usersRepository.findByEmail(principal.getName());
             }
             usersRepository.delete(currentUser);
             return ResponseEntity.ok("User deleted");
@@ -103,5 +106,21 @@ public class UserController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred. Please try again later.");
         }
+    }
+
+    @GetMapping("/getcurrentuserrole")
+    public ResponseEntity<String> getUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities() == null){
+            return ResponseEntity.badRequest().body("Current user has no roles");
+        }
+
+        String response = "";
+        if (authentication.getAuthorities().contains(SELLER)){
+            response = "SELLER";
+        } if(authentication.getAuthorities().contains(BUYER)) {
+            response = "BUYER";
+        }
+        return ResponseEntity.ok(response);
     }
 }

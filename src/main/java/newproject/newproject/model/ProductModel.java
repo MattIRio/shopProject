@@ -30,13 +30,15 @@ public class ProductModel {
     private String description;
     @Column(name = "brand")
     private String brand;
+    @Column(name = "product_category_tree")
+    private String category;
     @Column(name = "sellerId")
     private Integer sellerId;
 
 
     public ProductModel(){}
 
-    public ProductModel(UUID uniqId, String productName, int retailPrice, int discountedPrice, String image, String description, String brand) {
+    public ProductModel(UUID uniqId, String productName, int retailPrice, int discountedPrice, String image, String description, String brand, String category) {
         this.uniqId = uniqId;
         this.productName = productName;
         this.retailPrice = retailPrice;
@@ -44,5 +46,6 @@ public class ProductModel {
         this.image = image;
         this.description = description;
         this.brand = brand;
+        this.category = category;
     }
 }

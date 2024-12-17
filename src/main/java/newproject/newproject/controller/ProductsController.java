@@ -149,9 +149,22 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getprodutcsbyname/{searchedProductName}")
+    @GetMapping("/getproductsbyname/{searchedProductName}")
     public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String searchedProductName){
-        List<ProductModel> productList = productRepository.findByProductNameContainingIgnoreCase(searchedProductName);
+        List<ProductModel> productList = productRepository.findByProductNameStartingWithIgnoreCase(searchedProductName);
+
+        if (productList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        int limit = Math.min(productList.size(), 20);
+        return ResponseEntity.ok(productList.subList(0,limit));
+    }
+
+    @GetMapping("/getproductsbycategory/{searchedCategory}")
+    public ResponseEntity<List<ProductModel>> findByProductNameByCategory(@PathVariable String searchedCategory){
+        List<ProductModel> productList = productRepository.findByCategory(searchedCategory);
 
         if (productList.isEmpty()) {
             return ResponseEntity

@@ -47,12 +47,12 @@ public class FileUploadController {
         String fileName = file.getOriginalFilename();
         Path fileNameAndPath = Paths.get(uploadDirecotry, currentUser.getUserName() + "_" + fileName );
         try {
-            Path currentProfilePic = Path.of(usersRepository.findByEmail(currentUser.getUserName()).getProfilePicture());
+            Path currentProfilePic = Path.of(usersRepository.findByEmail(currentUser.getEmail()).getProfilePicture());
             if(Files.exists(currentProfilePic)) {
                 Files.delete(currentProfilePic);
             }
             Files.write(fileNameAndPath, file.getBytes());
-            UserModel localUser = usersRepository.findByEmail(currentUser.getUserName());
+            UserModel localUser = usersRepository.findByEmail(currentUser.getEmail());
             localUser.setProfilePicture(uploadDirecotry + fileName);
             usersRepository.save(localUser);
             redirectAttributes.addFlashAttribute("uploadingResult", "Successfully uploaded file: " + fileName);
