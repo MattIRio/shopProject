@@ -38,8 +38,7 @@ public class ProductModel {
 
     public ProductModel(){}
 
-    public ProductModel(UUID uniqId, String productName, int retailPrice, int discountedPrice, String image, String description, String brand, String category) {
-        this.uniqId = uniqId;
+    public ProductModel(String productName, int retailPrice, int discountedPrice, String image, String description, String brand, String category) {
         this.productName = productName;
         this.retailPrice = retailPrice;
         this.discountedPrice = discountedPrice;

@@ -45,7 +45,7 @@ public class FileUploadController {
         }
 
         String fileName = file.getOriginalFilename();
-        Path fileNameAndPath = Paths.get(uploadDirecotry, currentUser.getUserName() + "_" + fileName );
+        Path fileNameAndPath = Paths.get(uploadDirecotry, currentUser.getEmail() + "_" + fileName );
         try {
             Path currentProfilePic = Path.of(usersRepository.findByEmail(currentUser.getEmail()).getProfilePicture());
             if(Files.exists(currentProfilePic)) {
