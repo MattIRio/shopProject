@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@Controller
 public class ProductsRecomendationsService {
     @Autowired
     ProductRepository productRepository;

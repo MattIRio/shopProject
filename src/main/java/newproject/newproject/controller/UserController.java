@@ -1,5 +1,6 @@
 package newproject.newproject.controller;
 
+import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.PreferencesRepository;
 import newproject.newproject.repositories.ProductRepository;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -105,6 +107,19 @@ public class UserController {
     public ResponseEntity<Boolean> isAuthenticated(@AuthenticationPrincipal UserDetails userDetails) {
         try {
             return ResponseEntity.ok(userService.isAuthenticated(userDetails));
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/currentusersproducts")
+    public ResponseEntity<List<ProductModel>> getUserProducts(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        try {
+            List<ProductModel> userProducts = userService.getCurrentUserProducts(principal, authentication);
+            return ResponseEntity.ok(userProducts);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

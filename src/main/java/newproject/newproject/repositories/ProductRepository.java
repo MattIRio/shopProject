@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface ProductRepository extends JpaRepository<ProductModel, String> {
     ProductModel findByUniqId(UUID uniqId);
     ProductModel findByProductName(String productName);
+    List<ProductModel> findBySellerId(int sellerId);
 
     @Query("SELECT p FROM ProductModel p WHERE LOWER(p.productName) LIKE LOWER(CONCAT(:name, '%'))")
     List<ProductModel> findByProductNameStartingWithIgnoreCase(@Param("name") String name);

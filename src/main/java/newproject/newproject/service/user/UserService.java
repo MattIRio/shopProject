@@ -1,6 +1,7 @@
 package newproject.newproject.service.user;
 
 import newproject.newproject.authentication.OauthAndPrincipalAuthController;
+import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.PreferencesRepository;
 import newproject.newproject.repositories.ProductRepository;
@@ -68,13 +69,13 @@ public class UserService {
         return currentUser;
     }
 
-    public ResponseEntity<String> deleteCurrentUser(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+    public String deleteCurrentUser(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
         if (currentUser == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User data is missing or invalid.");
         }
         usersRepository.delete(currentUser);
-        return ResponseEntity.ok("User deleted");
+        return "User deleted";
     }
 
 
@@ -95,6 +96,15 @@ public class UserService {
 
     public Boolean isAuthenticated(@AuthenticationPrincipal UserDetails userDetails){
         return userDetails != null;
+    }
+
+    public List<ProductModel> getCurrentUserProducts(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User data is missing or invalid.");
+        }
+        List<ProductModel> usersProducts = productRepository.findBySellerId(currentUser.getId());
+        return usersProducts;
     }
 
 }
