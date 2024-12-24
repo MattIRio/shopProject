@@ -2,10 +2,14 @@ package newproject.newproject.controller;
 
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.UsersRepository;
+import newproject.newproject.service.signup.SignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -16,36 +20,25 @@ public class SignUpController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-        @GetMapping("/signUpPage")
+    private final SignUpService signUpService;
+
+    public SignUpController(SignUpService signUpService) {
+        this.signUpService = signUpService;
+    }
+
+    @GetMapping("/signUpPage")
         public String signUpPage() {                            //url to sign up page
             return "signup";
         }
 
     @PostMapping("/signUpUser")
-    public String createUser(@RequestBody UserModel userModel,
-                             RedirectAttributes redirectAttributes) {
+    public String createUser(@RequestBody UserModel userModel, RedirectAttributes redirectAttributes) {
         try {
-            if (userModel == null || userModel.getEmail() == null || userModel.getPassword() == null) {
-                redirectAttributes.addFlashAttribute("error", "Invalid user data provided");
-                return "redirect:/signUpPage";
-            }
-
-            UserModel existingUser = usersRepository.findByEmail(userModel.getEmail());
-            if (existingUser != null) {
-                redirectAttributes.addFlashAttribute("EmailExist", "User with such email already exists");
-                return "redirect:/signUpPage";
-
-            } else {
-                UserModel localUser = new UserModel();
-                localUser.setPassword(passwordEncoder.encode(userModel.getPassword()));
-                localUser.setEmail(userModel.getEmail());
-                redirectAttributes.addFlashAttribute("registrationSuccess", "You are successfully registered!");
-                usersRepository.save(localUser);
-                return "redirect:/loginPage";
-            }
-        } catch (Exception e) {
-            System.err.println("An error occurred while creating a user: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
+            signUpService.createUser(userModel, redirectAttributes);
+            return "redirect:/loginPage";
+        }catch (ResponseStatusException e) {
+            System.out.println("Unexpected error: " + e);
+            ResponseEntity.status(e.getStatusCode()).body(e.getReason()).getBody();
             return "redirect:/signUpPage";
         }
     }

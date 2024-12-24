@@ -57,5 +57,12 @@ public class UserModel {
     )
     private List<ProductModel> publishedProducts;
 
+    @OneToMany
+    @JoinTable(
+            name = "user_preferred_products",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<UsersPreferencesModel> preferredProducts;
 
 }

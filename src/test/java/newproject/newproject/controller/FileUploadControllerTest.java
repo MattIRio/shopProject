@@ -60,7 +60,7 @@ class FileUploadControllerTest {
         UsernamePasswordAuthenticationToken principalToken = new UsernamePasswordAuthenticationToken("testuser", "password");
         when(principal.getName()).thenReturn("testuser");
 
-        ResponseEntity<String> response = fileUploadController.upload(file, redirectAttributes, principalToken, authentication);
+        ResponseEntity<String> response = fileUploadController.uploadProfilePic(file, redirectAttributes, principalToken, authentication);
 
         Path filePath = Paths.get(uploadDirectory, "testuser_testProfilePic.jpg");
         assertTrue(Files.exists(filePath));

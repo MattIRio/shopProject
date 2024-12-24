@@ -15,7 +15,7 @@ public class ProductModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "uniq_id", unique = true)
+    @Column(name = "uniq_Id", unique = true)
     private UUID uniqId;
 
     @Column(name = "product_name")

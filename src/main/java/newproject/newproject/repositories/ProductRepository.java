@@ -20,4 +20,6 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
 
     @Query("SELECT p FROM ProductModel p WHERE p.category LIKE %:name%")
     List<ProductModel> findByCategory(@Param("name") String name);
+
+
 }

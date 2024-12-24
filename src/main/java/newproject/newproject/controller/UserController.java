@@ -1,27 +1,22 @@
 package newproject.newproject.controller;
 
 import newproject.newproject.model.UserModel;
+import newproject.newproject.repositories.PreferencesRepository;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
+import newproject.newproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.security.Principal;
 
-import static newproject.newproject.model.UserModel.UserType.BUYER;
-import static newproject.newproject.model.UserModel.UserType.SELLER;
 
 @Controller
 public class UserController {
@@ -29,98 +24,90 @@ public class UserController {
     ProductRepository productRepository;
     @Autowired
     UsersRepository usersRepository;
+    @Autowired
+    PreferencesRepository preferencesRepository;
+    @Autowired
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PutMapping("/saveuserinfo")
     public ResponseEntity<String> saveUser(@RequestBody UserModel user, Principal principal, RedirectAttributes redirectAttributes, @AuthenticationPrincipal OAuth2User authentication) {
         try {
-            UserModel currentUser = null;
-            if (principal instanceof OAuth2AuthenticationToken){
-                currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
-            } else if (principal instanceof UsernamePasswordAuthenticationToken){
-                currentUser = usersRepository.findByEmail(principal.getName());
-            }
-
-            if (user.getUserName() == null || user.getPhoneNumber() == null || user.getUserType() == null) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("User data is missing or invalid.");
-            }
-            currentUser.setUserName(user.getUserName());
-            currentUser.setPhoneNumber(user.getPhoneNumber());                                                                                  //saving/changing user info
-            currentUser.setUserType(user.getUserType());
-
-            usersRepository.save(currentUser);
+            userService.saveUser(user, principal, redirectAttributes, authentication);
             return ResponseEntity.ok("User profile information saved");
+        } catch (
+                ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         } catch (Exception e) {
-            System.err.println("An error occurred while saving user info: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unexpected error occurred. Please try again later.");
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
 
     @GetMapping("/getcurrentuserdata")
     public ResponseEntity<UserModel> getCurrentUserData(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
-        UserModel currentUser = null;
-        if (principal instanceof OAuth2AuthenticationToken){
-            currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
-        } else if (principal instanceof UsernamePasswordAuthenticationToken){
-            currentUser = usersRepository.findByEmail(principal.getName());                                                                          //returning current logged user model logged by Form-Based Authentication and oauth2
+        try {
+            UserModel currentUser = userService.getCurrentUserData(principal, authentication);
+            return ResponseEntity.ok(currentUser);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.ok(currentUser);
     }
 
 
     @GetMapping("/getuserdatabyid/{id}")
     public ResponseEntity<UserModel> getCurrentUserDataById(@PathVariable Integer id) {
-        if (id == null) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)                                                                                                  //returning user model by id
-                    .build();
-        }
-        UserModel currentUser = usersRepository.findById(id);
-        if (currentUser == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        try {
+        UserModel currentUser = userService.getCurrentUserDataById(id);
         return ResponseEntity.ok(currentUser);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/deletecurrentuser")
     public ResponseEntity<String> deleteCurrentUser(Principal principal,@AuthenticationPrincipal OAuth2User authentication) {
         try {
-            UserModel currentUser = null;
-            if (principal instanceof OAuth2AuthenticationToken){
-                currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
-            } else if (principal instanceof UsernamePasswordAuthenticationToken){
-                currentUser = usersRepository.findByEmail(principal.getName());
-            }
-            usersRepository.delete(currentUser);
-            return ResponseEntity.ok("User deleted");
+            userService.deleteCurrentUser(principal, authentication);
+            return ResponseEntity.ok("User deleted succesfully");
+        }catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
         } catch (Exception e) {
-            System.err.println("An error occurred while deleting user: " + e.getMessage());                                        //deleting current logged user model logged by Form-Based Authentication and oauth2
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unexpected error occurred. Please try again later.");
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/getcurrentuserrole")
     public ResponseEntity<String> getUserRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getAuthorities() == null){
-            return ResponseEntity.badRequest().body("Current user has no roles");
+        try {
+            String userRole = userService.getUserRole();
+            return ResponseEntity.ok(userRole);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
 
-        String response = "";
-        if (authentication.getAuthorities().contains(SELLER)){
-            response = "SELLER";
-        } if(authentication.getAuthorities().contains(BUYER)) {
-            response = "BUYER";
+    @GetMapping("/isuserauthenticated")
+    public ResponseEntity<Boolean> isAuthenticated(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            return ResponseEntity.ok(userService.isAuthenticated(userDetails));
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.ok(response);
     }
 }
