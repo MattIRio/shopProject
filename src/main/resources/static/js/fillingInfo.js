@@ -143,9 +143,9 @@ document.getElementById('fillingInfoCustomer').addEventListener('submit', functi
 
     if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
 
-        const formData = new FormData();
 
-        formData = {
+
+        const formData = {
             name: nameInput.value,
             phone: phoneInput.value,
             role: "BUYER",
@@ -208,7 +208,7 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
                 phoneNumber: phoneInput.value,
                 userType: 'SELLER'
             };
-        // const formData = new FormData();
+        const formData = new FormData();
         
         //  // Перебираємо всі елементи форми, пропускаючи перший
         //  const formElements = this.elements;
@@ -235,10 +235,10 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
              console.log(response);
              if (response.ok) {
                  // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-                 console.log('Login successful');
+                 console.log('Text data uploaded');
              } else {
                  // Обробка помилок
-                 console.log('Login failed');
+                 console.log('Text data not uploaded');
              }
          }).catch(error => {
              console.error('Error during fetch', error);
@@ -262,10 +262,10 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
             console.log(response);
             if (response.ok) {
                 // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-                console.log('Login successful');
+                console.log('Image Uploaded');
             } else {
                 // Обробка помилок
-                console.log('Login failed');
+                console.log('Image not uploaded');
             }
         }).catch(error => {
             console.error('Error during fetch', error);

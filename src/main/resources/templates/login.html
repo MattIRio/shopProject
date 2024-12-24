@@ -29,6 +29,9 @@
                 <label for="password"></label>
                 <input type="password" id="password" name="password" required>
                 <div class="password-error-text" style="display: none;">Enter valid password</div>
+                <div th:if="${error}" style="color: red;">
+                    <p th:text="${error}"></p>
+                </div>
                 <button type="submit">Log in</button>
             </form>
             <div class="line"></div>

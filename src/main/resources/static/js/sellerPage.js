@@ -13,6 +13,8 @@ async function getItemsFromSeller(brand) {
             product.brand.toLowerCase() === brand.toLowerCase()
         );
 
+        console.log(filteredProducts);
+
         // Виведення результатів
         if (filteredProducts.length === 0) {
             productList.innerHTML = `<p>No products found for brand: <strong>${brand}</strong>.</p>`;
