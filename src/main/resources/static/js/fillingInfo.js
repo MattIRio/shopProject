@@ -107,7 +107,7 @@ cropButton.addEventListener('click', () => {
             croppedImage.src = url; // Відображення результату
 
 
-            const file = new File([blob], 'cropped_image.jpg', { type: 'image/jpeg' });
+            const file = new File([blob], `${fileInput.files[0].name}`, { type: 'image/jpeg' });
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             fileInput.files = dataTransfer.files; // Оновлюємо поле input
@@ -146,9 +146,9 @@ document.getElementById('fillingInfoCustomer').addEventListener('submit', functi
 
 
         const formData = {
-            name: nameInput.value,
-            phone: phoneInput.value,
-            role: "BUYER",
+            userName: nameInput.value,
+            phoneNumber: phoneInput.value,
+            userType: "BUYER",
         }
 
         // Виконуємо запит на сервер
@@ -208,22 +208,7 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
                 phoneNumber: phoneInput.value,
                 userType: 'SELLER'
             };
-        const formData = new FormData();
-        
-        //  // Перебираємо всі елементи форми, пропускаючи перший
-        //  const formElements = this.elements;
-        
-        //  for (let i = 1; i < formElements.length; i++) { // починаємо з другого елемента
-        //      const field = formElements[i];
-        //      if (field.name) { // додаємо тільки елементи з атрибутом name
-        //          formData.append(field.name, field.value);
-        //      }
-        //  }
-        //  formData.append('role', 'SELLER');
-        //  for (let [key, value] of formData.entries()) {
-        //      console.log(key, value);
-        //  }
-         // Виконуємо запит на сервер
+
          fetch('/saveuserinfo', {
                  method: 'PUT',
                  body: JSON.stringify(userData),
