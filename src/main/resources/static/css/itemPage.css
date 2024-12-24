@@ -101,3 +101,7 @@ button:active {
     background-color: #0d3e84;
 }
 
+.product-description {
+    margin: 10px 30px;
+    font-size: 18px;
+}

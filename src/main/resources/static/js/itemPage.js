@@ -6,10 +6,10 @@ fetch('http://localhost:3000/items')
 
         // Витягуємо дані
         const imageUrl = JSON.parse(product.image)[0]; // Перше фото
-        const productName = product.product_name;
+        const productName = product.productName;
         const description = product.description;
-        const price = product.retail_price;
-        const discountedPrice = product.discounted_price;
+        const price = product.retailPrice;
+        const discountedPrice = product.discountedPrice;
         const brand = product.brand;
 
         // Заповнюємо фото
@@ -19,11 +19,20 @@ fetch('http://localhost:3000/items')
 
         // Заповнюємо деталі товару
         document.getElementById('product-details').innerHTML = `
+        <div class="product-main">
             <h2>${productName}</h2>
             <p><strong>Brand:</strong> ${brand}</p>
-            <p>${description}</p>
-            <p class="price">Price: <del>    ${price}</del>    ${discountedPrice} $</p>
+            <p class="price">
+                Price: 
+                ${discountedPrice ? `<del>${price} $</del> ${discountedPrice} $` : `${price} $`}
+            </p>
             <button id="add-to-cart-btn">Add to cart</button>
+        </div>
+    `;
+
+    document.querySelector('.product-description').innerHTML = `
+
+            <p>${description}</p>
         `;
 
         document.getElementById('add-to-cart-btn').addEventListener('click', () => {

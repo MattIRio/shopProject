@@ -153,7 +153,6 @@ header {
 
 .item-container {
     display: flex;
-    padding-bottom: 20px;
 }
 
 /* Стиль для зображення товару */
@@ -195,4 +194,71 @@ header {
 
 #checkout-button:hover {
     background-color: #007432;
+}
+
+.item-footer-container {
+    display: flex;
+    position: relative;
+    justify-content: right;
+}
+
+.quantity-btn {
+    font-size: 30px;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    color: blue;
+    background-color: white;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    
+}
+
+.item-quantity {
+    padding: 5px 20px;
+    border: #002f34 1px solid;
+    border-radius: 5px;
+    cursor: default;
+}
+
+.price-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.price-container {
+    font-size: 14px;
+}
+
+.discount-price-container {
+    font-size: 20px;
+    color: red;
+}
+
+.signup-badge {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    right: 100px;
+    color: white;
+    cursor: pointer;
+}
+
+#default-user-icon {
+    width: 30px;
+
+}
+
+.signup-badge p {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    font-size: 18px;
 }
