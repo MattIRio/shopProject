@@ -1,3 +1,28 @@
+fetch('/isuserauthenticated', {
+    method: 'GET',
+    // credentials: 'include', // Додає cookie для автентифікації
+})
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to check authentication status');
+        }
+        return response.json(); // Отримуємо true або false
+    })
+    .then(isAuthenticated => {
+        if (isAuthenticated) {
+            console.log('User is authenticated');
+            // Виконуємо дії для автентифікованого користувача
+        } else {
+            console.log('User is not authenticated');
+            // Перенаправляємо на сторінку входу або показуємо повідомлення
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Обробка помилок
+    });
+
+
 async function getItemsFromSeller(brand) {
     const productList = document.querySelector('.items-container');
     productList.innerHTML = '';
@@ -498,53 +523,51 @@ document.querySelector('form').addEventListener('submit', function (event) {
 
     console.log(userData);
 
-    // // Відправляємо запит на сервер через fetch
-    // fetch('/????????????', {
-    //     method: 'PUT',
-    //     body: JSON.stringify(userData),
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         [csrfHeader]: csrfToken // CSRF токен
-    //     }
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     console.log('Success:', data);
-    // })
-    // .catch((error) => {
-    //     console.error('Error:', error);
-    // });
+    // Відправляємо запит на сервер через fetch
+    fetch('/upload', {
+        method: 'PUT',
+        body: JSON.stringify(userData),
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken // CSRF токен
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 
     const formDataPhoto = new FormData();
-    const fileInput = document.querySelector('input[type="file"]');
 
-    Array.from(fileInput.files).forEach((file, index) => {
+    photoToUpload.files.forEach((file, index) => {
         formDataPhoto.append(`file${index + 1}`, file); // Додаємо кожен файл з унікальним ключем
     });
 
-    formDataPhoto.forEach((value, key) => {
-        console.log(key, value);
-    });
-
-
-    // fetch('/upload', {
-    //     method: 'POST',
-    //     body: formDataPhoto,
-    //     headers: {
-    //         [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-    //     }
-    // }).then(response => {
-    //     console.log(response);
-    //     if (response.ok) {
-    //         // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-    //         console.log('Login successful');
-    //     } else {
-    //         // Обробка помилок
-    //         console.log('Login failed');
-    //     }
-    // }).catch(error => {
-    //     console.error('Error during fetch', error);
+    // formDataPhoto.forEach((value, key) => {
+    //     console.log(key, value);
     // });
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formDataPhoto,
+        headers: {
+            [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+        }
+    }).then(response => {
+        console.log(response);
+        if (response.ok) {
+            // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+            console.log('Login successful');
+        } else {
+            // Обробка помилок
+            console.log('Login failed');
+        }
+    }).catch(error => {
+        console.error('Error during fetch', error);
+    });
 });
 
 function urlToBlob(urlFile) {
