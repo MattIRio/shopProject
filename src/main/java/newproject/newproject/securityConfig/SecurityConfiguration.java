@@ -29,10 +29,12 @@ public class SecurityConfiguration{
                 .csrf(csrf -> csrf
 //                           .disable()
                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+
                 )
+
                 .authorizeHttpRequests(registry -> {
 
-                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata").permitAll();
+                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata", "/upload/profilepic", "/addcategory/{productId}","/getuserdatabyid/{id}", "/getrecomendations").permitAll();
                     registry.requestMatchers( "/mainpage", "/profileform").authenticated();
                     registry.requestMatchers("null").hasRole("BUYER");
                     registry.requestMatchers("/postproduct").hasRole("SELLER");

@@ -10,7 +10,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://shop_db:5432/Shop_Project_DB
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1234
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
 
   shop_db:
     image: postgres:latest
@@ -21,7 +21,7 @@ services:
       POSTGRES_DB: Shop_Project_DB
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+      - ./Shop_Project_DB.sql:/docker-entrypoint-initdb.d/Shop_Project_DB.sql
     ports:
       - "5433:5432"
 
