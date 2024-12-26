@@ -246,13 +246,15 @@ header {
     display: flex;
     justify-content: center;
     align-self: center;
-    right: 100px;
+    right: 10vw;
     color: white;
     cursor: pointer;
 }
 
 #default-user-icon {
-    width: 30px;
+    width: 50px;
+    border-radius: 100px;
+    margin-right: 10px;
 
 }
 
@@ -261,4 +263,20 @@ header {
     justify-content: center;
     align-self: center;
     font-size: 18px;
+}
+
+@media (max-width: 930px) {
+    #user-name-header {
+        display: none; /* Приховати елемент */
+    }
+
+    #logo-desktop {
+        display: none;
+    }
+}
+
+@media (min-width: 931px) {
+    #logo-mobile {
+        display: none;
+    }
 }

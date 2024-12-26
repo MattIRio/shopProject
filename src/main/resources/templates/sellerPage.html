@@ -18,7 +18,8 @@
     <header>
         <div class="header-wrapper">
             <div class="logo">
-                <img src="/css/img/logo.png" alt="logo">
+                <img src="/css/img/logo.png" id="logo-desktop" alt="logo">
+                <img src="/css/img/logo-mobile.png" id="logo-mobile" alt="">
             </div>
             <div class="search-wrapper">
 
@@ -30,7 +31,7 @@
 
             <div class="signup-badge">
                 <img src="/css/img/default-user.png" id="default-user-icon" alt="">
-                <p><u> Login/Sign Up</u></p>
+                <p id="user-name-header"><u> Login/Sign Up</u></p>
             </div>
 
             <div class="cart-container">
@@ -56,7 +57,8 @@
 
 
     <div class="seller-info-container">
-        <img src="" id="seller-photo" alt="">
+        <img id="seller-photo" alt="">
+        <input type="file" id="seller-photo-input" style="display: none;">
         <p class="seller-name"></p>
     </div>
 
@@ -66,7 +68,6 @@
     <div class="cropContainerWrapper">
         <div class="cropContainer">
             <img src="/css/img/exitCross.png" alt="" id="exitCross">
-            <!-- <img src="/css/img/exitCross.png" alt="" id="exitCross"> -->
             <img id="image" style="max-width: 70%; display: none;" />
             <button id="cropButton">Crop</button>
 

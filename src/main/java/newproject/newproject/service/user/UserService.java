@@ -40,7 +40,7 @@ public class UserService {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
 
         if (user.getUserName() == null || user.getPhoneNumber() == null || user.getUserType() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User data is missing or invalid.");
         }
         currentUser.setUserName(user.getUserName());
         currentUser.setPhoneNumber(user.getPhoneNumber());                                                                                  //saving/changing user info

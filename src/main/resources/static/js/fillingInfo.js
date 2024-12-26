@@ -101,7 +101,7 @@ cropButton.addEventListener('click', () => {
     document.querySelector('.overlay').style.display = 'none';
     document.getElementById('addPhotoImg').style.display = 'none';
     if (cropper) {
-        const croppedCanvas = cropper.getCroppedCanvas(); // Отримати обрізане зображення
+        const croppedCanvas = cropper.getCroppedCanvas({ width: 300, height: 300 }); // Отримати обрізане зображення
         croppedCanvas.toBlob((blob) => {
             const url = URL.createObjectURL(blob);
             croppedImage.src = url; // Відображення результату
@@ -118,9 +118,8 @@ cropButton.addEventListener('click', () => {
 
 
 //Відправка інформації користувача
-document.getElementById('fillingInfoCustomer').addEventListener('submit', function (event) {
+document.getElementById('fillingInfoCustomer').addEventListener('submit', async function (event) {
     event.preventDefault();
-
 
     const form = document.querySelector('#fillingInfoCustomer');
     const nameInput = document.getElementById('customerName');
@@ -142,44 +141,38 @@ document.getElementById('fillingInfoCustomer').addEventListener('submit', functi
     }
 
     if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
-
-
-
         const formData = {
             userName: nameInput.value,
             phoneNumber: phoneInput.value,
             userType: "BUYER",
-        }
+        };
 
-        // Виконуємо запит на сервер
-        fetch('/saveuserinfo', {
-            method: 'PUT',
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-            }
-        })
-
-            .then(response => {
-                console.log(response);
-                if (response.ok) {
-                    // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-                    console.log('Login successful');
-                } else {
-                    // Обробка помилок
-                    console.log('Login failed');
+        try {
+            // Виконуємо асинхронний запит на сервер
+            const response = await fetch('/saveuserinfo', {
+                method: 'PUT',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
                 }
-            })
-            .catch(error => {
-                console.error('Error during fetch', error);
             });
+
+            if (response.ok) {
+                console.log('Login successful');
+                // Можна додати перенаправлення або повідомлення для користувача
+            } else {
+                console.error('Login failed', await response.text());
+            }
+        } catch (error) {
+            console.error('Error during fetch', error);
+        }
     }
 });
 
 
 //Відправка інформації продавцем
-document.getElementById('fillingInfoSeller').addEventListener('submit', function (event) {
+document.getElementById('fillingInfoSeller').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const form = document.querySelector('#fillingInfoSeller');
@@ -189,6 +182,7 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
     const namePattern = /^[A-Za-z ]{2,}$/;
     const phonePattern = /^\+(\d{10,15})$/;
 
+    // Перевірка полів
     if (!namePattern.test(nameInput.value)) {
         this.querySelector('.name-error-text').style.display = 'block';
     } else {
@@ -201,59 +195,55 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', function
         this.querySelector('.phone-error-text').style.display = 'none';
     }
 
-    //Якщо все вірно
     if (namePattern.test(nameInput.value) && phonePattern.test(phoneInput.value)) {
-         const userData = {
-                userName: nameInput.value,
-                phoneNumber: phoneInput.value,
-                userType: 'SELLER'
-            };
+        const userData = {
+            userName: nameInput.value,
+            phoneNumber: phoneInput.value,
+            userType: 'SELLER'
+        };
 
-         fetch('/saveuserinfo', {
-                 method: 'PUT',
-                 body: JSON.stringify(userData),
-                 headers: {
-                     'Content-Type': 'application/json',
-                     [csrfHeader]: csrfToken // CSRF токен
-                 }
-         }).then(response => {
-             console.log(response);
-             if (response.ok) {
-                 // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-                 console.log('Text data uploaded');
-             } else {
-                 // Обробка помилок
-                 console.log('Text data not uploaded');
-             }
-         }).catch(error => {
-             console.error('Error during fetch', error);
-         });
+        try {
+            // Відправка текстових даних
+            const userResponse = await fetch('/saveuserinfo', {
+                method: 'PUT',
+                body: JSON.stringify(userData),
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF токен
+                }
+            });
 
-
-
-        //Відправка фото
-        const formDataPhoto = new FormData();
-        const fileInput = form.querySelector('input[type="file"]');
-
-        formDataPhoto.append('file', fileInput.files[0]);  // Додаємо перший файл
-
-        fetch('/upload', {
-            method: 'POST',
-            body: formDataPhoto,
-            headers: {
-                [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-            }
-        }).then(response => {
-            console.log(response);
-            if (response.ok) {
-                // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-                console.log('Image Uploaded');
+            if (userResponse.ok) {
+                console.log('Text data uploaded');
             } else {
-                // Обробка помилок
-                console.log('Image not uploaded');
+                console.error('Text data not uploaded', await userResponse.text());
             }
-        }).catch(error => {
+
+            // Відправка фото
+            const formDataPhoto = new FormData();
+            const fileInput = form.querySelector('input[type="file"]');
+
+            if (fileInput.files.length > 0) {
+                formDataPhoto.append('file', fileInput.files[0]);
+
+                const photoResponse = await fetch('/upload/uploadprofilepic', {
+                    method: 'POST',
+                    body: formDataPhoto,
+                    headers: {
+                        [csrfHeader]: csrfToken // CSRF токен
+                    }
+                });
+
+                if (photoResponse.ok) {
+                    console.log('Image Uploaded');
+                } else {
+                    console.error('Image not uploaded', await photoResponse.text());
+                }
+            } else {
+                console.warn('No file selected for upload');
+            }
+        } catch (error) {
             console.error('Error during fetch', error);
-        });
+        }
     }
 });

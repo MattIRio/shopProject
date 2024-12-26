@@ -31,7 +31,8 @@ public class FileUploadService {
     @Autowired
     OauthAndPrincipalAuthController oauthAndPrincipalAuthController;
 
-    public static String uploadDirecotry = System.getProperty("user.dir")+"/uploads/";
+    // public static String uploadDirecotry = System.getProperty("user.dir")+"/uploads/";
+    public static String uploadDirecotry = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
 
     @Transactional
     public String uploadProfilePicture(MultipartFile file, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {

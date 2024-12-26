@@ -22,12 +22,12 @@
             <form id="userForm">
                 <p>E-mail</p>
                 <label for="email"></label>
-                <input type="text" id="email" name="email" required>
+                <input type="text" id="email" name="email" value="testuser@gmail.com" required>
                 <div class="email-error-text" style="display: none;">Enter valid e-mail</div>
                 <div style="height: 20px;"></div>
                 <p>Password</p>
                 <label for="password"></label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" value="testuser123Q" required>
                 <div class="password-error-text" style="display: none;">Enter valid password</div>
                 <div th:if="${error}" style="color: red;">
                     <p th:text="${error}"></p>
