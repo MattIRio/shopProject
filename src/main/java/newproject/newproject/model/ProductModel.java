@@ -30,6 +30,8 @@ public class ProductModel {
     private String description;
     @Column(name = "brand")
     private String brand;
+    @Column(name = "quantity")
+    private Integer quantity;
     @Column(name = "product_category_tree")
     private String category;
     @Column(name = "sellerId")
@@ -38,7 +40,7 @@ public class ProductModel {
 
     public ProductModel(){}
 
-    public ProductModel(String productName, int retailPrice, int discountedPrice, String image, String description, String brand, String category) {
+    public ProductModel(String productName, int retailPrice, int discountedPrice, String image, String description, String brand, String category, int quantity) {
         this.productName = productName;
         this.retailPrice = retailPrice;
         this.discountedPrice = discountedPrice;
@@ -46,5 +48,6 @@ public class ProductModel {
         this.description = description;
         this.brand = brand;
         this.category = category;
+        this.quantity = quantity;
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,35 +39,40 @@ public class ProductsService {
     }
 
     @Transactional
-    public void saveProduct(ProductModel product, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+    public UUID saveProduct(ProductModel product, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        if (product == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+        }
+        if (product.getProductName() == null || product.getBrand() == null || product.getDescription() == null || product.getRetailPrice() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+        }
+
         UserModel currentUser = null;
         if (principal instanceof OAuth2AuthenticationToken) {
             currentUser = usersRepository.findByEmail((String) authentication.getAttributes().get("email"));
         } else if (principal instanceof UsernamePasswordAuthenticationToken) {
             currentUser = usersRepository.findByEmail(principal.getName());
         }
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authorized.");
+        }
 
-        if (product == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
-        }
-        if (product.getProductName() == null || product.getBrand() == null || product.getDescription() == null || product.getImage() == null || product.getRetailPrice() == null) {     //creating product
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
-        }
 
         if (productRepository.findByProductName(product.getProductName()) != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with such name already exist.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with such name already exists.");
         }
 
         ProductModel productModel = new ProductModel();
         productModel.setProductName(product.getProductName());
         productModel.setBrand(product.getBrand());
-        productModel.setImage(product.getImage());
         productModel.setDescription(product.getDescription());
         productModel.setRetailPrice(product.getRetailPrice());
         productModel.setDiscountedPrice(product.getDiscountedPrice());
+        productModel.setQuantity(product.getQuantity());
         productModel.setSellerId(currentUser.getId());
 
         productRepository.save(productModel);
+        return productRepository.findByProductName(product.getProductName()).getUniqId();
 
     }
 

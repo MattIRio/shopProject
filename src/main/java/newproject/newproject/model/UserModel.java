@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,13 +42,8 @@ public class UserModel {
     )
     private List<ProductModel> boughtProducts;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_ordered_products",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<ProductModel> orderedProducts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserOrderedProduct> orderedProducts = new ArrayList<>();
 
     @OneToMany
     @JoinTable(

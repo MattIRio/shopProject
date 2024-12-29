@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
     public class ProductsController {
     @Autowired
     ProductRepository productRepository;
@@ -47,15 +47,15 @@ import java.util.UUID;
 
     @Transactional
     @PostMapping("/saveproduct")
-    public ResponseEntity<String> saveProduct(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes, @AuthenticationPrincipal OAuth2User authentication) {
+    public ResponseEntity<UUID> saveProduct(@RequestBody ProductModel product, Principal principal, RedirectAttributes redirectAttributes, @AuthenticationPrincipal OAuth2User authentication) {
         try {
-            productsService.saveProduct(product, principal, authentication);
-            return ResponseEntity.ok("Product saved");
+            UUID createdProductId = productsService.saveProduct(product, principal, authentication);
+            return ResponseEntity.ok(createdProductId);
         } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+            return ResponseEntity.status(e.getStatusCode()).build();
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

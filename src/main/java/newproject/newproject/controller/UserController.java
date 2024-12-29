@@ -5,6 +5,7 @@ import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.PreferencesRepository;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
+import newproject.newproject.service.user.UserOrdersService;
 import newproject.newproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -30,6 +32,8 @@ public class UserController {
     PreferencesRepository preferencesRepository;
     @Autowired
     private final UserService userService;
+    @Autowired
+    UserOrdersService userOrdersService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -118,6 +122,32 @@ public class UserController {
         try {
             List<ProductModel> userProducts = userService.getCurrentUserProducts(principal, authentication);
             return ResponseEntity.ok(userProducts);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/currentuserorders")
+    public ResponseEntity<List<ProductModel>> getUserOrders(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        try {
+            List<ProductModel> userProducts = userOrdersService.userOrders(principal, authentication);
+            return ResponseEntity.ok(userProducts);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/addordertocurrentuser/{productId}/{quantity}")
+    public ResponseEntity<String> addOrder(@PathVariable UUID productId, @PathVariable int quantity, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        try {
+            userOrdersService.addOrderToCurrentUser(productId, quantity, principal, authentication);
+            return ResponseEntity.ok("Product added");
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).build();
         } catch (Exception e) {
