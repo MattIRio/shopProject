@@ -2,11 +2,15 @@ package newproject.newproject.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
 @Entity
@@ -37,17 +41,4 @@ public class ProductModel {
     @Column(name = "sellerId")
     private Integer sellerId;
 
-
-    public ProductModel(){}
-
-    public ProductModel(String productName, int retailPrice, int discountedPrice, String image, String description, String brand, String category, int quantity) {
-        this.productName = productName;
-        this.retailPrice = retailPrice;
-        this.discountedPrice = discountedPrice;
-        this.image = image;
-        this.description = description;
-        this.brand = brand;
-        this.category = category;
-        this.quantity = quantity;
-    }
 }

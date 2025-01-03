@@ -98,10 +98,22 @@ import java.util.UUID;
         }
     }
 
+    @GetMapping("/getproductbyid/{productid}")
+    public ResponseEntity<ProductModel> getProductById(@PathVariable UUID productId){
+        try {
+            ProductModel product = productsService.getProductById(productId);
+            return ResponseEntity.ok(product);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
     @GetMapping("/getproductsbycategory/{searchedCategory}")
     public ResponseEntity<List<ProductModel>> findByProductNameByCategory(@PathVariable String searchedCategory) {
         try {
-            List<ProductModel> products = productsService.findByProductNameByCategory(searchedCategory);
+            List<ProductModel> products = productsService.findByProductByCategory(searchedCategory);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);

@@ -120,7 +120,17 @@ public class ProductsService {
         return productList.subList(0, limit);
     }
 
-    public List<ProductModel> findByProductNameByCategory(String searchedCategory){
+    public ProductModel getProductById(UUID id) {
+        ProductModel product = productRepository.findByUniqId(id);
+
+        if (product == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+        }
+
+        return product;
+    }
+
+    public List<ProductModel> findByProductByCategory(String searchedCategory){
         List<ProductModel> productList = productRepository.findByCategory(searchedCategory);
 
         if (productList.isEmpty()) {

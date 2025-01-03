@@ -36,7 +36,17 @@ public class UserOrdersService {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
         List<ProductModel> userOrders = new ArrayList<>();
         for (UserOrderedProduct orderedProduct : currentUser.getOrderedProducts().stream().toList()){
-            userOrders.add(orderedProduct.getProduct());
+            ProductModel product = ProductModel.builder()
+                    .productName(orderedProduct.getProduct().getProductName())
+                    .image(orderedProduct.getProduct().getImage())
+                    .brand(orderedProduct.getProduct().getBrand())
+                    .description(orderedProduct.getProduct().getDescription())
+                    .discountedPrice(orderedProduct.getProduct().getDiscountedPrice())
+                    .category(orderedProduct.getProduct().getCategory())
+                    .retailPrice(orderedProduct.getProduct().getRetailPrice())
+                    .quantity(orderedProduct.getQuantity())
+                    .build();
+            userOrders.add(product);
         }
         return userOrders;
     }
@@ -47,13 +57,14 @@ public class UserOrdersService {
         UserOrderedProduct existingOrder = userOrderedProductRepository.findByUserAndProduct(currentUser, currentProduct);
 
         if (existingOrder != null) {
-            existingOrder.setQuantity(existingOrder.getQuantity() + quantity);
+            existingOrder.setQuantity(quantity);
+            userOrderedProductRepository.save(existingOrder);
         } else {
             UserOrderedProduct newOrder = new UserOrderedProduct();
             newOrder.setUser(currentUser);
             newOrder.setProduct(currentProduct);
             newOrder.setQuantity(quantity);
-            currentUser.getOrderedProducts().add(newOrder);
+            userOrderedProductRepository.save(newOrder);
         }
     }
 
