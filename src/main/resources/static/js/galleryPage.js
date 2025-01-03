@@ -11,6 +11,7 @@ fetch('http://localhost:3000/items')
             const itemWrapper = document.createElement("li");
             const itemTitle = document.createElement('h4');
             const itemPrice = document.createElement("p");
+            const itemBrand = document.createElement("p");
 
             // Створення контейнера для зображення
             const itemImageWrapper = document.createElement('div');
@@ -26,15 +27,17 @@ fetch('http://localhost:3000/items')
 
             // Додавання елементів
             itemImageWrapper.appendChild(itemImage); // Додаємо зображення в контейнер
-            itemTitle.innerHTML = item.product_name; // Додаємо назву товару
-            itemPrice.innerHTML = `${item.retail_price} $`; // Додаємо ціну
+            itemTitle.innerHTML = item.productName; // Додаємо назву товару
+            itemBrand.innerHTML = item.brand;
+            itemPrice.innerHTML = `${item.retailPrice} $`; // Додаємо ціну
 
             // Додавання класів для текстових елементів
             itemTitle.classList.add('item-title');
+            itemBrand.classList.add('item-brand');
             itemPrice.classList.add('item-price');
 
             // Вставка всіх елементів в картку товару
-            itemWrapper.append(itemImageWrapper, itemTitle, itemPrice);
+            itemWrapper.append(itemImageWrapper, itemTitle, itemBrand, itemPrice);
             itemCatalog.appendChild(itemWrapper); // Вставка картки в каталог
 
 

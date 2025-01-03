@@ -86,6 +86,7 @@ function updateCartModal() {
             item.quantity++;
             localStorage.setItem('cart', JSON.stringify(cart)); // Оновлюємо кошик в локальному сховищі
             updateCartModal();
+            updateCartCount();
         });
 
         decreaseButton.addEventListener('click', () => {
@@ -93,6 +94,7 @@ function updateCartModal() {
                 item.quantity--;
                 localStorage.setItem('cart', JSON.stringify(cart)); // Оновлюємо кошик в локальному сховищі
                 updateCartModal();
+                updateCartCount();
             }
         });
 

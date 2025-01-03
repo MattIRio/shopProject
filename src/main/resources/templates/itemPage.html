@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/libraries/swiper.min.css">
     <link rel="stylesheet" href="../static/css/itemPage.css">
     <link rel="stylesheet" href="../static/css/header.css">
     <title>Item Page</title>
 </head>
+
 <body>
     <header>
         <div class="header-wrapper">
             <div class="logo">
-                <img src="../static/css/img/logo.png" alt="logo">
+                <img src="../static/css/img/logo.png" id="logo-desktop" alt="logo">
+                <img src="../static/css/img/logo-mobile.png" id="logo-mobile" alt="">
             </div>
             <div class="search-wrapper">
-                
+
                 <input type="text" id="search-bar" placeholder="Search...">
-                <img src="../static/css/img/search-icon.png" alt="" id="search-icon" >
+                <img src="../static/css/img/search-icon.png" alt="" id="search-icon">
                 <button id="search-button">Search</button>
-    
+
             </div>
 
             <div class="signup-badge">
                 <img src="../static/css/img/default-user.png" id="default-user-icon" alt="">
-                <p><u> Login/Sign Up</u></p>
+                <p id="user-name-header"><u> Login/Sign Up</u></p>
             </div>
+
             <div class="cart-container">
                 <img src="../static/css/img/cart-icon.png" alt="Cart" class="cart-icon" id="cart-icon">
                 <span class="cart-badge">0</span>
@@ -46,24 +51,51 @@
         </div>
     </div>
 
-    <div class="product-wrapper">
 
+
+    <div class="product-wrapper">
         <div class="product-container">
-            <div class="product-image" id="product-image">
-                <!-- Фото товару -->
+            <!-- <div class="product-image" id="product-image"></div> -->
+            <div class="slider-container">
+                <div class="swiper-container main-slider">
+                    <div class="swiper-wrapper" id="main-slider-wrapper">
+                        <!-- Слайди додаються динамічно -->
+                    </div>
+                    <button class="swiper-button-next"></button>
+                    <button class="swiper-button-prev"></button>
+                </div>
+
+                <div class="swiper-container thumbs-slider">
+                    <div class="swiper-wrapper" id="thumbs-slider-wrapper"></div>
+                    <button class="swiper-button-next"></button>
+                    <button class="swiper-button-prev"></button>
+                </div>
             </div>
-            <div class="product-details" id="product-details">
-                <!-- Деталі товару -->
+
+            <div class="product-details" id="product-details"></div>
+        </div>
+    </div>
+
+    <div class="product-description"></div>
+
+    <div class="same-seller-items-wrapper">
+        <p class="same-brand-items-title">Other products from this seller</p>
+        <div class="same-brand-items-slider-container">
+            <div class="swiper-container same-brand-items-slider">
+                <div class="swiper-wrapper" id="same-brand-items-slider-wrapper"></div>
+                <button class="swiper-button-prev"></button>
+                <button class="swiper-button-next"></button>
+
             </div>
         </div>
-       
+
+
     </div>
 
-    <div class="product-description">
-        <!-- description -->
-    </div>
+    <script src="../static/js/libraries/swiper.min.js"></script>
     <script src="../static/js/shoppingCart.js"></script>
     <script src="../static/js/itemPage.js"></script>
 
 </body>
+
 </html>
