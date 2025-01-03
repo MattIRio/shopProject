@@ -55,12 +55,30 @@
         </div>
     </div>
 
-
-    <div class="seller-info-container">
-        <img id="seller-photo" alt="">
+<div class="seller-info-wrapper">
+    <div class="seller-image-wrapper">
+        <img id="seller-photo" alt="Seller Photo" src="path-to-image.jpg">
         <input type="file" id="seller-photo-input" style="display: none;">
-        <p class="seller-name"></p>
     </div>
+
+    <div class="seller-info-container">  
+        <div class="seller-info">
+            <p class="seller-label">Name:</p>
+            <p class="seller-name"></p>
+            <button class="edit-btn edit-name-btn">Edit</button>
+        </div>
+        <div class="seller-info">
+            <p class="seller-label">Phone:</p>
+            <p class="seller-phone"></p>
+            <button class="edit-btn edit-phone-btn">Edit</button>
+        </div>
+        <div class="data-validation-error" style="display: none; color: red;">Your data is not correct</div>
+    </div>
+</div>
+
+    
+
+    
 
 
     <div id="overlay" class="overlay"></div>
@@ -118,8 +136,11 @@
                 <label for="discountPrice">Discount Price:</label>
                 <input type="number" id="discountPrice" name="discountPrice" placeholder="Discount price">
 
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" placeholder="Category">
+
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" placeholder="Description" rows="4"></textarea>
+                <textarea id="description" name="description" placeholder="Description" rows="6"></textarea>
 
                 <button type="submit" class="submit-btn">Save</button>
             </form>
@@ -130,8 +151,7 @@
         <div class="modal-content">
             <span id="close-modal" class="close">&times;</span>
             <form id="edit-form">
-                <input type="file" style="opacity: 0; pointer-events: none;" id="editFileInput" name="editFile" required
-                    accept="image/*" />
+                <input type="file" style="opacity: 0; pointer-events: none;" id="editFileInput" name="editFile" accept="image/*" />
 
                 <!-- Іконка для завантаження фото -->
                 <div class="editPhotoImgContainer">
@@ -152,8 +172,14 @@
                 <label for="edit-discount-price">Discount Price:</label>
                 <input type="number" id="edit-discount-price">
 
+                <label for="edit-category">Category:</label>
+                <input type="text" id="edit-category">
+
+                <label for="edit-brand">Brand:</label>
+                <input type="text" id="edit-brand">
+
                 <label for="edit-description">Description:</label>
-                <textarea id="edit-description" rows="4"></textarea>
+                <textarea id="edit-description" rows="6"></textarea>
 
                 <button type="submit" class="submit-btn">Save Changes</button>
             </form>

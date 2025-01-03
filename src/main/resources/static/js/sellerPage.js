@@ -13,11 +13,115 @@ async function uploadUserPhotoAndName() {
 
         document.getElementById('user-name-header').innerHTML = userData.userName;
         document.querySelector('.seller-name').innerHTML = userData.userName;
+        document.querySelector('.seller-phone').innerHTML = userData.phoneNumber;
         document.getElementById('seller-photo').src = profilePicture;
         document.getElementById('default-user-icon').src = profilePicture;
 
+        addEditHandlers(userData);
     }
 }
+
+function addEditHandlers(userData) {
+    const editNameButton = document.querySelector('.edit-name-btn');
+    const editPhoneButton = document.querySelector('.edit-phone-btn');
+
+    // Редагування імені
+    editNameButton.addEventListener('click', () => handleEdit('.seller-name', 'userName', userData, editNameButton));
+
+    // Редагування телефону
+    editPhoneButton.addEventListener('click', () => handleEdit('.seller-phone', 'phoneNumber', userData, editPhoneButton));
+}
+
+function handleEdit(selector, field, userData, button) {
+    const element = document.querySelector(selector);
+    const originalValue = element.innerText;
+
+    element.innerHTML = `<input type="text" class="edit-input" value="${originalValue}" />`;
+    const input = element.querySelector('.edit-input');
+    input.focus();
+
+    button.style.display = 'none';
+    const confirmButton = document.createElement('button');
+    const cancelButton = document.createElement('button');
+
+    confirmButton.innerHTML = '✔';
+    confirmButton.classList.add('confirm-btn');
+    cancelButton.innerHTML = 'X';
+    cancelButton.classList.add('cancel-btn');
+
+    button.parentElement.appendChild(confirmButton);
+    button.parentElement.appendChild(cancelButton);
+
+    confirmButton.addEventListener('click', async () => {
+        const newValue = input.value.trim();
+
+        if (
+            (field === 'userName' && /^[A-Za-z ]{2,}$/.test(newValue)) ||
+            (field === 'phoneNumber' && /^\+(\d{10,15})$/.test(newValue))
+        ) {
+            element.innerText = newValue;
+            document.querySelector('.data-validation-error').style.display = "none";
+            // Відправка змін на сервер
+            await updateUserData({ ...userData, [field]: newValue });
+
+            // Повернення кнопки "Редагувати"
+            cleanupEdit(button, confirmButton, cancelButton);
+        } else {
+            document.querySelector('.data-validation-error').style.display = "block";
+        }
+    });
+
+    // Обробка скасування змін
+    cancelButton.addEventListener('click', () => {
+        element.innerText = originalValue;
+        cleanupEdit(button, confirmButton, cancelButton);
+    });
+
+
+    function handleDocumentClick(event) {
+        const isInput = event.target.classList.contains('edit-input');
+        const isConfirmButton = event.target.classList.contains('confirm-btn');
+        const isCancelButton = event.target.classList.contains('cancel-btn');
+        const isEditButton = event.target.classList.contains('edit-btn');
+
+        if (!(isInput || isConfirmButton || isCancelButton || isEditButton)) {
+            element.innerText = originalValue;
+            cleanupEdit(button, confirmButton, cancelButton);
+        }
+    }
+
+    // Додаємо обробник події на документ, щоб обробляти натискання поза інпутом
+    document.addEventListener('click', handleDocumentClick);
+}
+
+function cleanupEdit(editButton, confirmButton, cancelButton) {
+    confirmButton.remove();
+    cancelButton.remove();
+
+    editButton.style.display = 'inline-block';
+}
+
+async function updateUserData(updatedData) {
+    try {
+        const response = await fetch('/saveuserinfo', {
+            method: 'PUT',
+            body: JSON.stringify(updatedData),
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken
+            }
+        });
+
+        if (response.ok) {
+            console.log('User data updated successfully');
+        } else {
+            console.error('Failed to update user data', await response.text());
+        }
+    } catch (error) {
+        console.error('Error updating user data', error);
+    }
+}
+
 uploadUserPhotoAndName();
 
 
@@ -27,22 +131,9 @@ async function getItemsFromSeller() {
     productList.innerHTML = '';
 
     try {
-        // Завантаження JSON даних з сервера
         const response = await fetch('/currentusersproducts');
         const products = await response.json();
 
-        // // Фільтрація товарів за брендом
-        // const filteredProducts = products.filter(product =>
-        //     product.brand.toLowerCase() === brand.toLowerCase()
-        // );
-
-        // // Виведення результатів
-        // if (filteredProducts.length === 0) {
-        //     productList.innerHTML = `<p>No products found for brand: <strong>${brand}</strong>.</p>`;
-        //     return;
-        // }
-
-        // Відображення товарів
         products.forEach(product => {
             const productDiv = document.createElement('div');
             const imageArray = JSON.parse(product.image); // Масив зображень для кожного товару
@@ -77,7 +168,8 @@ async function getItemsFromSeller() {
 
 getItemsFromSeller();
 
-let photoToUpload = [];
+let photoToUploadAddItem = [];
+let photoToUploadEditItem = [];
 
 function openEditModal(product, imageArray) {
     const modal = document.getElementById('edit-modal');
@@ -89,20 +181,20 @@ function openEditModal(product, imageArray) {
     document.getElementById('edit-name').value = product.productName;
     document.getElementById('edit-price').value = product.retailPrice;
     document.getElementById('edit-discount-price').value = product.discountedPrice || '';
+    document.getElementById('edit-category').value = product.category;
+    document.getElementById('edit-brand').value = product.brand;
     document.getElementById('edit-description').value = product.description;
 
-    // Очищаємо попередній вміст галереї
     const galleryContainer = document.getElementById('editGalleryContainer');
     galleryContainer.innerHTML = ''; // Очищаємо галерею
-    photoToUpload = [];
+    photoToUploadEditItem = [];
 
-    // Завантажуємо фото товару з бази даних
     if (imageArray && imageArray.length > 0) {
         imageArray.forEach((imageUrl) => {
             const imgWrapper = document.createElement('div');
             imgWrapper.classList.add('edit-image-wrapper');
 
-            urlToBlob(imageUrl);
+            urlToBlobEditing(imageUrl);
 
             const img = document.createElement('img');
             img.src = imageUrl; // URL зображення з бази даних
@@ -122,7 +214,7 @@ function openEditModal(product, imageArray) {
     const editForm = document.getElementById('edit-form');
     editForm.onsubmit = async (e) => {
         e.preventDefault();
-        await saveEditedProduct(product.id, product.brand); // Зберігаємо зміни
+        await saveEditedProduct(product.uniqId, product.brand); // Зберігаємо зміни
         modal.style.display = 'none';
     };
 
@@ -131,6 +223,7 @@ function openEditModal(product, imageArray) {
         modal.style.display = 'none';
         document.querySelector('.overlay').style.display = 'none';
     };
+
 }
 
 // Функція для видалення зображення з галереї товару
@@ -143,54 +236,52 @@ function removeImageFromGallery(imageElement, product, imageArray) {
     // Оновлюємо масив зображень у базі даних (необхідно відправити оновлені дані на сервер)
     product.image = JSON.stringify(updatedImages);
 
-    // Видаляємо елемент з DOM
     imageElement.remove();
 
-    photoToUpload.splice(imageArray.indexOf(imageUrl), 1);
+    photoToUploadEditItem.splice(imageArray.indexOf(imageUrl), 1);
 
-    // Можна додати код для відправки оновлених даних на сервер через API (наприклад, PUT запит)
     console.log('Image removed, new image array:', updatedImages);
 
 
 }
 
-async function saveEditedProduct(productId, brand) {
+async function saveEditedProduct(productId) {
     // Отримуємо дані, які змінюються в процесі редагування
     const updatedProduct = {
         productName: document.getElementById('edit-name').value,
         retailPrice: document.getElementById('edit-price').value,
         discountedPrice: document.getElementById('edit-discount-price').value,
         description: document.getElementById('edit-description').value,
-        //сюда збереження товара дописать
+        brand: document.getElementById('edit-brand').value,
+        category: document.getElementById('edit-category').value,
     };
+
+
 
     // Завантажуємо поточні дані товару для збереження інших полів без змін
     try {
-        const response = await fetch(`http://localhost:3000/items/${productId}`);
+        const response = await fetch(`/upload/uploadproductspics/${productId}`);
         const product = await response.json();
 
         // Залишаємо старі значення для полів, яких не торкаємось
         const finalProduct = {
-            ...product, // зберігаємо всі поточні поля продукту
-            ...updatedProduct // оновлюємо лише змінені поля
-
-            //Додать масив зображень photoToUpload
-
+            ...product,
+            ...updatedProduct
         };
 
-        // Відправляємо PUT запит з оновленими даними
-        const putResponse = await fetch(`http://localhost:3000/items/${productId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(finalProduct),
-        });
+        // // Відправляємо PUT запит з оновленими даними
+        // const putResponse = await fetch(`http://localhost:3000/items/${productId}`, {
+        //     method: 'PUT',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(finalProduct),
+        // });
 
-        if (putResponse.ok) {
-            alert('Product updated successfully!');
-            getItemsFromSeller(brand); // Оновлюємо список для того ж бренду
-        } else {
-            alert('Failed to update product');
-        }
+        // if (putResponse.ok) {
+        //     alert('Product updated successfully!');
+        //     getItemsFromSeller(brand); // Оновлюємо список для того ж бренду
+        // } else {
+        //     alert('Failed to update product');
+        // }
     } catch (error) {
         console.error('Error updating product:', error);
     }
@@ -209,12 +300,15 @@ const modal = document.getElementById('modal');
 // Відкриття модального вікна
 openModalBtn.addEventListener('click', () => {
     photoToUpload = [];
+    photoToUploadEditItem = [];
     modal.style.display = 'block';
     document.querySelector('.overlay').style.display = 'block';
 });
 
 // Закриття модального вікна при кліку на кнопку закриття
 closeModalBtn.addEventListener('click', () => {
+    photoToUpload = [];
+    photoToUploadEditItem = [];
     modal.style.display = 'none';
     document.querySelector('.overlay').style.display = 'none';
 });
@@ -222,156 +316,12 @@ closeModalBtn.addEventListener('click', () => {
 // Закриття модального вікна при кліку поза ним
 window.addEventListener('click', (e) => {
     if (e.target === modal) {
+        photoToUpload = [];
+        photoToUploadEditItem = [];
         modal.style.display = 'none';
         document.querySelector('.overlay').style.display = 'none';
     }
 });
-
-// //Crop Images
-// const fileInput = document.getElementById('fileInput');
-// const image = document.getElementById('image');
-// const cropButton = document.getElementById('cropButton');
-// const exitCross = document.getElementById('exitCross');
-// const galleryContainer = document.getElementById('galleryContainer');
-// const galleryFiles = [];
-// let cropper;
-// let originalFileName = ''; // Змінна для зберігання імені файлу
-
-// // Завантаження зображення
-// fileInput.addEventListener('change', (event) => {
-//     const file = event.target.files[0];
-//     document.querySelector('.cropContainerWrapper').style.display = 'block';
-//     document.querySelector('.overlay').style.display = 'block';
-
-//     if (file) {
-//         originalFileName = file.name;
-//         const reader = new FileReader();
-//         reader.onload = (e) => {
-//             image.src = e.target.result; // Завантажене фото
-//             image.style.display = 'block';
-
-//             // Ініціалізація Cropper.js
-//             if (cropper) cropper.destroy(); // Знищує попередній cropper
-//             cropper = new Cropper(image, {
-//                 aspectRatio: 1, // Співвідношення сторін (1 = квадрат)
-//                 viewMode: 2,    // Режим відображення
-//                 movable: true,  // Можливість переміщення області
-//                 zoomable: false, // Масштабування
-//                 responsive: false,
-//             });
-//         };
-//         reader.readAsDataURL(file);
-//     }
-//     else {
-//         fileInput.value = "";
-//     }
-
-// });
-
-// // Закриття вікна без додавання
-// exitCross.addEventListener('click', () => {
-//     closeCropper();
-// });
-
-
-// cropButton.addEventListener('click', () => {
-//     if (cropper) {
-//         // 1. Показати зображення у природному розмірі
-//         const naturalCanvas = cropper.getCroppedCanvas(); // Без фіксованих розмірів
-//         const naturalUrl = naturalCanvas.toDataURL('image/jpeg');
-
-//         addImageToGallery(naturalUrl); // Додаємо до галереї
-
-//         // 2. Створити зображення з фіксованими розмірами для надсилання
-//         const fixedCanvas = cropper.getCroppedCanvas({
-//             width: 300,  // Фіксована ширина
-//             height: 300, // Фіксована висота
-//         });
-
-//         fixedCanvas.toBlob((blob) => {
-//             // const file = new File([blob], `fixed_image_${Date.now()}.jpg`, { type: 'image/jpeg' });
-//             const file = new File([blob], originalFileName, { type: 'image/jpeg' });
-//             console.log('Зображення для надсилання:', file);
-//             // 
-//             galleryFiles.push(file); // Додаємо файл до масиву
-//             logGalleryFiles();
-
-//             const dataTransfer = new DataTransfer();
-//             galleryFiles.forEach((file) => {
-//                 dataTransfer.items.add(file);
-//             });
-//             fileInput.files = dataTransfer.files; // Оновлюємо список файлів у input
-
-
-//         }, 'image/jpeg', 0.9); // Формат і якість зображення
-
-//         // Закрити модальне вікно
-//         closeCropper();
-//     }
-// });
-
-// // Функція для додавання зображення у галерею
-// function addImageToGallery(url) {
-//     const imgWrapper = document.createElement('div');
-//     imgWrapper.classList.add('image-wrapper');
-
-//     const img = document.createElement('img');
-//     img.src = url;
-//     img.alt = 'Cropped Image';
-//     img.classList.add('gallery-image');
-
-//     imgWrapper.appendChild(img);
-//     document.getElementById('galleryContainer').appendChild(imgWrapper);
-
-//     imgWrapper.addEventListener('click', () => {
-//         removeImageFromGallery(imgWrapper);
-//     });
-// }
-
-// // Закриття модального вікна
-// function closeCropper() {
-//     document.querySelector('.cropContainerWrapper').style.display = 'none';
-//     document.querySelector('.overlay').style.display = 'none';
-//     if (cropper) cropper.destroy();
-//     fileInput.value = ""; // Очищаємо значення інпуту
-//     cropper = null;
-// }
-
-// let resizeTimeout;
-
-// window.addEventListener('resize', () => {
-//     clearTimeout(resizeTimeout); // Скидаємо попередній таймер
-//     resizeTimeout = setTimeout(() => {
-//         if (cropper) {
-//             cropper.destroy(); // Знищуємо попередній екземпляр Cropper
-//         }
-//         cropper = new Cropper(image, { // Створюємо новий
-//             aspectRatio: 1,
-//             movable: true,  // Можливість переміщення області
-//             zoomable: false, // Масштабування
-//             viewMode: 1,
-//             responsive: false
-//         });
-//     }, 0);
-
-// });
-
-// function logGalleryFiles() {
-//     console.log('All files:');
-//     galleryFiles.forEach((file, index) => {
-//         console.log(`${index + 1}: ${file.name}, ${file.size} байт`);
-//     });
-// }
-
-// function removeImageFromGallery(imageElement) {
-//     const index = Array.from(document.querySelectorAll('.image-wrapper')).indexOf(imageElement);
-//     if (index !== -1) {
-//         galleryFiles.splice(index, 1); // Видаляємо файл із масиву
-//         imageElement.remove(); // Видаляємо з DOM
-//         console.log(`Image #${index + 1} deleted.`);
-//         logGalleryFiles(); // Оновлюємо лог файлів
-//     }
-// }
 
 function updateProfileImage() {
     sellerPhotoInput = document.getElementById('seller-photo-input');
@@ -389,10 +339,10 @@ function updateProfileImage() {
 
     sellerPhotoInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
-        document.querySelector('.cropContainerWrapper').style.display = 'block';
-        document.querySelector('.overlay').style.display = 'block';
 
         if (file) {
+            document.querySelector('.cropContainerWrapper').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
             originalFileName = file.name;
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -410,7 +360,7 @@ function updateProfileImage() {
         if (cropper) {
             // Отримуємо обрізане зображення у вигляді Canvas
             const croppedCanvas = cropper.getCroppedCanvas({ width: 300, height: 300 });
-    
+
             // Чекаємо на перетворення канвасу в Blob
             const blob = await new Promise((resolve, reject) => {
                 croppedCanvas.toBlob((resultBlob) => {
@@ -420,15 +370,16 @@ function updateProfileImage() {
                         reject('Error creating blob');
                     }
                 }, 'image/jpeg');
+                closeCropper();
             });
-    
+
             // Створюємо файл з Blob
             const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
-    
+
             // Створюємо FormData для передачі на сервер
             const formData = new FormData();
             formData.append('file', file); // Додаємо файл у FormData
-    
+
             // Тепер чекаємо на завершення fetch перед тим, як рухатися далі
             try {
                 const response = await fetch('/upload/uploadprofilepic', {
@@ -438,13 +389,13 @@ function updateProfileImage() {
                         [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
                     }
                 });
-    
+
                 console.log(response);
                 if (response.ok) {
                     console.log('Image Uploaded');
                     setTimeout(async () => {
                         await uploadUserPhotoAndName();
-                    }, 1000); 
+                    }, 1000);
                 } else {
                     console.log('Image not uploaded');
                 }
@@ -500,10 +451,11 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
 
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
-        document.querySelector('.cropContainerWrapper').style.display = 'block';
-        document.querySelector('.overlay').style.display = 'block';
+
 
         if (file) {
+            document.querySelector('.cropContainerWrapper').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
             originalFileName = file.name;
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -530,7 +482,13 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
                 galleryFiles.push(file);
                 logGalleryFiles();
                 updateInputFiles(fileInput, galleryFiles);
-                photoToUpload.push(file);
+                if (imgContainerClass === 'edit-image-wrapper') {
+                    photoToUploadEditItem.push(file);
+                }
+                else {
+                    photoToUploadAddItem.push(file);
+                }
+
             }, 'image/jpeg', 0.9);
 
             closeCropper();
@@ -560,6 +518,7 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
             filesArray.splice(index, 1); // Видаляємо файл із масиву
             imageElement.remove(); // Видаляємо з DOM
             console.log(`Image #${index + 1} deleted.`);
+            photoToUploadAddItem.splice(index, 1)
             logGalleryFiles();
             updateInputFiles(fileInput, filesArray);
         }
@@ -613,80 +572,82 @@ setupImageCropper('editFileInput', 'editGalleryContainer', 'edit-image-wrapper')
 setupImageCropper('fileInput', 'galleryContainer', 'image-wrapper');
 
 //Add Form Gathering
-const nameInput = document.getElementById('name');
-const priceInput = document.getElementById('price');
-const quantityInput = document.getElementById('quantity');
-const brandInput = document.getElementById('brand');
-const discountPriceInput = document.getElementById('discountPrice');
-const descriptionInput = document.getElementById('description');
+// const nameInput = document.getElementById('name');
+// const priceInput = document.getElementById('price');
+// const quantityInput = document.getElementById('quantity');
+// const brandInput = document.getElementById('brand');
+// const discountPriceInput = document.getElementById('discountPrice');
+// const descriptionInput = document.getElementById('description');
 
-document.querySelector('form').addEventListener('submit', function (event) {
-    event.preventDefault(); // Перешкоджаємо стандартному відправленню форми
+// document.querySelector('form').addEventListener('submit', function (event) {
+//     event.preventDefault();
 
-    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+//     const userData = {
+//         name: nameInput.value,
+//         price: priceInput.value,
+//         quantity: quantityInput.value,
+//         brand: brandInput.value,
+//         discountPrice: discountPriceInput.value,
+//         description: descriptionInput.value
+//     };
 
-    // Створюємо об'єкт для даних з форми
-    const userData = {
-        name: nameInput.value,
-        price: priceInput.value,
-        quantity: quantityInput.value,
-        brand: brandInput.value,
-        discountPrice: discountPriceInput.value,
-        description: descriptionInput.value
-    };
+//     console.log(userData);
 
-    console.log(userData);
+//     // Відправляємо запит на сервер через fetch
+//     fetch('/upload', {
+//         method: 'PUT',
+//         body: JSON.stringify(userData),
+//         headers: {
+//             'Content-Type': 'application/json',
+//             [csrfHeader]: csrfToken // CSRF токен
+//         }
+//     })
+//         .then(response => response.json())
+//         .then(data => {
+//             console.log('Success:', data);
+//         })
+//         .catch((error) => {
+//             console.error('Error:', error);
+//         });
 
-    // Відправляємо запит на сервер через fetch
-    fetch('/upload', {
-        method: 'PUT',
-        body: JSON.stringify(userData),
-        headers: {
-            'Content-Type': 'application/json',
-            [csrfHeader]: csrfToken // CSRF токен
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+//     const formDataPhoto = new FormData();
 
-    const formDataPhoto = new FormData();
+//     photoToUpload.files.forEach((file, index) => {
+//         formDataPhoto.append(`file${index + 1}`, file); // Додаємо кожен файл з унікальним ключем
+//     });
 
-    photoToUpload.files.forEach((file, index) => {
-        formDataPhoto.append(`file${index + 1}`, file); // Додаємо кожен файл з унікальним ключем
-    });
+//     formDataPhoto.forEach((value, key) => {
+//         console.log(key, value);
+//     });
 
-    // formDataPhoto.forEach((value, key) => {
-    //     console.log(key, value);
-    // });
+//     fetch('/upload', {
+//         method: 'POST',
+//         body: formDataPhoto,
+//         headers: {
+//             [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+//         }
+//     }).then(response => {
+//         console.log(response);
+//         if (response.ok) {
+//             // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
+//             console.log('Login successful');
+//         } else {
+//             // Обробка помилок
+//             console.log('Login failed');
+//         }
+//     }).catch(error => {
+//         console.error('Error during fetch', error);
+//     });
+// });
 
-    fetch('/upload', {
-        method: 'POST',
-        body: formDataPhoto,
-        headers: {
-            [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-        }
-    }).then(response => {
-        console.log(response);
-        if (response.ok) {
-            // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-            console.log('Login successful');
-        } else {
-            // Обробка помилок
-            console.log('Login failed');
-        }
-    }).catch(error => {
-        console.error('Error during fetch', error);
-    });
-});
-
-function urlToBlob(urlFile) {
+function urlToBlobAdding(urlFile) {
     const file = new File([urlFile], urlFile.split('/').pop(), { type: 'image/jpeg' });
-    photoToUpload.push(file);
-    console.log(photoToUpload);
+    photoToUploadAddItem.push(file);
+    console.log(photoToUploadAddItem);
+}
+
+function urlToBlobEditing(urlFile) {
+    const file = new File([urlFile], urlFile.split('/').pop(), { type: 'image/jpeg' });
+    photoToUploadEditItem.push(file);
+    console.log(photoToUploadEditItem);
 }

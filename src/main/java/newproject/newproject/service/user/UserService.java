@@ -43,7 +43,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User data is missing or invalid.");
         }
         currentUser.setUserName(user.getUserName());
-        currentUser.setPhoneNumber(user.getPhoneNumber());                                                                                  //saving/changing user info
+        currentUser.setPhoneNumber(user.getPhoneNumber());
         currentUser.setUserType(user.getUserType());
 
         usersRepository.save(currentUser);
