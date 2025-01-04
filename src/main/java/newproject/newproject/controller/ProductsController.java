@@ -122,5 +122,31 @@ import java.util.UUID;
         }
     }
 
+    @GetMapping("/getproductsbysellerid/{sellerid}")
+    public ResponseEntity<List<ProductModel>> findByProductsBySellerId(@PathVariable int sellerid) {
+        try {
+            List<ProductModel> products = productsService.findByProductBySellerId(sellerid);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @GetMapping("/getproductsbybrand/{brand}")
+    public ResponseEntity<?> findByProductsByBrand(@PathVariable String brand) {
+        try {
+            List<ProductModel> products = productsService.findByProductByBrand(brand);
+            return ResponseEntity.ok(products);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred.");
+        }
+    }
+
 
 }

@@ -20,10 +20,8 @@ public class ProductPageController {
 
 private final ProductsService productService;
 
-    @GetMapping("/itempage/{productId}")
-    public String itemPage(@PathVariable UUID productId, Model model) {
-        ProductModel product = productService.getProductById(productId);
-        model.addAttribute("product", product);
+    @GetMapping("/itempage/{productId}/{productName}")
+    public String itemPage() {
         return "itemPage";
     }
 }

@@ -139,4 +139,25 @@ public class ProductsService {
         int limit = Math.min(productList.size(), 100);
         return productList.subList(0,limit);
     }
+
+    public List<ProductModel> findByProductBySellerId(int sellerId){
+        List<ProductModel> productList = productRepository.findBySellerId(sellerId);
+
+        if (productList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+        }
+        int limit = Math.min(productList.size(), 20);
+        return productList.subList(0,limit);
+    }
+
+    public List<ProductModel> findByProductByBrand(String brand){
+        List<ProductModel> productList = productRepository.findByBrand(brand);
+
+        if (productList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product data is missing or invalid.");
+        }
+        int limit = Math.min(productList.size(), 20);
+        return productList.subList(0,limit);
+    }
+
 }

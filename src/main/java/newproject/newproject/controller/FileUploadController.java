@@ -1,8 +1,11 @@
 package newproject.newproject.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import newproject.newproject.service.fileUpload.FileUploadService;
+import newproject.newproject.service.products.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/upload")
+@RequiredArgsConstructor
 public class FileUploadController {
     @Autowired
     UsersRepository usersRepository;
@@ -28,12 +32,9 @@ public class FileUploadController {
     ProductRepository productRepository;
 
     private final FileUploadService fileUploadService;
+    private final ProductsService productsService;
 
     public static String uploadDirecotry = System.getProperty("user.dir") + "/uploads/";
-
-    public FileUploadController(FileUploadService fileUploadService) {
-        this.fileUploadService = fileUploadService;
-    }
 
     @PostMapping("/uploadprofilepic")
     public ResponseEntity<String> uploadProfilePic(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
