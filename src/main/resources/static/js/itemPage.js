@@ -1,9 +1,13 @@
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
+
     fetch('http://localhost:3000/items')
         .then(response => response.json())
         .then(data => {
             // Вибираємо перший товар з масиву для прикладу
-            const product = data[0];
+            const product = data[1];
 
             // Витягуємо дані
             const imageUrl = JSON.parse(product.image)[0]; // Перше фото

@@ -98,7 +98,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getproductbyid/{productid}")
+    @GetMapping("/getproductbyid/{productId}")
     public ResponseEntity<ProductModel> getProductById(@PathVariable UUID productId){
         try {
             ProductModel product = productsService.getProductById(productId);

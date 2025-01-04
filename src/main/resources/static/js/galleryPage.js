@@ -1,13 +1,16 @@
 // id, category, description, image, price, title
+let currentUrl = window.location.href;
+console.log(currentUrl);
 
-// fetch('http://localhost:8080/getallproducts')
-fetch('http://localhost:3000/items')
+
+fetch('http://localhost:8080/api/products/getallproducts')
+// fetch('http://localhost:3000/items')
     .then(res => res.json())
     .then(json => {
 
         const itemCatalog = document.querySelector('.item-catalog');
         json.forEach((item) => {
-            //creating elements
+            // creating elements
             const itemWrapper = document.createElement("li");
             const itemTitle = document.createElement('h4');
             const itemPrice = document.createElement("p");
@@ -25,8 +28,14 @@ fetch('http://localhost:3000/items')
             // Додавання класу для зображення
             itemImage.classList.add('item-image');
 
+            // Створюємо посилання і обгортаємо картинку
+            const itemLink = document.createElement('a');
+            itemLink.href = `/itempage/${item.uniqId}`; // Встановлюємо посилання на основі item.uniqId
+            itemLink.appendChild(itemImageWrapper); // Додаємо картинку в посилання
+
             // Додавання елементів
             itemImageWrapper.appendChild(itemImage); // Додаємо зображення в контейнер
+
             itemTitle.innerHTML = item.productName; // Додаємо назву товару
             itemBrand.innerHTML = item.brand;
             itemPrice.innerHTML = `${item.retailPrice} $`; // Додаємо ціну
@@ -37,9 +46,7 @@ fetch('http://localhost:3000/items')
             itemPrice.classList.add('item-price');
 
             // Вставка всіх елементів в картку товару
-            itemWrapper.append(itemImageWrapper, itemTitle, itemBrand, itemPrice);
+            itemWrapper.append(itemLink, itemTitle, itemBrand, itemPrice);
             itemCatalog.appendChild(itemWrapper); // Вставка картки в каталог
-
-
         })
     })
