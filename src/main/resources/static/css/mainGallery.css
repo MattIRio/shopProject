@@ -13,17 +13,22 @@
 /* Контейнер з картками товарів */
 .item-catalog {
     display: flex;
-    flex-wrap: wrap; /* Перенесення карток на новий ряд */
-    gap: 15px; /* Відстань між картками */
+    flex-wrap: wrap;
+    /* Перенесення карток на новий ряд */
+    gap: 15px;
+    /* Відстань між картками */
     padding: 10px;
-    justify-content: center; /* Вирівнювання по центру */
-    list-style: none; /* Прибираємо маркери списку */
+    justify-content: center;
+    /* Вирівнювання по центру */
+    list-style: none;
+    /* Прибираємо маркери списку */
     margin: 0;
 }
 
 /* Картка товару */
 .item-catalog li {
-    flex: 1 1 calc(20% - 15px); /* Максимум 5 карток в ряд */
+    flex: 1 1 calc(20% - 15px);
+    /* Максимум 5 карток в ряд */
     max-width: calc(20% - 15px);
     background: #fff;
     border: 1px solid #ddd;
@@ -35,17 +40,21 @@
 }
 
 .item-catalog li:hover {
-    transform: translateY(-5px); /* Підняття картки при наведенні */
+    transform: translateY(-5px);
+    /* Підняття картки при наведенні */
 }
 
 .item-title {
     height: 2.8rem;
-    display: -webkit-box; 
+    display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    -webkit-box-orient: vertical; /* Орієнтація блоку */
-    overflow: hidden; /* Приховати зайвий текст */
-    text-overflow: ellipsis; /* Додати три крапки */
+    -webkit-box-orient: vertical;
+    /* Орієнтація блоку */
+    overflow: hidden;
+    /* Приховати зайвий текст */
+    text-overflow: ellipsis;
+    /* Додати три крапки */
     overflow: hidden;
     font-size: 1.1rem;
     margin: 10px 0;
@@ -53,17 +62,23 @@
 }
 
 .item-price {
+    font-weight: bold;
+}
+
+.item-discounted-price {
+    font-weight: bold;
     font-size: 1.3rem;
     color: #f84147;
-    font-weight: bold;
     margin-bottom: 10px;
 }
 
 /* Контейнер для зображення */
 .item-image-wrapper {
-    width: 100%; /* Ширина 100% від картки */
+    width: 100%;
+    /* Ширина 100% від картки */
     height: 0;
-    padding-bottom: 100%; /* Це дасть нам квадратний контейнер (висота = ширина) */
+    padding-bottom: 100%;
+    /* Це дасть нам квадратний контейнер (висота = ширина) */
     position: relative;
     overflow: hidden;
 }
@@ -74,30 +89,32 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Масштабування зображення, щоб воно не спотворювалось */
+    object-fit: contain;
+    /* Масштабування зображення, щоб воно не спотворювалось */
     border-radius: 8px;
 }
 
 /* Адаптивність для менших екранів */
 @media (max-width: 1200px) {
     .item-catalog li {
-        flex: 1 1 calc(25% - 15px); /* 4 картки в ряд */
+        flex: 1 1 calc(25% - 15px);
+        /* 4 картки в ряд */
         max-width: calc(25% - 15px);
     }
 }
 
 @media (max-width: 900px) {
     .item-catalog li {
-        flex: 1 1 calc(33.33% - 15px); /* 3 картки в ряд */
+        flex: 1 1 calc(33.33% - 15px);
+        /* 3 картки в ряд */
         max-width: calc(33.33% - 15px);
     }
 }
 
 @media (max-width: 600px) {
     .item-catalog li {
-        flex: 1 1 calc(50% - 15px); /* 2 картки в ряд */
+        flex: 1 1 calc(50% - 15px);
+        /* 2 картки в ряд */
         max-width: calc(50% - 15px);
     }
 }
-
-

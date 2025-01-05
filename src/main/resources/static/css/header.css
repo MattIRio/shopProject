@@ -20,10 +20,13 @@ header {
 
 }
 
-.logo img {
+.logo a {
     height: 70%;
     margin-left: 50px;
+}
 
+.logo a img{
+    height: 100%;
 }
 
 .search-wrapper{
@@ -120,7 +123,7 @@ header {
     margin: 10% auto;
     padding: 20px;
     width: 80%;
-    max-width: 500px;
+    max-width: 540px;
 }
 
 .close {
@@ -155,11 +158,18 @@ header {
     display: flex;
 }
 
+.item-in-cart-wrapper {
+    padding: 10px;
+    border: 1px solid #e8e8e8;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
 /* Стиль для зображення товару */
 .cart-item-image {
     width: 80px; /* Ширина зображення */
     height: 80px; /* Висота зображення */
-    object-fit: cover; /* Зберігає пропорції зображення */
+    object-fit: contain; /* Зберігає пропорції зображення */
     margin-right: 15px; /* Відступ праворуч від зображення */
     border-radius: 5px; /* Округлені кути */
 }
@@ -169,6 +179,25 @@ header {
     width: 100%;
     justify-content: space-between;
     padding: 10px 30px;
+}
+
+.delete-btn-wrapper{
+    margin-left: auto;
+    padding: 20px 0px;
+    width: 40px;
+    height: 40px;
+}
+
+.delete-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    text-align: center;
+    line-height: 0px;
+    border-radius: 6px;
+    background-color: red;
+    background-image: url('./img/deleteIcon.png');
+    background-repeat: no-repeat;
 }
 
 #checkout-button,
@@ -223,22 +252,26 @@ header {
     border: #002f34 1px solid;
     border-radius: 5px;
     cursor: default;
+    width: 50px;
 }
 
 .price-wrapper {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    width: 80px;
 
 }
 
 .price-container {
     font-size: 14px;
+    text-align: right;
 }
 
 .discount-price-container {
     font-size: 20px;
     color: red;
+    text-align: right;
 }
 
 .signup-badge {
