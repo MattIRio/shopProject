@@ -32,10 +32,10 @@ public class UserOrdersService {
     @Autowired
     UserOrderedProductRepository userOrderedProductRepository;
 
-    public List<ProductModel> userOrders(Principal principal, @AuthenticationPrincipal OAuth2User authentication){
+    public List<ProductModel> userOrders(Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
         List<ProductModel> userOrders = new ArrayList<>();
-        for (UserOrderedProduct orderedProduct : currentUser.getOrderedProducts().stream().toList()){
+        for (UserOrderedProduct orderedProduct : currentUser.getOrderedProducts().stream().toList()) {
             ProductModel product = ProductModel.builder()
                     .productName(orderedProduct.getProduct().getProductName())
                     .image(orderedProduct.getProduct().getImage())
@@ -51,7 +51,7 @@ public class UserOrdersService {
         return userOrders;
     }
 
-    public void addOrderToCurrentUser(UUID productId, int quantity, Principal principal, @AuthenticationPrincipal OAuth2User authentication){
+    public void addOrderToCurrentUser(UUID productId, int quantity, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
         ProductModel currentProduct = productRepository.findByUniqId(productId);
         UserOrderedProduct existingOrder = userOrderedProductRepository.findByUserAndProduct(currentUser, currentProduct);
@@ -65,6 +65,15 @@ public class UserOrdersService {
             newOrder.setProduct(currentProduct);
             newOrder.setQuantity(quantity);
             userOrderedProductRepository.save(newOrder);
+        }
+    }
+
+    public void deleteOrderFromCurrentUser(UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
+        ProductModel currentProduct = productRepository.findByUniqId(productId);
+        UserOrderedProduct existingOrder = userOrderedProductRepository.findByUserAndProduct(currentUser, currentProduct);
+        if (existingOrder != null) {
+            userOrderedProductRepository.delete(existingOrder);
         }
     }
 

@@ -155,4 +155,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @DeleteMapping("/deleteorderfromcurrentuser/{productId}")
+    public ResponseEntity<String> deleteOrder(@PathVariable UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        try {
+            userOrdersService.deleteOrderFromCurrentUser(productId, principal, authentication);
+            return ResponseEntity.ok("Product deleted");
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
