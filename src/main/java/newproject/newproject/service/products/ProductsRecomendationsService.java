@@ -18,9 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -94,53 +96,136 @@ public class ProductsRecomendationsService {
             }
 
             List<UsersPreferencesModel> mostVisitedProducts = preferencesRepository.findTopByUserIdOrderByViewCount(currentUser.getId());
+            String separatedCategory1 = null;
+            String separatedCategory2 = null;
+            String separatedCategory3 = null;
+            String separatedCategory4 = null;
+            String separatedCategory5 = null;
+
+            if (mostVisitedProducts.size() > 0) {
+                String[] category1 = mostVisitedProducts.get(0).getPreferredCategory().split(",");
+                System.out.println(category1.length);
+                if (category1.length > 1 && category1[1] != null) {
+                    separatedCategory1 = category1[1];
+                } else if (category1.length == 1) {
+                    separatedCategory1 = category1[0];
+                }
+            }
+            List<ProductModel> recomendedProducts = preferencesRepository.findTopBy1stCategory(separatedCategory1);
+
+            if (mostVisitedProducts.size() > 1) {
+                String[] category2 = mostVisitedProducts.get(1).getPreferredCategory().split(",");
+                if (category2.length > 1 && category2[1] != null) {
+                    separatedCategory2 = category2[1];
+                } else if (category2.length == 1) {
+                    separatedCategory2 = category2[0];
+                }
+                recomendedProducts.addAll(preferencesRepository.findTopBy2ndCategory(separatedCategory2));
+            }
+
+            if (mostVisitedProducts.size() > 2) {
+                String[] category3 = mostVisitedProducts.get(2).getPreferredCategory().split(",");
+                if (category3.length > 1 && category3[1] != null) {
+                    separatedCategory3 = category3[1];
+                } else if (category3.length == 1) {
+                    separatedCategory3 = category3[0];
+                }
+                recomendedProducts.addAll(preferencesRepository.findTopBy3rdCategory(separatedCategory3));
+            }
+
+            if (mostVisitedProducts.size() > 3) {
+                String[] category4 = mostVisitedProducts.get(3).getPreferredCategory().split(",");
+                if (category4.length > 1 && category4[1] != null) {
+                    separatedCategory4 = category4[1];
+                } else if (category4.length == 1) {
+                    separatedCategory4 = category4[0];
+                }
+                recomendedProducts.addAll(preferencesRepository.findTopBy4thCategory(separatedCategory4));
+            }
+
+            if (mostVisitedProducts.size() > 4) {
+                String[] category5 = mostVisitedProducts.get(4).getPreferredCategory().split(",");
+                if (category5.length > 1 && category5[1] != null) {
+                    separatedCategory5 = category5[1];
+                } else if (category5.length == 1) {
+                    separatedCategory5 = category5[0];
+                }
+                recomendedProducts.addAll(preferencesRepository.findTopBy5thCategory(separatedCategory5));
+            }
+
+            return ResponseEntity.ok(recomendedProducts);
+        } catch (Exception e) {
+            System.err.println("An error occurred while creating recomendations: " + e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
 
 
-            String[] category1 = mostVisitedProducts.get(0).getPreferredCategory().split(",");
-            String[] separatedCategory1 = (category1.length > 1 && category1[1] != null)
-                    ? category1[1].split(",")
-                    : (category1.length > 0 && category1[0] != null)
-                    ? category1[0].split(",")
-                    : new String[0];
+    @GetMapping("/getrecomendationsfornotloggeduser")
+    public ResponseEntity<List<ProductModel>> GetCategoryForNotLoggedUser(@RequestBody List<String> preferencesList) {
+        try {
+            String separatedCategory1 = null;
+            String separatedCategory2 = null;
+            String separatedCategory3 = null;
+            String separatedCategory4 = null;
+            String separatedCategory5 = null;
 
-            String[] category2 = mostVisitedProducts.get(1).getPreferredCategory().split(",");
-            String[] separatedCategory2 = (category2.length > 1 && category2[1] != null)
-                    ? category2[1].split(",")
-                    : (category2.length > 0 && category2[0] != null)
-                    ? category2[0].split(",")
-                    : new String[0];
+            if (preferencesList.size() > 0) {
+                String[] category1 = preferencesList.get(0).split(",");
+                if (category1.length > 1 && category1[1] != null) {
+                    separatedCategory1 = category1[1];
+                } else if (category1.length == 1) {
+                    separatedCategory1 = category1[0];
+                }
+            }
+            if (preferencesList.size() > 1) {
+                String[] category2 = preferencesList.get(1).split(",");
+                if (category2.length > 1 && category2[1] != null) {
+                    separatedCategory2 = category2[1];
+                } else if (category2.length == 1) {
+                    separatedCategory2 = category2[0];
+                }
+            }
 
-            String[] category3 = mostVisitedProducts.get(2).getPreferredCategory().split(",");
-            String[] separatedCategory3 = (category3.length > 1 && category3[1] != null)
-                    ? category3[1].split(",")
-                    : (category3.length > 0 && category3[0] != null)
-                    ? category3[0].split(",")
-                    : new String[0];
+            if (preferencesList.size() > 2) {
+                String[] category3 = preferencesList.get(2).split(",");
+                if (category3.length > 1 && category3[1] != null) {
+                    separatedCategory3 = category3[1];
+                } else if (category3.length == 1) {
+                    separatedCategory3 = category3[0];
+                }
+            }
 
-            String[] category4 = mostVisitedProducts.get(3).getPreferredCategory().split(",");
-            String[] separatedCategory4 = (category4.length > 1 && category4[1] != null)
-                    ? category4[1].split(",")
-                    : (category4.length > 0 && category4[0] != null)
-                    ? category4[0].split(",")
-                    : new String[0];
+            if (preferencesList.size() > 3) {
+                String[] category4 = preferencesList.get(3).split(",");
+                if (category4.length > 1 && category4[1] != null) {
+                    separatedCategory4 = category4[1];
+                } else if (category4.length == 1) {
+                    separatedCategory4 = category4[0];
+                }
+            }
 
-            String[] category5 = mostVisitedProducts.get(4).getPreferredCategory().split(",");
-            String[] separatedCategory5 = (category5.length > 1 && category5[1] != null)
-                    ? category5[1].split(",")
-                    : (category5.length > 0 && category5[0] != null)
-                    ? category5[0].split(",")
-                    : new String[0];
+            if (preferencesList.size() > 4) {
+                String[] category5 = preferencesList.get(4).split(",");
+                if (category5.length > 1 && category5[1] != null) {
+                    separatedCategory5 = category5[1];
+                } else if (category5.length == 1) {
+                    separatedCategory5 = category5[0];
+                }
+            }
 
-            List<ProductModel> recomendedProducts = preferencesRepository.findTopBy1stCategory(separatedCategory1[0]);
-            recomendedProducts.addAll(preferencesRepository.findTopBy2ndCategory(separatedCategory2[0]));
-            recomendedProducts.addAll(preferencesRepository.findTopBy3rdCategory(separatedCategory3[0]));
-            recomendedProducts.addAll(preferencesRepository.findTopBy4thCategory(separatedCategory4[0]));
-            recomendedProducts.addAll(preferencesRepository.findTopBy5thCategory(separatedCategory5[0]));
+            List<ProductModel> recomendedProducts = preferencesRepository.findTopBy1stCategory(separatedCategory1);
+            recomendedProducts.addAll(preferencesRepository.findTopBy2ndCategory(separatedCategory2));
+            recomendedProducts.addAll(preferencesRepository.findTopBy3rdCategory(separatedCategory3));
+            recomendedProducts.addAll(preferencesRepository.findTopBy4thCategory(separatedCategory4));
+            recomendedProducts.addAll(preferencesRepository.findTopBy5thCategory(separatedCategory5));
 
 
             return ResponseEntity.ok(recomendedProducts);
         } catch (Exception e) {
-            System.err.println("An error occurred while deleting user: " + e.getMessage());
+            System.err.println("An error occurred while creating recomendations: " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();

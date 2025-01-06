@@ -20,9 +20,9 @@ public class ProfileInfoFillingController {
     public String profileInfoForm(Principal principal, @AuthenticationPrincipal OAuth2User authentication){
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
         if (currentUser.getUserName() != null){
-            return "/mainpage";
+            return "redirect:/mainpage";
         }
-        return ("/profileInfoFilling");
+        return "profileInfoFilling";
     }
 
 }
