@@ -4,7 +4,6 @@ console.log(currentUrl);
 
 
 fetch('http://localhost:8080/api/products/getallproducts')
-// fetch('http://localhost:3000/items')
     .then(res => res.json())
     .then(json => {
 
@@ -14,6 +13,7 @@ fetch('http://localhost:8080/api/products/getallproducts')
             const itemWrapper = document.createElement("li");
             const itemTitle = document.createElement('h4');
             const itemPrice = document.createElement("p");
+            const itemDiscountedPrice = document.createElement("p");
             const itemBrand = document.createElement("p");
 
             // Створення контейнера для зображення
@@ -27,18 +27,35 @@ fetch('http://localhost:8080/api/products/getallproducts')
 
             // Додавання класу для зображення
             itemImage.classList.add('item-image');
-
+            const sanitizedProductName = item.productName.replace(/\//g, '-');
             // Створюємо посилання і обгортаємо картинку
             const itemLink = document.createElement('a');
-            itemLink.href = `/itempage/${item.uniqId}`; // Встановлюємо посилання на основі item.uniqId
+            itemLink.href = `/itempage/${item.uniqId}/${sanitizedProductName}`; // Встановлюємо посилання на основі item.uniqId
             itemLink.appendChild(itemImageWrapper); // Додаємо картинку в посилання
 
-            // Додавання елементів
-            itemImageWrapper.appendChild(itemImage); // Додаємо зображення в контейнер
+            // Додавання зображення в контейнер
+            itemImageWrapper.appendChild(itemImage);
 
-            itemTitle.innerHTML = item.productName; // Додаємо назву товару
+            // Створюємо посилання для назви товару
+            const itemTitleLink = document.createElement('a');
+            itemTitleLink.href = `/itempage/${item.uniqId}/${sanitizedProductName}`; // Посилання на товар
+            itemTitleLink.textContent = item.productName; // Встановлюємо текст посилання
+            itemTitleLink.classList.add('item-title-link'); // Додаємо клас для стилізації
+            itemTitle.appendChild(itemTitleLink); // Додаємо посилання в заголовок
+
+            // Відображення текстових даних
             itemBrand.innerHTML = item.brand;
-            itemPrice.innerHTML = `${item.retailPrice} $`; // Додаємо ціну
+
+            // Відображення цін
+            if (item.discountedPrice && item.discountedPrice < item.retailPrice) {
+                // Якщо є знижка
+                itemPrice.innerHTML = `<s>${item.retailPrice} $</s>`; // Закреслюємо стару ціну
+                itemDiscountedPrice.innerHTML = `${item.discountedPrice} $`; // Відображаємо нову ціну
+                itemDiscountedPrice.classList.add('item-discounted-price');
+            } else {
+                // Якщо немає знижки
+                itemPrice.innerHTML = `${item.retailPrice} $`;
+            }
 
             // Додавання класів для текстових елементів
             itemTitle.classList.add('item-title');
@@ -46,7 +63,12 @@ fetch('http://localhost:8080/api/products/getallproducts')
             itemPrice.classList.add('item-price');
 
             // Вставка всіх елементів в картку товару
-            itemWrapper.append(itemLink, itemTitle, itemBrand, itemPrice);
+            if (item.discountedPrice && item.discountedPrice < item.retailPrice) {
+                itemWrapper.append(itemLink, itemTitle, itemBrand, itemPrice, itemDiscountedPrice);
+            } else {
+                itemWrapper.append(itemLink, itemTitle, itemBrand, itemPrice);
+            }
+
             itemCatalog.appendChild(itemWrapper); // Вставка картки в каталог
-        })
-    })
+        });
+    });

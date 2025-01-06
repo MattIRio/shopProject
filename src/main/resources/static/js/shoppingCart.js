@@ -7,7 +7,7 @@ function updateCartCount() {
 // Додавання товару в кошик
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart')) || []; // Отримати існуючий кошик або пустий масив
-    const existingProductIndex = cart.findIndex(item => item.id === product.uniq_id);
+    const existingProductIndex = cart.findIndex(item => item.id === product.uniqId);
 
     if (existingProductIndex !== -1) {
         // Якщо товар вже є в кошику, збільшуємо його кількість
@@ -15,11 +15,11 @@ function addToCart(product) {
     } else {
         // Додаємо новий товар до кошика
         const productToAdd = {
-            id: product.uniq_id,
-            name: product.product_name,
-            price: product.retail_price,
+            id: product.uniqId,
+            name: product.productName,
+            price: product.retailPrice,
             image: JSON.parse(product.image)[0],
-            discountPrice: product.discounted_price,
+            discountPrice: product.discountedPrice,
             quantity: 1
         };
         cart.push(productToAdd);
@@ -48,7 +48,7 @@ function updateCartModal() {
 
     cartItemsContainer.innerHTML = ''; // Очищаємо список товарів в кошику
 
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
         const listItem = document.createElement('li');
         const itemImage = document.createElement('img');
         const itemContainer = document.createElement('div');
@@ -60,6 +60,8 @@ function updateCartModal() {
         const itemFooterContainer = document.createElement('div');
         const itemQuantity = document.createElement('div');
         const priceWrapper = document.createElement('div');
+        const deleteButtonWrapper = document.createElement('div'); // Контейнер для кнопки видалення
+        const deleteButton = document.createElement('button'); // Кнопка видалення товару
 
         itemImage.classList.add('cart-item-image');
         itemContainer.classList.add('item-container');
@@ -69,6 +71,8 @@ function updateCartModal() {
         itemFooterContainer.classList.add('item-footer-container');
         itemQuantity.classList.add('item-quantity');
         priceWrapper.classList.add('price-wrapper');
+        deleteButton.classList.add('delete-btn'); // Додаємо клас для стилізації кнопки видалення
+        deleteButtonWrapper.classList.add('delete-btn-wrapper'); // Клас для контейнера кнопки видалення
 
         // Виведення інформації про товар
         itemImage.src = item.image;
@@ -98,6 +102,14 @@ function updateCartModal() {
             }
         });
 
+        // Обробник для видалення товару
+        deleteButton.addEventListener('click', () => {
+            cart.splice(index, 1); // Видаляємо товар з масиву
+            localStorage.setItem('cart', JSON.stringify(cart)); // Оновлюємо кошик в локальному сховищі
+            updateCartModal();
+            updateCartCount();
+        });
+
         // Обчислюємо ціни
         const totalPrice = item.price * item.quantity;
         const discountPrice = item.discountPrice ? item.discountPrice * item.quantity : null;  // Якщо є знижка, обчислюємо, якщо ні - null
@@ -105,15 +117,13 @@ function updateCartModal() {
         // Додаємо інформацію про ціну
         priceContainer.innerHTML = `${totalPrice} $`;
 
-
-        
         // Оновлюємо container для ціни зі знижкою, якщо знижка існує
         if (discountPrice) {
             discountPriceContainer.innerHTML = `${discountPrice} $`;
 
             priceWrapper.append(priceContainer);
             priceContainer.style.textDecoration = 'line-through';
-            priceWrapper.append(discountPriceContainer);  // Додаємо контейнер зі знижкою, якщо вона є
+            priceWrapper.append(discountPriceContainer); // Додаємо контейнер зі знижкою, якщо вона є
         } else {
             priceWrapper.append(priceContainer);
             priceContainer.style = 'font-size: 20px';
@@ -121,11 +131,21 @@ function updateCartModal() {
 
         // Додаємо елементи до DOM
         itemQuantity.append(item.quantity);
-        
+
         quantityContainer.append(decreaseButton, itemQuantity, increaseButton);
         itemContainer.append(itemImage, listItem);
-        itemFooterContainer.append(quantityContainer, priceWrapper)
-        cartItemsContainer.append(itemContainer, itemFooterContainer);
+
+        // Обертаємо кнопку видалення в контейнер і додаємо його в itemContainer
+        deleteButtonWrapper.appendChild(deleteButton);
+        itemContainer.appendChild(deleteButtonWrapper);
+
+        itemFooterContainer.append(quantityContainer, priceWrapper);
+
+        const itemInCartWrapper = document.createElement('div');
+        itemInCartWrapper.classList.add('item-in-cart-wrapper');
+        itemInCartWrapper.append(itemContainer, itemFooterContainer);
+
+        cartItemsContainer.append(itemInCartWrapper);
     });
 
     cartTotalElement.innerHTML = `Total amount: ${cartTotal}$`;

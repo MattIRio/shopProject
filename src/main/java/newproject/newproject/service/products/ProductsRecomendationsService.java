@@ -33,7 +33,7 @@ public class ProductsRecomendationsService {
     @Autowired
     PreferencesRepository preferencesRepository;
 
-    @PostMapping("/addcategory/{productId}")
+    @PostMapping("/addrecomendationtouser/{productId}")
     public ResponseEntity<String> Setcategory(Principal principal, @AuthenticationPrincipal OAuth2User authentication, @PathVariable UUID productId) {
         try {
             UserModel currentUser = null;

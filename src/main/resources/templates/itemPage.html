@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
     <!-- <link rel="stylesheet" href="../static/css/libraries/swiper.min.css">
     <link rel="stylesheet" href="../static/css/itemPage.css">
     <link rel="stylesheet" href="../static/css/header.css"> -->
@@ -18,10 +22,13 @@
     <header>
         <div class="header-wrapper">
             <div class="logo">
-                <!-- <img src="../static/css/img/logo.png" id="logo-desktop" alt="logo">
-                <img src="../static/css/img/logo-mobile.png" id="logo-mobile" alt=""> -->
-                <img src="/css/img/logo.png" id="logo-desktop" alt="logo">
-                <img src="/css/img/logo-mobile.png" id="logo-mobile" alt="">
+                <a href="/mainpage">
+                    <!-- <img src="../static/css/img/logo.png" id="logo-desktop" alt="logo">
+                    <img src="../static/css/img/logo-mobile.png" id="logo-mobile" alt=""> -->
+                    <img src="/css/img/logo.png" id="logo-desktop" alt="logo">
+                    <img src="/css/img/logo-mobile.png" id="logo-mobile" alt="">
+                </a>
+
             </div>
             <div class="search-wrapper">
 
@@ -97,13 +104,24 @@
 
             </div>
         </div>
+    </div>
 
-
+    <div class="recommended-items-wrapper">
+        <p class="recommended-items-title">Recommended Products</p>
+        <div class="recommended-items-slider-container">
+            <div class="swiper-container recommended-items-slider">
+                <div class="swiper-wrapper" id="recommended-items-slider-wrapper"></div>
+                <button class="swiper-button-prev"></button>
+                <button class="swiper-button-next"></button>
+            </div>
+        </div>
     </div>
 
     <script src="/js/libraries/swiper.min.js"></script>
+    <script src="/js/isUserAuthenticated.js"></script>
     <script src="/js/shoppingCart.js"></script>
     <script src="/js/itemPage.js"></script>
+
     <!-- <script src="../static/js/libraries/swiper.min.js"></script>
     <script src="../static/js/shoppingCart.js"></script>
     <script src="../static/js/itemPage.js"></script> -->

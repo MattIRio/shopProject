@@ -1,6 +1,7 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+let isHandlersCreated = false;
 async function uploadUserPhotoAndName() {
     const isUserAuthenticated = await fetch("/isuserauthenticated");
     if (isUserAuthenticated.ok) {
@@ -17,11 +18,16 @@ async function uploadUserPhotoAndName() {
         document.getElementById('seller-photo').src = profilePicture;
         document.getElementById('default-user-icon').src = profilePicture;
 
-        addEditHandlers(userData);
+        if (isHandlersCreated) {
+            return;
+        } else {
+            addEditHandlers(userData);
+        }
     }
 }
 
 function addEditHandlers(userData) {
+    isHandlersCreated = true;
     const editNameButton = document.querySelector('.edit-name-btn');
     const editPhoneButton = document.querySelector('.edit-phone-btn');
 
@@ -135,23 +141,36 @@ async function getItemsFromSeller() {
         const products = await response.json();
 
         products.forEach(product => {
+            const sanitizedProductName = product.productName.replace(/\//g, '-');
+
             const productDiv = document.createElement('div');
-            const imageArray = JSON.parse(product.image); // Масив зображень для кожного товару
+            const imageArray = JSON.parse(product.image || '[]'); // Масив зображень для кожного товару
             productDiv.classList.add('product');
+
+            // Перевірка на наявність зображення
+            let imageSrc = '';
+            if (imageArray.length > 0) {
+                imageSrc = imageArray[0];
+            } else {
+                imageSrc = '../css/img/noImageAvailable.png'; // Вкажіть шлях до плейсхолдера
+                console.warn(`Product with ID ${product.uniqId} does not have an image.`);
+            }
+
             productDiv.innerHTML = `
-                <div class="product-image-container">
-                    <img src="${imageArray[0]}" alt="${product.productName}">
-                </div>
-                <div class="product-info-container">
-                    <h2>${product.productName}</h2>
-                    <p><strong>Price:</strong> $${product.retailPrice}</p>
-                    <p><strong>Discounted Price:</strong> $${product.discountedPrice}</p>
-                    <p><strong>Description:</strong> ${product.description}</p>
-                </div>
-                <div class="product-edit-buttons-wrapper">
-                    <button class="edit-info-button" data-product-id="${product.uniqId}">Edit</button>
-                </div>
-            `;
+    <div class="product-image-container">
+        <img src="${imageSrc}" alt="${product.productName}">
+    </div>
+    <div class="product-info-container">
+        <a href="/itempage/${product.uniqId}/${sanitizedProductName}"><h2>${product.productName}</h2></a>
+        <p><strong>Price:</strong> $${product.retailPrice}</p>
+        <p><strong>Discounted Price:</strong> $${product.discountedPrice}</p>
+        <p><strong>Description:</strong> ${product.description}</p>
+    </div>
+    <div class="product-edit-buttons-wrapper">
+        <button class="edit-info-button" data-product-id="${product.uniqId}">Edit</button>
+    </div>
+`;
+
             productList.appendChild(productDiv);
 
             // Обробник кнопки "Edit" - використовуємо замикання, щоб передати правильні дані
@@ -214,7 +233,7 @@ function openEditModal(product, imageArray) {
     const editForm = document.getElementById('edit-form');
     editForm.onsubmit = async (e) => {
         e.preventDefault();
-        await saveEditedProduct(product.uniqId, product.brand); // Зберігаємо зміни
+        await saveEditedProduct(product.uniqId); // Зберігаємо зміни
         modal.style.display = 'none';
     };
 
@@ -392,10 +411,10 @@ function updateProfileImage() {
 
                 console.log(response);
                 if (response.ok) {
-                    console.log('Image Uploaded');
                     setTimeout(async () => {
                         await uploadUserPhotoAndName();
                     }, 1000);
+                    console.log('Image Uploaded');
                 } else {
                     console.log('Image not uploaded');
                 }
@@ -572,73 +591,77 @@ setupImageCropper('editFileInput', 'editGalleryContainer', 'edit-image-wrapper')
 setupImageCropper('fileInput', 'galleryContainer', 'image-wrapper');
 
 //Add Form Gathering
-// const nameInput = document.getElementById('name');
-// const priceInput = document.getElementById('price');
-// const quantityInput = document.getElementById('quantity');
-// const brandInput = document.getElementById('brand');
-// const discountPriceInput = document.getElementById('discountPrice');
-// const descriptionInput = document.getElementById('description');
+const nameInput = document.getElementById('name');
+const priceInput = document.getElementById('price');
+const quantityInput = document.getElementById('quantity');
+const brandInput = document.getElementById('brand');
+const discountPriceInput = document.getElementById('discountPrice');
+const descriptionInput = document.getElementById('description');
+const categoryInput = document.getElementById('category');
 
-// document.querySelector('form').addEventListener('submit', function (event) {
-//     event.preventDefault();
+document.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-//     const userData = {
-//         name: nameInput.value,
-//         price: priceInput.value,
-//         quantity: quantityInput.value,
-//         brand: brandInput.value,
-//         discountPrice: discountPriceInput.value,
-//         description: descriptionInput.value
-//     };
+    const userData = {
+        productName: nameInput.value,
+        retailPrice: priceInput.value,
+        quantity: quantityInput.value,
+        brand: brandInput.value,
+        discountedPrice: discountPriceInput.value,
+        description: descriptionInput.value,
+        category: categoryInput.value,
+    };
 
-//     console.log(userData);
+    console.log(userData);
 
-//     // Відправляємо запит на сервер через fetch
-//     fetch('/upload', {
-//         method: 'PUT',
-//         body: JSON.stringify(userData),
-//         headers: {
-//             'Content-Type': 'application/json',
-//             [csrfHeader]: csrfToken // CSRF токен
-//         }
-//     })
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log('Success:', data);
-//         })
-//         .catch((error) => {
-//             console.error('Error:', error);
-//         });
+    // Відправляємо запит на сервер через fetch
+    fetch('http://localhost:8080/api/products/saveproduct', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
 
-//     const formDataPhoto = new FormData();
+            // if (photoToUploadAddItem > 0) {
+            //     const formDataPhoto = new FormData();
 
-//     photoToUpload.files.forEach((file, index) => {
-//         formDataPhoto.append(`file${index + 1}`, file); // Додаємо кожен файл з унікальним ключем
-//     });
+            //     photoToUploadAddItem.files.forEach((file, index) => {
+            //         formDataPhoto.append(`file${index + 1}`, file); // Додаємо кожен файл з унікальним ключем
+            //     });
 
-//     formDataPhoto.forEach((value, key) => {
-//         console.log(key, value);
-//     });
+            //     formDataPhoto.forEach((value, key) => {
+            //         console.log(key, value);
+            //     });
 
-//     fetch('/upload', {
-//         method: 'POST',
-//         body: formDataPhoto,
-//         headers: {
-//             [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-//         }
-//     }).then(response => {
-//         console.log(response);
-//         if (response.ok) {
-//             // Якщо запит успішний, можна перенаправити користувача або відобразити повідомлення
-//             console.log('Login successful');
-//         } else {
-//             // Обробка помилок
-//             console.log('Login failed');
-//         }
-//     }).catch(error => {
-//         console.error('Error during fetch', error);
-//     });
-// });
+            //     fetch(`/upload//uploadproductspics/${data}`, {
+            //         method: 'POST',
+            //         body: formDataPhoto,
+            //         headers: {
+            //             [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+            //         }
+            //     }).then(response => {
+            //         console.log(response);
+            //         if (response.ok) {
+            //             console.log('Photo uploaded');
+            //         } else {
+            //             console.log('Photo not uploaded');
+            //         }
+            //     }).catch(error => {
+            //         console.error('Error during fetch', error);
+            //     });
+            // }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+
+});
 
 function urlToBlobAdding(urlFile) {
     const file = new File([urlFile], urlFile.split('/').pop(), { type: 'image/jpeg' });

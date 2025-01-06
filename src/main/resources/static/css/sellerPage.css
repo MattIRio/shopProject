@@ -127,8 +127,9 @@ header {
 
 .product img {
     width: 150px;
-    height: auto;
+    height: 150px;
     margin-top: 10px;
+    object-fit: contain;
 }
 
 .product-image-container {
