@@ -67,11 +67,11 @@ form.addEventListener('submit', function (event) {
 const googleLoginUrl = 'http://localhost:8080/oauth2/authorization/google';
 
 document.getElementById('google-registration').onclick = () => {
-  window.location.href = googleLoginUrl;
+    window.location.href = googleLoginUrl;
 };
 
 const githubLoginUrl = 'http://localhost:8080/oauth2/authorization/github';
 
 document.getElementById('github-registration').onclick = () => {
-  window.location.href = githubLoginUrl;
+    window.location.href = githubLoginUrl;
 };

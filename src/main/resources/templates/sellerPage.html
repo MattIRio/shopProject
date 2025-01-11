@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/libraries/cropper.css" />
-    <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/sellerPage.css">
+    <link rel="stylesheet" href="/css/header.css">
 
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -36,9 +36,11 @@
             </div>
 
             <div class="signup-badge">
-                <img src="/css/img/default-user.png" id="default-user-icon" alt="">
-                <!-- <img src="../static/css/img/default-user.png" id="default-user-icon" alt=""> -->
-                <p id="user-name-header"><u> Login/Sign Up</u></p>
+                <a href="/loginPage" class="signup-badge-href">
+                    <img src="/css/img/default-user.png" id="default-user-icon" alt="">
+                    <!-- <img src="../static/css/img/default-user.png" id="default-user-icon" alt=""> -->
+                    <p id="user-name-header"><u> Login/Sign Up</u></p>
+                </a>
             </div>
 
             <div class="cart-container">
@@ -63,30 +65,44 @@
         </div>
     </div>
 
-<div class="seller-info-wrapper">
-    <div class="seller-image-wrapper">
-        <img id="seller-photo" alt="Seller Photo" src="path-to-image.jpg">
-        <input type="file" id="seller-photo-input" style="display: none;" accept="image/*">
+    <div class="seller-info-wrapper">
+        <div class="seller-image-wrapper">
+            <img id="seller-photo" alt="Seller Photo" src="">
+            <input type="file" id="seller-photo-input" style="display: none;" accept="image/*">
+        </div>
+
+
+        <div>
+            <div class="seller-info-container">
+                <div class="seller-info">
+                    <p class="seller-label">Name:</p>
+                    <p class="seller-name"></p>
+                    <button class="edit-btn edit-name-btn">Edit</button>
+                </div>
+                <div class="seller-info">
+                    <p class="seller-label">Phone:</p>
+                    <p class="seller-phone"></p>
+                    <button class="edit-btn edit-phone-btn">Edit</button>
+                </div>
+                <div class="data-validation-error" style="display: none; color: red;">Your data is not correct</div>
+            </div>
+            
+            <div class="logout">
+                <img src="/css/img/logout-icon.png" alt="logout-icon" class="logout-icon">
+                <a href="/logout" class="logout-text"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            </form>
+            </div>
+        </div>
+
     </div>
 
-    <div class="seller-info-container">  
-        <div class="seller-info">
-            <p class="seller-label">Name:</p>
-            <p class="seller-name"></p>
-            <button class="edit-btn edit-name-btn">Edit</button>
-        </div>
-        <div class="seller-info">
-            <p class="seller-label">Phone:</p>
-            <p class="seller-phone"></p>
-            <button class="edit-btn edit-phone-btn">Edit</button>
-        </div>
-        <div class="data-validation-error" style="display: none; color: red;">Your data is not correct</div>
-    </div>
-</div>
 
-    
 
-    
+
 
 
     <div id="overlay" class="overlay"></div>
@@ -106,8 +122,9 @@
         <div class="modal-content">
             <span class="close-btn" id="closeModalBtn">&times;</span>
             <h3>Add an Item</h3>
-            <form>
-                <input type="file" style="opacity: 0; pointer-events: none;" id="fileInput" name="file" accept="image/*" />
+            <form class="form">
+                <input type="file" style="opacity: 0; pointer-events: none;" id="fileInput" name="file"
+                    accept="image/*" />
 
                 <!-- Іконка для завантаження фото -->
                 <div class="addPhotoImgContainer">
@@ -158,7 +175,8 @@
         <div class="modal-content">
             <span id="close-modal" class="close">&times;</span>
             <form id="edit-form">
-                <input type="file" style="opacity: 0; pointer-events: none;" id="editFileInput" name="editFile" accept="image/*" />
+                <input type="file" style="opacity: 0; pointer-events: none;" id="editFileInput" name="editFile"
+                    accept="image/*" />
 
                 <!-- Іконка для завантаження фото -->
                 <div class="editPhotoImgContainer">
@@ -179,6 +197,9 @@
                 <label for="edit-discount-price">Discount Price:</label>
                 <input type="number" id="edit-discount-price">
 
+                <label for="edit-quantity">Quantity:</label>
+                <input type="number" id="edit-quantity" min="1" required>
+
                 <label for="edit-category">Category:</label>
                 <input type="text" id="edit-category">
 
@@ -188,7 +209,11 @@
                 <label for="edit-description">Description:</label>
                 <textarea id="edit-description" rows="6"></textarea>
 
-                <button type="submit" class="submit-btn">Save Changes</button>
+                
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn">Save Changes</button>
+                    <button type="button" class="delete-item-btn submit-btn">Delete Item</button>
+                </div>
             </form>
         </div>
     </div>

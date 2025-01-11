@@ -25,6 +25,7 @@ async function uploadUserPhotoAndName() {
 
         if (userData.userName) {
             document.getElementById('user-name-header').innerHTML = userData.userName;
+            document.querySelector('.signup-badge-href').href = "/sellerPage";
         }
     } catch (error) {
         console.error("Error during user data upload:", error);

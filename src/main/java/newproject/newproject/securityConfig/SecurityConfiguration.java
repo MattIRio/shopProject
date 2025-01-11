@@ -34,8 +34,8 @@ public class SecurityConfiguration{
 
                 .authorizeHttpRequests(registry -> {
 
-                    registry.requestMatchers("/signUpUser", "/signUpPage", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata", "/upload/profilepic", "/addcategory/{productId}","/getuserdatabyid/{id}", "/getrecomendations", "mainGallery.html", "/api/products/getproductbyid/**", "/mainpage", "/itemPage").permitAll();
-                    registry.requestMatchers("/profileform").authenticated();
+                    registry.requestMatchers("/signUpUser", "/signUpPage", "/logout", "/loginPage", "/oauth-login", "/css/**", "signup.html", "/upload","/getcurrentuserdata", "/upload/profilepic", "/addcategory/{productId}","/getuserdatabyid/{id}", "/getrecomendations", "mainGallery.html", "/api/products/getproductbyid/**", "/mainpage", "/itemPage").permitAll();
+                    registry.requestMatchers("/sellerPage", "/profileform").authenticated();
                     registry.requestMatchers("null").hasRole("BUYER");
                     registry.requestMatchers("/postproduct").hasRole("SELLER");
                     registry.anyRequest().permitAll();

@@ -73,11 +73,11 @@ import java.util.UUID;
         }
     }
 
-    @PutMapping("/deleteproduct")
+    @PutMapping("/deleteproduct/{productId}")
     public ResponseEntity<String> changeProductInfo(@PathVariable UUID productId, RedirectAttributes redirectAttributes) {
         try {
             productsService.changeProductInfo(productId, redirectAttributes);
-            return ResponseEntity.ok("Product deletedd");
+            return ResponseEntity.ok("Product deleted");
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         } catch (Exception e) {

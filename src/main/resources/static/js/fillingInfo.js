@@ -4,6 +4,7 @@ const customerButton = document.getElementById("customerButton");
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+
 sellerButton.addEventListener("click", (event) => {
     if (!sellerButton.classList.contains('pressed')) {
         sellerButton.classList.add('pressed');
@@ -236,6 +237,7 @@ document.getElementById('fillingInfoSeller').addEventListener('submit', async fu
 
                 if (photoResponse.ok) {
                     console.log('Image Uploaded');
+                    window.location.href = "/mainpage";
                 } else {
                     console.error('Image not uploaded', await photoResponse.text());
                 }

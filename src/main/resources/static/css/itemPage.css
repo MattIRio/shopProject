@@ -12,6 +12,7 @@
 
 
 .product-wrapper {
+    margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,7 +142,7 @@ button:active {
 }
 
 .thumbs-slider {
-    height: 80px;
+    height: 8vw;
     /* Зменшено висоту мініатюр */
 }
 
@@ -217,7 +218,7 @@ button:active {
 }
 
 #main-slider-wrapper {
-    height: 40vw;
+    height: 32vw;
 }
 
 .same-seller-items-wrapper,
@@ -229,7 +230,7 @@ button:active {
 .item-title a {
     color: inherit; /* Спадковий колір (залежить від батьківського елемента) */
     text-decoration: none; /* Вимикаємо підкреслення */
-    font-weight: bold;
+    font-weight: normal;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -237,6 +238,7 @@ button:active {
     box-orient: vertical;
     overflow: hidden;
     padding: 0 10px;
+    font-size: 14px;
 }
 
 .item-title a:hover {
@@ -246,8 +248,8 @@ button:active {
 
 /* Ціна товару */
 .item-price {
-    font-weight: bold;
-    font-size: 16px;
+    font-weight: normal;
+    font-size: 12px;
     padding-left: 10px;
 }
 
@@ -264,8 +266,8 @@ button:active {
 /* Знижена ціна */
 .item-discounted-price {
     padding-left: 10px;
-    font-weight: bold;
-    font-size: 16px;
+    font-weight: normal;
+    font-size: 14px;
     color: red;
     padding-bottom: 5px;
 }
@@ -305,8 +307,9 @@ button:active {
 
 /* Ціна без знижки */
 .item-price-no-discount {
-    margin-top: 10px;
-    margin-bottom: 15px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 14px;
 }
 
 /* Контейнер для заголовку */

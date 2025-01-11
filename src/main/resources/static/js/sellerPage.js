@@ -11,6 +11,7 @@ async function uploadUserPhotoAndName() {
 
         let profilePicture = profilePicturePath.split("/uploads")[1]; // Отримуємо все після '/uploads'
         profilePicture = "/uploads" + profilePicture;  // Додаємо '/uploads' назад
+        document.querySelector('.signup-badge-href').href = "/sellerPage";
 
         document.getElementById('user-name-header').innerHTML = userData.userName;
         document.querySelector('.seller-name').innerHTML = userData.userName;
@@ -144,7 +145,27 @@ async function getItemsFromSeller() {
             const sanitizedProductName = product.productName.replace(/\//g, '-');
 
             const productDiv = document.createElement('div');
-            const imageArray = JSON.parse(product.image || '[]'); // Масив зображень для кожного товару
+            // const imageArray = JSON.parse(product.image || '[]'); // Масив зображень для кожного товару
+
+            let imageArray = [];
+
+            if (product.image) {
+                const fixedJson = product.image
+                    .replace(/\\/g, '\\\\') // Екрануємо всі зворотні слеші
+                    .replace(/,\s*C:/g, ',"C:') // Додаємо лапки навколо шляхів після ком
+                    .replace(/\[C:/g, '["C:') // Додаємо лапки для першого елемента
+                    .replace(/\.jpg/g, '.jpg"') // Закриваємо лапки після файлів
+                    .replace(/\.webp/g, '.webp"') // Закриваємо лапки після файлів
+                    .replace(/\.png/g, '.png"'); // Закриваємо лапки після файлів
+
+                imageArray = JSON.parse(fixedJson || '[]')
+                    .map(imageUrl => imageUrl.includes("\\uploads")
+                        ? "/uploads" + imageUrl.split("uploads")[1].replace(/\\/g, '/')
+                        : imageUrl
+                    );
+            }
+
+
             productDiv.classList.add('product');
 
             // Перевірка на наявність зображення
@@ -153,23 +174,22 @@ async function getItemsFromSeller() {
                 imageSrc = imageArray[0];
             } else {
                 imageSrc = '../css/img/noImageAvailable.png'; // Вкажіть шлях до плейсхолдера
-                console.warn(`Product with ID ${product.uniqId} does not have an image.`);
             }
 
             productDiv.innerHTML = `
-    <div class="product-image-container">
-        <img src="${imageSrc}" alt="${product.productName}">
-    </div>
-    <div class="product-info-container">
-        <a href="/itempage/${product.uniqId}/${sanitizedProductName}"><h2>${product.productName}</h2></a>
-        <p><strong>Price:</strong> $${product.retailPrice}</p>
-        <p><strong>Discounted Price:</strong> $${product.discountedPrice}</p>
-        <p><strong>Description:</strong> ${product.description}</p>
-    </div>
-    <div class="product-edit-buttons-wrapper">
-        <button class="edit-info-button" data-product-id="${product.uniqId}">Edit</button>
-    </div>
-`;
+                <div class="product-image-container">
+                    <img src="${imageSrc}" alt="${product.productName}">
+                </div>
+                <div class="product-info-container">
+                    <a href="/itempage/${product.uniqId}/${sanitizedProductName}"><h2>${product.productName}</h2></a>
+                    <p><strong>Price:</strong> $${product.retailPrice}</p>
+                    <p><strong>Discounted Price:</strong> $${product.discountedPrice}</p>
+                    <p><strong>Description:</strong> ${product.description}</p>
+                </div>
+                <div class="product-edit-buttons-wrapper">
+                    <button class="edit-info-button" data-product-id="${product.uniqId}">Edit</button>
+                </div>
+            `;
 
             productList.appendChild(productDiv);
 
@@ -190,8 +210,12 @@ getItemsFromSeller();
 let photoToUploadAddItem = [];
 let photoToUploadEditItem = [];
 
-function openEditModal(product, imageArray) {
+async function openEditModal(product, imageArray) {
     const modal = document.getElementById('edit-modal');
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Опціонально: додає плавний ефект прокрутки
+    });
     modal.style.display = 'flex';
 
     document.querySelector('.overlay').style.display = 'block';
@@ -203,17 +227,18 @@ function openEditModal(product, imageArray) {
     document.getElementById('edit-category').value = product.category;
     document.getElementById('edit-brand').value = product.brand;
     document.getElementById('edit-description').value = product.description;
+    document.getElementById('edit-quantity').value = product.quantity;
 
     const galleryContainer = document.getElementById('editGalleryContainer');
     galleryContainer.innerHTML = ''; // Очищаємо галерею
     photoToUploadEditItem = [];
 
     if (imageArray && imageArray.length > 0) {
-        imageArray.forEach((imageUrl) => {
+        for (const imageUrl of imageArray) { // Використовуємо for...of для послідовності
             const imgWrapper = document.createElement('div');
             imgWrapper.classList.add('edit-image-wrapper');
 
-            urlToBlobEditing(imageUrl);
+            await urlToBlobEditing(imageUrl); // Чекаємо завершення fetch
 
             const img = document.createElement('img');
             img.src = imageUrl; // URL зображення з бази даних
@@ -224,10 +249,32 @@ function openEditModal(product, imageArray) {
 
             // Додаємо функціонал для видалення фото
             imgWrapper.addEventListener('click', () => {
-                removeImageFromGallery(imgWrapper, product, imageArray);
+                removeImageFromEditGallery(imgWrapper, product, imageArray);
             });
-        });
+        }
     }
+
+    document.querySelector('.delete-item-btn').addEventListener('click', async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch(`/api/products/deleteproduct/${product.uniqId}`, { // Додаємо await
+                method: 'PUT',
+                headers: {
+                    [csrfHeader]: csrfToken, // Додаємо CSRF токен
+                },
+            });
+
+            const responseData = await response.text(); // Чекаємо завершення запиту
+            console.log('Product deleted successfully:', responseData);
+            modal.style.display = "none";
+            document.querySelector('.overlay').style.display = 'none';
+            document.querySelectorAll('.product').forEach(element => element.remove());
+            getItemsFromSeller()
+
+        } catch (error) {
+            console.error('Unexpected item delete error:', error);
+        }
+    });
 
     // Додаємо обробник для збереження
     const editForm = document.getElementById('edit-form');
@@ -246,7 +293,7 @@ function openEditModal(product, imageArray) {
 }
 
 // Функція для видалення зображення з галереї товару
-function removeImageFromGallery(imageElement, product, imageArray) {
+function removeImageFromEditGallery(imageElement, product, imageArray) {
     const imageUrl = imageElement.querySelector('img').src;
 
     // Видаляємо зображення з масиву
@@ -255,87 +302,113 @@ function removeImageFromGallery(imageElement, product, imageArray) {
     // Оновлюємо масив зображень у базі даних (необхідно відправити оновлені дані на сервер)
     product.image = JSON.stringify(updatedImages);
 
-    imageElement.remove();
+    imageElement.remove(); // видаляємо елемент DOM
 
-    photoToUploadEditItem.splice(imageArray.indexOf(imageUrl), 1);
+    // Видаляємо файл з photoToUploadEditItem
+    const imageIndex = photoToUploadEditItem.findIndex(image => image.name === imageUrl.split('/').pop());
+    if (imageIndex !== -1) {
+        photoToUploadEditItem.splice(imageIndex, 1);
+    }
 
-    console.log('Image removed, new image array:', updatedImages);
-
-
+    console.log('Image removed, new image array:', photoToUploadEditItem);
 }
 
 async function saveEditedProduct(productId) {
     // Отримуємо дані, які змінюються в процесі редагування
     const updatedProduct = {
+        uniqId: productId,
         productName: document.getElementById('edit-name').value,
         retailPrice: document.getElementById('edit-price').value,
         discountedPrice: document.getElementById('edit-discount-price').value,
         description: document.getElementById('edit-description').value,
         brand: document.getElementById('edit-brand').value,
         category: document.getElementById('edit-category').value,
+        quantity: document.getElementById('edit-quantity').value,
     };
 
 
+    // Відправляємо PUT запит з оновленими даними
+    const putResponse = await fetch(`/api/products/changeproductinfo`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify(updatedProduct),
+    });
 
-    // Завантажуємо поточні дані товару для збереження інших полів без змін
-    try {
-        const response = await fetch(`/upload/uploadproductspics/${productId}`);
-        const product = await response.json();
+    const formDataPhoto = new FormData();
 
-        // Залишаємо старі значення для полів, яких не торкаємось
-        const finalProduct = {
-            ...product,
-            ...updatedProduct
-        };
+    photoToUploadEditItem.forEach((file) => {
+        formDataPhoto.append(`file`, file); // Додаємо кожен файл з унікальним ключем
+    });
 
-        // // Відправляємо PUT запит з оновленими даними
-        // const putResponse = await fetch(`http://localhost:3000/items/${productId}`, {
-        //     method: 'PUT',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(finalProduct),
-        // });
+    formDataPhoto.forEach((value, key) => {
+        console.log(key, value);
+    });
 
-        // if (putResponse.ok) {
-        //     alert('Product updated successfully!');
-        //     getItemsFromSeller(brand); // Оновлюємо список для того ж бренду
-        // } else {
-        //     alert('Failed to update product');
-        // }
-    } catch (error) {
-        console.error('Error updating product:', error);
+    // fetch(`/upload/uploadproductspics/${productId}`, {
+    fetch(`/upload/uploadeditedproductspics/${productId}`, {
+        method: 'POST',
+        body: formDataPhoto,
+        headers: {
+            [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+        }
+    }).then(response => {
+        console.log(response);
+        if (response.ok) {
+            console.log('Photo uploaded');
+        } else {
+            console.log('Photo not uploaded');
+        }
+    }).catch(error => {
+        console.error('Error during fetch', error);
+    });
+
+
+    if (putResponse.ok) {
+        alert('Product updated successfully!');
+        document.querySelector('.overlay').style.display = 'none';
+        getItemsFromSeller(brand); // Оновлюємо список для того ж бренду
+    } else {
+        alert('Failed to update product');
     }
 }
-
-
-
 
 
 
 //add-item
 const openModalBtn = document.getElementById('add-item');
 const closeModalBtn = document.getElementById('closeModalBtn');
-const modal = document.getElementById('modal');
+const modal = document.querySelector('.modal');
 
 // Відкриття модального вікна
 openModalBtn.addEventListener('click', () => {
-    photoToUpload = [];
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
     photoToUploadEditItem = [];
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
     document.querySelector('.overlay').style.display = 'block';
 });
 
 // Закриття модального вікна при кліку на кнопку закриття
 closeModalBtn.addEventListener('click', () => {
-    photoToUpload = [];
     photoToUploadEditItem = [];
     modal.style.display = 'none';
     document.querySelector('.overlay').style.display = 'none';
+
 });
 
 // Закриття модального вікна при кліку поза ним
 window.addEventListener('click', (e) => {
+    const editModal = document.getElementById('edit-modal');
+    if (e.target === editModal) {
+        editModal.style.display = 'none';
+        document.querySelector('.overlay').style.display = 'none';
+    }
     if (e.target === modal) {
-        photoToUpload = [];
         photoToUploadEditItem = [];
         modal.style.display = 'none';
         document.querySelector('.overlay').style.display = 'none';
@@ -499,10 +572,10 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
             fixedCanvas.toBlob((blob) => {
                 const file = new File([blob], originalFileName, { type: 'image/jpeg' });
                 galleryFiles.push(file);
-                logGalleryFiles();
                 updateInputFiles(fileInput, galleryFiles);
                 if (imgContainerClass === 'edit-image-wrapper') {
                     photoToUploadEditItem.push(file);
+                    console.log(photoToUploadEditItem);
                 }
                 else {
                     photoToUploadAddItem.push(file);
@@ -538,7 +611,8 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
             imageElement.remove(); // Видаляємо з DOM
             console.log(`Image #${index + 1} deleted.`);
             photoToUploadAddItem.splice(index, 1)
-            logGalleryFiles();
+            photoToUploadEditItem.splice(index, 1);
+            console.log(photoToUploadEditItem);
             updateInputFiles(fileInput, filesArray);
         }
     }
@@ -555,13 +629,6 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
         if (cropper) cropper.destroy();
         cropper = null;
         fileInput.value = '';
-    }
-
-    function logGalleryFiles() {
-        console.log('All files:');
-        galleryFiles.forEach((file, index) => {
-            console.log(`${index + 1}: ${file.name}, ${file.size} байт`);
-        });
     }
 
     let resizeTimeout;
@@ -599,7 +666,7 @@ const discountPriceInput = document.getElementById('discountPrice');
 const descriptionInput = document.getElementById('description');
 const categoryInput = document.getElementById('category');
 
-document.querySelector('form').addEventListener('submit', function (event) {
+document.querySelector('.form').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const userData = {
@@ -615,7 +682,7 @@ document.querySelector('form').addEventListener('submit', function (event) {
     console.log(userData);
 
     // Відправляємо запит на сервер через fetch
-    fetch('http://localhost:8080/api/products/saveproduct', {
+    await fetch('http://localhost:8080/api/products/saveproduct', {
         method: 'POST',
         body: JSON.stringify(userData),
         headers: {
@@ -627,34 +694,52 @@ document.querySelector('form').addEventListener('submit', function (event) {
         .then(data => {
             console.log('Success:', data);
 
-            // if (photoToUploadAddItem > 0) {
-            //     const formDataPhoto = new FormData();
+            if (photoToUploadAddItem.length > 0) {
+                const formDataPhoto = new FormData();
 
-            //     photoToUploadAddItem.files.forEach((file, index) => {
-            //         formDataPhoto.append(`file${index + 1}`, file); // Додаємо кожен файл з унікальним ключем
-            //     });
+                photoToUploadAddItem.forEach((file) => {
+                    formDataPhoto.append(`file`, file); // Додаємо кожен файл з унікальним ключем
+                });
 
-            //     formDataPhoto.forEach((value, key) => {
-            //         console.log(key, value);
-            //     });
+                formDataPhoto.forEach((value, key) => {
+                    console.log(key, value);
+                });
 
-            //     fetch(`/upload//uploadproductspics/${data}`, {
-            //         method: 'POST',
-            //         body: formDataPhoto,
-            //         headers: {
-            //             [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
-            //         }
-            //     }).then(response => {
-            //         console.log(response);
-            //         if (response.ok) {
-            //             console.log('Photo uploaded');
-            //         } else {
-            //             console.log('Photo not uploaded');
-            //         }
-            //     }).catch(error => {
-            //         console.error('Error during fetch', error);
-            //     });
-            // }
+                fetch(`/upload/uploadproductspics/${data}`, {
+                    method: 'POST',
+                    body: formDataPhoto,
+                    headers: {
+                        [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+                    }
+                }).then(response => {
+                    console.log(response);
+                    if (response.ok) {
+                        console.log('Photo uploaded');
+                    } else {
+                        console.log('Photo not uploaded');
+                    }
+                }).catch(error => {
+                    console.error('Error during fetch', error);
+                });
+            }
+
+            nameInput.value = '';
+            priceInput.value = '';
+            quantityInput.value = '';
+            brandInput.value = '';
+            discountPriceInput.value = '';
+            descriptionInput.value = '';
+            categoryInput.value = '';
+            document.querySelectorAll('.image-wrapper').forEach(element => element.remove());
+            photoToUploadAddItem = '';
+
+            modal.style.display = "none";
+            document.querySelector('.overlay').style.display = 'none';
+            document.querySelectorAll('.product').forEach(element => element.remove());
+            setTimeout(() => { getItemsFromSeller() }, 1000)
+
+
+
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -669,8 +754,28 @@ function urlToBlobAdding(urlFile) {
     console.log(photoToUploadAddItem);
 }
 
-function urlToBlobEditing(urlFile) {
-    const file = new File([urlFile], urlFile.split('/').pop(), { type: 'image/jpeg' });
-    photoToUploadEditItem.push(file);
-    console.log(photoToUploadEditItem);
+async function urlToBlobEditing(urlFile) {
+    try {
+        const response = await fetch(urlFile);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch file: ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
+        const file = new File([blob], urlFile.split('/').pop(), { type: 'image/jpeg' });
+
+        photoToUploadEditItem.push(file);
+        console.log(photoToUploadEditItem);
+    } catch (error) {
+        console.error('Error during file conversion:', error);
+    }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfInput = document.querySelector('form#logout-form input[name="_csrf"]');
+    if (csrfInput) {
+        csrfInput.value = csrfToken;
+    }
+});

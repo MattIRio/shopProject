@@ -6,6 +6,36 @@ const productId = idMatch ? idMatch[1] : null;
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+function getImages(product) {
+    let imageArray = [];
+
+    // Перевіряємо, чи існує властивість image у product
+    if (product && product.image) {
+        const imageData = product.image;
+        console.log("product.image:", imageData);  // Діагностика: перевіряємо, що містить image
+
+        // Якщо це URL-адреса (починається з http), додаємо її як є
+        if (typeof imageData === 'string' && imageData.startsWith("http")) {
+            imageArray = [imageData]; // Додаємо без змін
+        } else if (imageData.startsWith("/uploads")) {
+            // Якщо це локальний шлях, обробляємо як локальне зображення
+            imageArray = [imageData]; // Залишаємо локальний шлях без змін
+        } else {
+            // Якщо це інший формат (наприклад, JSON-рядок), намагаємось його обробити
+            try {
+                // Пробуємо парсити як JSON
+                imageArray = JSON.parse(imageData || '[]')
+                    .map(imageUrl => imageUrl.replace(/\\/g, '/')); // Заміняємо зворотні слеші на прямі
+            } catch (error) {
+                console.error("Error parsing image JSON:", error);
+                imageArray = []; // Якщо помилка, повертаємо порожній масив
+            }
+        }
+    }
+
+    return imageArray; // Завжди повертаємо масив
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     fetch(`/addrecomendationtouser/${productId}`, {
@@ -34,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(product => {
 
-            const imageUrl = JSON.parse(product.image)[0]; // Перше фото
             const productName = product.productName;
             const description = product.description;
             const price = product.retailPrice;
@@ -69,22 +98,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // const product2 = data[0]; // Зміна назви, щоб уникнути конфлікту
-            const images = JSON.parse(product.image);
+
+            let images = [];
+            images = getImages(product);
 
             const mainSliderWrapper = document.getElementById('main-slider-wrapper');
             const thumbsSliderWrapper = document.getElementById('thumbs-slider-wrapper');
 
-            images.forEach(imageUrl => {
+            if (images.length > 0) {
+                images.forEach(imageUrl => {
+                    const mainSlide = document.createElement('div');
+                    mainSlide.className = 'swiper-slide';
+                    mainSlide.innerHTML = `<img src="${imageUrl}" alt="Main Image">`;
+                    mainSliderWrapper.appendChild(mainSlide);
+
+                    const thumbSlide = document.createElement('div');
+                    thumbSlide.className = 'swiper-slide';
+                    thumbSlide.innerHTML = `<img src="${imageUrl}" alt="Thumbnail">`;
+                    thumbsSliderWrapper.appendChild(thumbSlide);
+                });
+            } else {
                 const mainSlide = document.createElement('div');
                 mainSlide.className = 'swiper-slide';
-                mainSlide.innerHTML = `<img src="${imageUrl}" alt="Main Image">`;
+                mainSlide.innerHTML = `<img src="../../css/img/noImageAvailable.png" alt="Main Image">`;
                 mainSliderWrapper.appendChild(mainSlide);
+                document.querySelector('.thumbs-slider').style.display = 'none';
+            }
 
-                const thumbSlide = document.createElement('div');
-                thumbSlide.className = 'swiper-slide';
-                thumbSlide.innerHTML = `<img src="${imageUrl}" alt="Thumbnail">`;
-                thumbsSliderWrapper.appendChild(thumbSlide);
-            });
 
             // Ініціалізація Swiper
             const thumbsSwiper = new Swiper('.thumbs-slider', {
@@ -138,8 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Створення зображення
                             const itemImage = document.createElement('img');
-                            let imageArray = JSON.parse(item.image);
-                            itemImage.src = imageArray[0];
+                            let imageArray = getImages(item);
+                            if (imageArray.length > 0) {
+                                itemImage.src = imageArray[0];
+                            } else {
+                                itemImage.src = '../../css/img/noImageAvailable.png';
+                            }
+
 
                             // Додавання класу для зображення
                             itemImage.classList.add('item-image');
@@ -225,8 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Створення зображення
                             const itemImage = document.createElement('img');
-                            let imageArray = JSON.parse(item.image);
-                            itemImage.src = imageArray[0];
+                            let imageArray = getImages(item);
+                            if (imageArray.length > 0) {
+                                itemImage.src = imageArray[0];
+                            } else {
+                                itemImage.src = '../../css/img/noImageAvailable.png';
+                            }
 
                             // Додавання класу для зображення
                             itemImage.classList.add('item-image');

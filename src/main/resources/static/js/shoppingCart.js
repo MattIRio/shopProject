@@ -4,6 +4,36 @@ function updateCartCount() {
     document.querySelector('.cart-badge').innerHTML = totalCount;
 }
 
+function getImages(product) {
+    let imageArray = [];
+
+    // Перевіряємо, чи існує властивість image у product
+    if (product && product.image) {
+        const imageData = product.image;
+        console.log("product.image:", imageData);  // Діагностика: перевіряємо, що містить image
+
+        // Якщо це URL-адреса (починається з http), додаємо її як є
+        if (typeof imageData === 'string' && imageData.startsWith("http")) {
+            imageArray = [imageData]; // Додаємо без змін
+        } else if (imageData.startsWith("/uploads")) {
+            // Якщо це локальний шлях, обробляємо як локальне зображення
+            imageArray = [imageData]; // Залишаємо локальний шлях без змін
+        } else {
+            // Якщо це інший формат (наприклад, JSON-рядок), намагаємось його обробити
+            try {
+                // Пробуємо парсити як JSON
+                imageArray = JSON.parse(imageData || '[]')
+                    .map(imageUrl => imageUrl.replace(/\\/g, '/')); // Заміняємо зворотні слеші на прямі
+            } catch (error) {
+                console.error("Error parsing image JSON:", error);
+                imageArray = []; // Якщо помилка, повертаємо порожній масив
+            }
+        }
+    }
+
+    return imageArray; // Завжди повертаємо масив
+}
+
 // Додавання товару в кошик
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart')) || []; // Отримати існуючий кошик або пустий масив
@@ -18,7 +48,7 @@ function addToCart(product) {
             id: product.uniqId,
             name: product.productName,
             price: product.retailPrice,
-            image: JSON.parse(product.image)[0],
+            image: getImages(product)[0] || '../../css/img/noImageAvailable.png',
             discountPrice: product.discountedPrice,
             quantity: 1
         };
@@ -75,7 +105,7 @@ function updateCartModal() {
         deleteButtonWrapper.classList.add('delete-btn-wrapper'); // Клас для контейнера кнопки видалення
 
         // Виведення інформації про товар
-        itemImage.src = item.image;
+        itemImage.src = getImages(item)[0] || '../../css/img/noImageAvailable.png';
         listItem.innerHTML = `${item.name}`;
 
         // Кнопки збільшення та зменшення кількості

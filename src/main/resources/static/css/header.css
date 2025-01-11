@@ -34,7 +34,7 @@ header {
     position: absolute;
     width: 45%;
     height: 100%;
-    left: 50%;
+    left: 45%;
     transform: translateX(-50%); /* Розташовує по центру */
     align-items: center;
 
@@ -124,6 +124,7 @@ header {
     padding: 20px;
     width: 80%;
     max-width: 540px;
+    border-radius: 10px;
 }
 
 .close {
@@ -284,6 +285,12 @@ header {
     cursor: pointer;
 }
 
+.signup-badge-href {
+    display: flex;
+    color: white
+
+}
+
 #default-user-icon {
     width: 50px;
     border-radius: 100px;
@@ -306,6 +313,12 @@ header {
     #logo-desktop {
         display: none;
     }
+
+    .search-wrapper {
+        width: 55%;
+        left: 50%;
+    }
+
 }
 
 @media (min-width: 931px) {

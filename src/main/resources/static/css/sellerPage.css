@@ -35,22 +35,21 @@ header {
 
 .logo img {
     height: 70%;
-    margin-left: 50px;
-
 }
 
-.search-wrapper{
+.search-wrapper {
     display: flex;
     position: absolute;
     width: 45%;
     height: 100%;
     left: 50%;
-    transform: translateX(-50%); /* Розташовує по центру */
+    transform: translateX(-50%);
+    /* Розташовує по центру */
     align-items: center;
 
 }
 
-#search-bar{
+#search-bar {
     position: absolute;
     /* padding-left: 20px; */
     font-size: 16px;
@@ -95,26 +94,31 @@ header {
 }
 
 .cart-icon {
-    width: 30px; 
+    width: 30px;
     height: 30px;
 }
 
 .cart-badge {
     position: absolute;
     top: 0;
-    right: -10px; 
-    background-color: #00a046; 
-    color: white; 
-    border-radius: 50%; 
-    width: 20px; 
+    right: -10px;
+    background-color: #00a046;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
     height: 20px;
-    text-align: center; 
-    font-size: 12px; 
-    line-height: 20px; 
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
     font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
+
 /* Header end */
+
+h2 {
+    color: #4CAF50;
+}
 
 .product {
     border: 1px solid #ddd;
@@ -144,24 +148,36 @@ header {
 details {
     margin: 10px 20px;
     padding: 10px;
-    border: 1px solid #ccc; /* Сіра рамка */
-    border-radius: 8px; /* Закруглені кути */
-    background-color: #f9f9f9; /* Світлий фон */
-    font-family: Arial, sans-serif; /* Шрифт */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тінь для ефекту об'єму */
-    transition: all 0.3s ease; /* Плавний ефект */
+    border: 1px solid #ccc;
+    /* Сіра рамка */
+    border-radius: 8px;
+    /* Закруглені кути */
+    background-color: #f9f9f9;
+    /* Світлий фон */
+    font-family: Arial, sans-serif;
+    /* Шрифт */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Тінь для ефекту об'єму */
+    transition: all 0.3s ease;
+    /* Плавний ефект */
 }
 
 /* Стилізація summary (заголовка, на який клікають) */
 summary {
     font-size: 18px;
     font-weight: bold;
-    color: #4CAF50; /* Зелений колір тексту */
-    padding: 8px 12px; /* Внутрішні відступи */
-    border-radius: 5px; /* Закруглені кути */
-    cursor: pointer; /* Курсор у вигляді руки */
-    outline: none; /* Прибрати обводку */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Плавний ефект при наведенні */
+    color: #4CAF50;
+    /* Зелений колір тексту */
+    padding: 8px 12px;
+    /* Внутрішні відступи */
+    border-radius: 5px;
+    /* Закруглені кути */
+    cursor: pointer;
+    /* Курсор у вигляді руки */
+    outline: none;
+    /* Прибрати обводку */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Плавний ефект при наведенні */
 }
 
 /* add-to-cart */
@@ -181,11 +197,12 @@ summary {
 
 /* Модельне вікно */
 .modal {
-    display: none; /* Спочатку приховано */
+    display: none;
+    /* Спочатку приховано */
     position: absolute;
     z-index: 1;
     left: 0;
-    top: 130px;
+    top: 50px;
     width: 100%;
     /* height: 100%; */
     overflow: auto;
@@ -231,7 +248,8 @@ form label {
     font-weight: bold;
 }
 
-form input, form textarea {
+form input,
+form textarea {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
@@ -240,7 +258,8 @@ form input, form textarea {
     box-sizing: border-box;
 }
 
-form input:focus, form textarea:focus {
+form input:focus,
+form textarea:focus {
     border-color: #4CAF50;
     outline: none;
 }
@@ -254,6 +273,11 @@ form input:focus, form textarea:focus {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+}
+
+.delete-item-btn {
+    background-color: red;
+    margin-left: 30px;
 }
 
 .submit-btn:hover {
@@ -276,7 +300,7 @@ form input:focus, form textarea:focus {
     transition: 0.3s ease;
 }
 
-#fileInput, 
+#fileInput,
 #editFileInput {
     background-color: #fff !important;
     position: absolute;
@@ -292,11 +316,11 @@ form input:focus, form textarea:focus {
 
 
 
-#croppedImage{
+#croppedImage {
     width: 25%;
     height: 25%;
     cursor: pointer;
-  
+
 }
 
 #image {
@@ -309,14 +333,17 @@ form input:focus, form textarea:focus {
 
 
 #overlay {
-    display: none; /* Псевдоелемент для затемнення */
+    display: none;
+    /* Псевдоелемент для затемнення */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* затемнення */
-    z-index: 1; /* Під контейнером */
+    background: rgba(0, 0, 0, 0.5);
+    /* затемнення */
+    z-index: 1;
+    /* Під контейнером */
     transition: opacity 0.3s ease;
 }
 
@@ -335,7 +362,7 @@ form input:focus, form textarea:focus {
 
 }
 
-.cropper-container{
+.cropper-container {
     margin-top: 40px;
 }
 
@@ -348,11 +375,12 @@ form input:focus, form textarea:focus {
 .cropper-modal {
     position: absolute;
     /* opacity: 0; */
-    
+
 }
 
 .cropper-modal {
-    background-color: rgba(0, 0, 0, 0.5); /* затемнення з напівпрозорим чорним фоном */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* затемнення з напівпрозорим чорним фоном */
 }
 
 #exitCross {
@@ -377,10 +405,11 @@ img[alt="The image to crop"] {
 
 }
 
-.cropContainerWrapper, 
+.cropContainerWrapper,
 .cropContainerWrapperEdit {
     display: none;
-    position: relative;;
+    position: relative;
+    ;
 }
 
 #galleryContainer,
@@ -390,41 +419,54 @@ img[alt="The image to crop"] {
 }
 
 
-.image-wrapper, 
+.image-wrapper,
 .edit-image-wrapper {
-    display: inline-block; /* Контейнер підлаштовується під розмір вмісту */
-    line-height: 0; /* Видаляє зайві відступи, що додаються через inline */
+    display: inline-block;
+    /* Контейнер підлаштовується під розмір вмісту */
+    line-height: 0;
+    /* Видаляє зайві відступи, що додаються через inline */
     margin-right: 10px;
     margin-bottom: 10px;
     cursor: pointer;
     position: relative;
 }
 
-.image-wrapper img, 
+.image-wrapper img,
 .edit-image-wrapper img {
-    display: block; /* Зображення займає весь простір батьківського контейнера */
+    display: block;
+    /* Зображення займає весь простір батьківського контейнера */
     width: 150px;
     height: 150px;
     transition: opacity 0.3s ease;
     object-fit: contain;
 }
 
+#edit-file-upload-button {
+    width: 100px;
+}
+
 .edit-image-wrapper::after,
 .image-wrapper::after {
-    content: '🗑️'; /* Іконка сміттєвої корзини */
+    content: '🗑️';
+    /* Іконка сміттєвої корзини */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.6); /* Напівпрозорий білий фон */
+    background: rgba(255, 255, 255, 0.6);
+    /* Напівпрозорий білий фон */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 36px; /* Розмір іконки */
-    color: #333; /* Колір іконки */
-    opacity: 0; /* Початково приховано */
-    transition: opacity 0.3s ease; /* Плавна анімація */
+    font-size: 36px;
+    /* Розмір іконки */
+    color: #333;
+    /* Колір іконки */
+    opacity: 0;
+    /* Початково приховано */
+    transition: opacity 0.3s ease;
+    /* Плавна анімація */
     cursor: pointer;
 }
 
@@ -490,56 +532,68 @@ img[alt="The image to crop"] {
     margin-left: 20px;
 }
 
-.preview-image{ 
+.preview-image {
     height: 100px;
 }
 
 .seller-image-wrapper {
     display: inline-block;
-    position: relative; /* Потрібно для позиціонування псевдоелемента */
+    position: relative;
+    /* Потрібно для позиціонування псевдоелемента */
     width: 200px;
     height: 200px;
     margin: 20px;
     cursor: pointer;
-    border-radius: 20px; /* Округлені кути для контейнера */
+    border-radius: 20px;
+    /* Округлені кути для контейнера */
 }
 
 /* Стили для зображення */
 .seller-image-wrapper img {
     width: 100%;
     height: 100%;
-    border-radius: 20px; /* Округлені кути для зображення */
-    object-fit: cover; /* Картинка заповнює весь контейнер */
+    border-radius: 20px;
+    /* Округлені кути для зображення */
+    object-fit: cover;
+    /* Картинка заповнює весь контейнер */
 }
 
 /* Псевдоелемент для фону та іконки редагування */
 .seller-image-wrapper::after {
-    content: "✎"; /* Іконка редагування */
+    content: "✎";
+    /* Іконка редагування */
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Центруємо іконку */
+    transform: translate(-50%, -50%);
+    /* Центруємо іконку */
     font-size: 36px;
-    color: #007BFF; /* Колір іконки */
-    opacity: 0; /* Початково приховано */
-    transition: opacity 0.3s ease; /* Плавний ефект для з'явлення */
-    pointer-events: none; /* Іконка не має бути клікабельною */
+    color: #007BFF;
+    /* Колір іконки */
+    opacity: 0;
+    /* Початково приховано */
+    transition: opacity 0.3s ease;
+    /* Плавний ефект для з'явлення */
+    pointer-events: none;
+    /* Іконка не має бути клікабельною */
 }
 
 /* Показуємо фон та іконку при наведенні */
 .seller-image-wrapper:hover::after {
-    opacity: 1; /* З'являється при наведенні */
+    opacity: 1;
+    /* З'являється при наведенні */
 }
 
 /* Світлий фон при наведенні на контейнер */
 .seller-image-wrapper:hover {
-    background-color: rgba(0, 123, 255, 0.1); /* Легкий фон при наведенні */
+    background-color: rgba(0, 123, 255, 0.1);
+    /* Легкий фон при наведенні */
 }
 
 .seller-info-container {
-    width: 100%;
+    width: 42vw;
     max-width: 400px;
-    margin: 0px 0px 20px 20px ;
+    margin: 0px 0px 20px 20px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -564,7 +618,8 @@ img[alt="The image to crop"] {
 }
 
 /* Поле з інформацією (ім'я або телефон) */
-.seller-name, .seller-phone {
+.seller-name,
+.seller-phone {
     flex-grow: 1;
     color: #555;
     margin-right: 10px;
@@ -593,7 +648,8 @@ img[alt="The image to crop"] {
 }
 
 /* Кнопки підтвердження і скасування змін */
-.confirm-btn, .cancel-btn {
+.confirm-btn,
+.cancel-btn {
     padding: 5px 10px;
     font-size: 14px;
     border: none;
@@ -646,4 +702,24 @@ img[alt="The image to crop"] {
 .seller-info-wrapper {
     display: flex;
     align-items: center;
+}
+
+.logout {
+    display: flex;
+    font-size: 20px;
+    align-items: center;
+    color: #4CAF50;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+.logout-text {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.logout-icon {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
 }
