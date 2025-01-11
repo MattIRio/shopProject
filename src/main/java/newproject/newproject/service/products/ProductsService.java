@@ -65,13 +65,16 @@ public class ProductsService {
         ProductModel productModel = new ProductModel();
         productModel.setProductName(product.getProductName());
         productModel.setBrand(product.getBrand());
+        productModel.setCategory(product.getCategory());
         productModel.setDescription(product.getDescription());
         productModel.setRetailPrice(product.getRetailPrice());
         productModel.setDiscountedPrice(product.getDiscountedPrice());
         productModel.setQuantity(product.getQuantity());
         productModel.setSellerId(currentUser.getId());
 
+        currentUser.getPublishedProducts().add(productModel);
         productRepository.save(productModel);
+        usersRepository.save(currentUser);
         return productRepository.findByProductName(product.getProductName()).getUniqId();
 
     }
