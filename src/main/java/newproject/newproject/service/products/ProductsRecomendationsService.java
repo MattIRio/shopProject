@@ -163,7 +163,7 @@ public class ProductsRecomendationsService {
     }
 
 
-    @GetMapping("/getrecomendationsfornotloggeduser")
+    @PostMapping("/getrecomendationsfornotloggeduser")
     public ResponseEntity<List<ProductModel>> GetCategoryForNotLoggedUser(@RequestBody List<String> preferencesList) {
         try {
             String separatedCategory1 = null;

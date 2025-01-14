@@ -73,18 +73,18 @@ import java.util.UUID;
         }
     }
 
-    @PutMapping("/deleteproduct/{productId}")
-    public ResponseEntity<String> changeProductInfo(@PathVariable UUID productId, RedirectAttributes redirectAttributes) {
-        try {
-            productsService.changeProductInfo(productId, redirectAttributes);
-            return ResponseEntity.ok("Product deleted");
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
-        } catch (Exception e) {
-            System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
-        }
-    }
+//    @DeleteMapping("/deleteproduct/{productId}")
+//    public ResponseEntity<String> changeProductInfo(@PathVariable UUID productId, RedirectAttributes redirectAttributes) {
+//        try {
+//            productsService.deleteProduct(productId, redirectAttributes);
+//            return ResponseEntity.ok("Product deleted");
+//        } catch (ResponseStatusException e) {
+//            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+//        } catch (Exception e) {
+//            System.out.println("Unexpected error: " + e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+//        }
+//    }
 
     @GetMapping("/getproductsbyname/{searchedProductName}")
     public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String searchedProductName){
@@ -113,7 +113,7 @@ import java.util.UUID;
     @GetMapping("/getproductsbycategory/{searchedCategory}")
     public ResponseEntity<List<ProductModel>> findByProductNameByCategory(@PathVariable String searchedCategory) {
         try {
-            List<ProductModel> products = productsService.findByProductByCategory(searchedCategory);
+            List<ProductModel> products = productsService.findProductByCategory(searchedCategory);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -125,7 +125,7 @@ import java.util.UUID;
     @GetMapping("/getproductsbysellerid/{sellerid}")
     public ResponseEntity<List<ProductModel>> findByProductsBySellerId(@PathVariable int sellerid) {
         try {
-            List<ProductModel> products = productsService.findByProductBySellerId(sellerid);
+            List<ProductModel> products = productsService.findProductBySellerId(sellerid);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -137,7 +137,7 @@ import java.util.UUID;
     @GetMapping("/getproductsbybrand/{brand}")
     public ResponseEntity<?> findByProductsByBrand(@PathVariable String brand) {
         try {
-            List<ProductModel> products = productsService.findByProductByBrand(brand);
+            List<ProductModel> products = productsService.findProductByBrand(brand);
             return ResponseEntity.ok(products);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

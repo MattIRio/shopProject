@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,15 +82,19 @@ public class UserService {
 
     public String getUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getAuthorities() == null){
+        if (authentication.getAuthorities() == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Current user has no roles.");
         }
 
         String response = "";
-        if (authentication.getAuthorities().contains(SELLER)){
-            response = "SELLER";
-        } if(authentication.getAuthorities().contains(BUYER)) {
-            response = "BUYER";
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if (authority.getAuthority().equals("ROLE_SELLER")) {
+                response = "SELLER";
+                break;
+            } else if (authority.getAuthority().equals("ROLE_BUYER")) {
+                response = "BUYER";
+                break;
+            }
         }
         return response;
     }

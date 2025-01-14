@@ -1,10 +1,13 @@
 package newproject.newproject.service.products;
 
 import jakarta.transaction.Transactional;
+import newproject.newproject.authentication.OauthAndPrincipalAuthController;
 import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;
+import newproject.newproject.model.UserOrderedProduct;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
+import newproject.newproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,10 @@ public class ProductsService {
     ProductRepository productRepository;
     @Autowired
     UsersRepository usersRepository;
-
+    @Autowired
+    OauthAndPrincipalAuthController oauthAndPrincipalAuthController;
+    @Autowired
+    UserService userService;
 
     public List<ProductModel> allProducts() {
         List<ProductModel> productList = productRepository.findAll();                 //returning first 20 products
@@ -101,7 +107,7 @@ public class ProductsService {
         productRepository.save(productModel);
     }
 
-    public void changeProductInfo(UUID productId, RedirectAttributes redirectAttributes) {
+    public void deleteProduct(UUID productId, RedirectAttributes redirectAttributes) {
         ProductModel localProduct = productRepository.findByUniqId(productId);
 
         if (productId == null) {
@@ -133,7 +139,7 @@ public class ProductsService {
         return product;
     }
 
-    public List<ProductModel> findByProductByCategory(String searchedCategory){
+    public List<ProductModel> findProductByCategory(String searchedCategory){
         List<ProductModel> productList = productRepository.findByCategory(searchedCategory);
 
         if (productList.isEmpty()) {
@@ -143,7 +149,7 @@ public class ProductsService {
         return productList.subList(0,limit);
     }
 
-    public List<ProductModel> findByProductBySellerId(int sellerId){
+    public List<ProductModel> findProductBySellerId(int sellerId){
         List<ProductModel> productList = productRepository.findBySellerId(sellerId);
 
         if (productList.isEmpty()) {
@@ -153,7 +159,7 @@ public class ProductsService {
         return productList.subList(0,limit);
     }
 
-    public List<ProductModel> findByProductByBrand(String brand){
+    public List<ProductModel> findProductByBrand(String brand){
         List<ProductModel> productList = productRepository.findByBrand(brand);
 
         if (productList.isEmpty()) {
@@ -161,6 +167,20 @@ public class ProductsService {
         }
         int limit = Math.min(productList.size(), 20);
         return productList.subList(0,limit);
+    }
+
+    public void deleteOrderFromCurrentSeller(UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
+        if (userService.getUserRole() != "SELLER"){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user is not a seller");
+        }
+
+        ProductModel currentProduct = productRepository.findByUniqId(productId);
+        if (currentUser.getPublishedProducts().contains(currentProduct) == false){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user have no such product");
+        }
+        currentUser.getPublishedProducts().remove(currentProduct);
+        usersRepository.save(currentUser);
     }
 
 }

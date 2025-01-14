@@ -5,6 +5,7 @@ import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.PreferencesRepository;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
+import newproject.newproject.service.products.ProductsService;
 import newproject.newproject.service.user.UserOrdersService;
 import newproject.newproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class UserController {
     private final UserService userService;
     @Autowired
     UserOrdersService userOrdersService;
+    @Autowired
+    ProductsService productsService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -160,6 +163,19 @@ public class UserController {
     public ResponseEntity<String> deleteOrder(@PathVariable UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
         try {
             userOrdersService.deleteOrderFromCurrentUser(productId, principal, authentication);
+            return ResponseEntity.ok("Product deleted");
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/deleteproductfromcurrentseller/{productId}")
+    public ResponseEntity<String> deleteOrderFromCurrentSeller(@PathVariable UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        try {
+            productsService.deleteOrderFromCurrentSeller(productId, principal, authentication);
             return ResponseEntity.ok("Product deleted");
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).build();

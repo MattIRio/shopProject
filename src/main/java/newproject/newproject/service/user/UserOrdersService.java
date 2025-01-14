@@ -8,12 +8,14 @@ import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UserOrderedProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -74,7 +76,22 @@ public class UserOrdersService {
         UserOrderedProduct existingOrder = userOrderedProductRepository.findByUserAndProduct(currentUser, currentProduct);
         if (existingOrder != null) {
             userOrderedProductRepository.delete(existingOrder);
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Current user has no such order");
         }
     }
+
+    public void deleteProductFromCurrentUser(UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
+        UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
+        ProductModel currentProduct = productRepository.findByUniqId(productId);
+        UserOrderedProduct existingOrder = userOrderedProductRepository.findByUserAndProduct(currentUser, currentProduct);
+        if (existingOrder != null) {
+            userOrderedProductRepository.delete(existingOrder);
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Current user has no such order");
+        }
+    }
+
+
 
 }
