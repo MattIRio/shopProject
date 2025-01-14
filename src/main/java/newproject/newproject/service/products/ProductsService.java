@@ -180,6 +180,7 @@ public class ProductsService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user have no such product");
         }
         currentUser.getPublishedProducts().remove(currentProduct);
+        productRepository.delete(currentProduct);
         usersRepository.save(currentUser);
     }
 

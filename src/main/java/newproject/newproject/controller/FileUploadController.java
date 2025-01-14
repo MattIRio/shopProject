@@ -63,16 +63,16 @@ public class FileUploadController {
         }
     }
 
-    @PostMapping("/uploadeditedproductspics/{productId}")
-    public ResponseEntity<String> uploadEditedProductPics(@RequestParam("file") MultipartFile[] file, @PathVariable UUID productId, RedirectAttributes redirectAttributes, @AuthenticationPrincipal OAuth2User authentication) {
-        try {
-            String fileNames = fileUploadService.uploadEditedProductPics(file, productId, authentication);
-            redirectAttributes.addFlashAttribute("uploadingResult", "Successfully saved files: " + fileNames);
-            return ResponseEntity.ok("File saved");
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("uploadingResult", "Failed to save file");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save file");
-        }
-    }
+//    @PostMapping("/uploadeditedproductspics/{productId}")
+//    public ResponseEntity<String> uploadEditedProductPics(@RequestParam("file") MultipartFile[] file, @PathVariable UUID productId, RedirectAttributes redirectAttributes, @AuthenticationPrincipal OAuth2User authentication) {
+//        try {
+//            String fileNames = fileUploadService.uploadEditedProductPics(file, productId, authentication);
+//            redirectAttributes.addFlashAttribute("uploadingResult", "Successfully saved files: " + fileNames);
+//            return ResponseEntity.ok("File saved");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            redirectAttributes.addFlashAttribute("uploadingResult", "Failed to save file");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save file");
+//        }
+//    }
 }
