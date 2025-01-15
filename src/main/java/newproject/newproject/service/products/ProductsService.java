@@ -86,7 +86,7 @@ public class ProductsService {
     }
 
 
-    public void changeProductInfo(@RequestBody ProductModel product, RedirectAttributes redirectAttributes) {
+    public void changeProductInfo(@RequestBody ProductModel product) {
         if (product == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
         }
@@ -98,6 +98,8 @@ public class ProductsService {
         }
 
         productModel.setProductName(product.getProductName());
+        productModel.setCategory(product.getCategory());
+        productModel.setQuantity(product.getQuantity());
         productModel.setBrand(product.getBrand());
         productModel.setImage(product.getImage());
         productModel.setDescription(product.getDescription());

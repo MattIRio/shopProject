@@ -108,7 +108,7 @@ public class UserService {
         if (currentUser == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User data is missing or invalid.");
         }
-        List<ProductModel> usersProducts = productRepository.findBySellerId(currentUser.getId());
+        List<ProductModel> usersProducts = currentUser.getPublishedProducts();
         return usersProducts;
     }
 

@@ -121,7 +121,7 @@ class ProductsControllerTest {
         when((productRepository.findByUniqId(product.getUniqId()))).thenReturn(product);
 
 
-        ResponseEntity<String> response = productsController.changeProductInfo(existingProduct, redirectAttributes);
+        ResponseEntity<String> response = productsController.changeProductInfo(existingProduct);
 
 
         assertEquals("Product info changed", response.getBody());

@@ -61,9 +61,9 @@ import java.util.UUID;
 
 
     @PutMapping("/changeproductinfo")
-    public ResponseEntity<String> changeProductInfo(@RequestBody ProductModel product, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> changeProductInfo(@RequestBody ProductModel product) {
         try {
-            productsService.changeProductInfo(product, redirectAttributes);
+            productsService.changeProductInfo(product);
             return ResponseEntity.ok("Product changed");
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
