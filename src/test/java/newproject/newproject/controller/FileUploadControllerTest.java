@@ -2,6 +2,7 @@ package newproject.newproject.controller;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import newproject.newproject.controller.fileUpload.FileUploadController;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
 class FileUploadControllerTest {

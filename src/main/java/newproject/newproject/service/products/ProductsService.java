@@ -39,9 +39,8 @@ public class ProductsService {
     UserService userService;
 
     public List<ProductModel> allProducts() {
-        List<ProductModel> productList = productRepository.findAll();                 //returning first 20 products
-        int mimimal = Math.min(productList.size(), 20);
-        return productList.subList(0, mimimal);
+        List<ProductModel> productList = productRepository.getAllProductsInRandomOrder();                 //returning first 20 products
+        return productList;
     }
 
     @Transactional
@@ -79,6 +78,8 @@ public class ProductsService {
         productModel.setSellerId(currentUser.getId());
 
         currentUser.getPublishedProducts().add(productModel);
+
+
         productRepository.save(productModel);
         usersRepository.save(currentUser);
         return productRepository.findByProductName(product.getProductName()).getUniqId();

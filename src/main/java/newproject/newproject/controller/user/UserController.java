@@ -1,4 +1,4 @@
-package newproject.newproject.controller;
+package newproject.newproject.controller.user;
 
 import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;

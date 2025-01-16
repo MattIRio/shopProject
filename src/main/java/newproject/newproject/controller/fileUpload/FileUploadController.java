@@ -1,6 +1,5 @@
-package newproject.newproject.controller;
+package newproject.newproject.controller.fileUpload;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;

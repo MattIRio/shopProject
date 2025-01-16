@@ -1,4 +1,4 @@
-package newproject.newproject.controller;
+package newproject.newproject.controller.pages;
 
 import newproject.newproject.authentication.OauthAndPrincipalAuthController;
 import newproject.newproject.model.UserModel;

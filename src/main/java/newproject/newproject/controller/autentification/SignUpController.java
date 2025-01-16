@@ -1,10 +1,9 @@
-package newproject.newproject.controller;
+package newproject.newproject.controller.autentification;
 
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.UsersRepository;
 import newproject.newproject.service.signup.SignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

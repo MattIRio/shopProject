@@ -1,6 +1,7 @@
 package newproject.newproject.controller;
 
 import jakarta.transaction.Transactional;
+import newproject.newproject.controller.autentification.SignUpController;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.UsersRepository;
 import org.junit.jupiter.api.Test;

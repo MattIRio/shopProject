@@ -1,5 +1,6 @@
 package newproject.newproject.controller;
 
+import newproject.newproject.controller.user.UserController;
 import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.UsersRepository;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,7 +18,6 @@ import static newproject.newproject.model.UserModel.UserType.BUYER;
 import static newproject.newproject.model.UserModel.UserType.SELLER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserControllerTest {

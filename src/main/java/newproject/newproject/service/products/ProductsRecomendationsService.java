@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -96,11 +97,51 @@ public class ProductsRecomendationsService {
             }
 
             List<UsersPreferencesModel> mostVisitedProducts = preferencesRepository.findTopByUserIdOrderByViewCount(currentUser.getId());
+
             String separatedCategory1 = null;
             String separatedCategory2 = null;
             String separatedCategory3 = null;
             String separatedCategory4 = null;
             String separatedCategory5 = null;
+
+            List<String> listOfRecomendedCategories = new ArrayList<>();
+            listOfRecomendedCategories.add("Men's Clothing");
+            listOfRecomendedCategories.add("Women's Clothing");
+            listOfRecomendedCategories.add("Bangles, Bracelets");
+            listOfRecomendedCategories.add("Jewellery");
+            listOfRecomendedCategories.add("Bags");
+            listOfRecomendedCategories.add("Laptop Accessories");
+            listOfRecomendedCategories.add("Festive Needs");
+            listOfRecomendedCategories.add("Accessories & Spare parts");
+            listOfRecomendedCategories.add("Art Supplies");
+
+            if (mostVisitedProducts.get(0).getPreferredCategory() == null){
+                UsersPreferencesModel preferencesModel = new UsersPreferencesModel();
+                preferencesModel.setPreferredCategory(listOfRecomendedCategories.get(((int) (Math.random() * 8) + 1)));
+                mostVisitedProducts.set(0,preferencesModel);
+            }
+            if (mostVisitedProducts.size() < 2){
+                UsersPreferencesModel preferencesModel = new UsersPreferencesModel();
+                preferencesModel.setPreferredCategory(listOfRecomendedCategories.get(((int) (Math.random() * 8) + 1)));
+                mostVisitedProducts.add(preferencesModel);
+            }
+            if (mostVisitedProducts.size() < 3){
+                UsersPreferencesModel preferencesModel = new UsersPreferencesModel();
+                preferencesModel.setPreferredCategory(listOfRecomendedCategories.get(((int) (Math.random() * 8) + 1)));
+                mostVisitedProducts.add(preferencesModel);
+            }
+            if (mostVisitedProducts.size() < 4){
+                UsersPreferencesModel preferencesModel = new UsersPreferencesModel();
+                preferencesModel.setPreferredCategory(listOfRecomendedCategories.get(((int) (Math.random() * 8) + 1)));
+                mostVisitedProducts.add(preferencesModel);
+            }
+            if (mostVisitedProducts.size() < 5){
+                UsersPreferencesModel preferencesModel = new UsersPreferencesModel();
+                preferencesModel.setPreferredCategory(listOfRecomendedCategories.get(((int) (Math.random() * 8) + 1)));
+                mostVisitedProducts.add(preferencesModel);
+            }
+
+
 
             if (mostVisitedProducts.size() > 0) {
                 String[] category1 = mostVisitedProducts.get(0).getPreferredCategory().split(",");
@@ -171,6 +212,25 @@ public class ProductsRecomendationsService {
             String separatedCategory3 = null;
             String separatedCategory4 = null;
             String separatedCategory5 = null;
+
+            List<String> listOfRecomendedCategories = new ArrayList<>();
+            listOfRecomendedCategories.add("Men's Clothing");
+            listOfRecomendedCategories.add("Women's Clothing");
+            listOfRecomendedCategories.add("Bangles, Bracelets");
+            listOfRecomendedCategories.add("Jewellery");
+            listOfRecomendedCategories.add("Bags");
+            listOfRecomendedCategories.add("Laptop Accessories");
+            listOfRecomendedCategories.add("Festive Needs");
+            listOfRecomendedCategories.add("Accessories & Spare parts");
+            listOfRecomendedCategories.add("Art Supplies");
+
+            for (int i = 0; i < preferencesList.size(); i++){
+                for (int j = i+1; j < preferencesList.size(); j++){
+                    if (preferencesList.get(i).equals(preferencesList.get(j))){
+                        preferencesList.set(j, listOfRecomendedCategories.get((int) (Math.random() * 8) + 1));
+                    }
+                }
+            }
 
             if (preferencesList.size() > 0) {
                 String[] category1 = preferencesList.get(0).split(",");

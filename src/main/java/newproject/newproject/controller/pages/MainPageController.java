@@ -1,4 +1,4 @@
-package newproject.newproject.controller;
+package newproject.newproject.controller.pages;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

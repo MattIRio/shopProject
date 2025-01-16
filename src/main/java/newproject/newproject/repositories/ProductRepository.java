@@ -12,9 +12,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<ProductModel, String> {
+    @Query(value = "SELECT * FROM products ORDER BY RANDOM() LIMIT 30", nativeQuery = true)
+    List<ProductModel> getAllProductsInRandomOrder();
+
     ProductModel findByUniqId(UUID uniqId);
     ProductModel findByProductName(String productName);
     List<ProductModel> findByBrand(String brand);
+
+    @Query("SELECT p FROM ProductModel p WHERE p.sellerId = :sellerId ORDER BY RANDOM() LIMIT 15")
     List<ProductModel> findBySellerId(int sellerId);
 
     @Query("SELECT p FROM ProductModel p WHERE LOWER(p.productName) LIKE LOWER(CONCAT(:name, '%'))")
