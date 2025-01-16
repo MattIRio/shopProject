@@ -1,0 +1,1664 @@
+{
+  "categories": [
+      {
+          "name": "Kitchen & Dining",
+          "subcategories": [
+              {
+                  "name": "Kitchen Tools",
+                  "subcategories": [
+                      {
+                          "name": "Kitchen Implements",
+                          "subcategories": [
+                              { "name": "Pizza Cutters" },
+                              { "name": "Hand Juicers" },
+                              { "name": "Choppers & Peelers" },
+                              { "name": "Spatulas & Ladles" },
+                              { "name": "Kitchen Scissors" }
+                          ]
+                      },
+                      {
+                          "name": "Cookware",
+                          "subcategories": [
+                              {
+                                  "name": "Pots & Pans",
+                                  "subcategories": [
+                                      { "name": "Pans & Tawas" },
+                                      { "name": "Woks & Kadhais" },
+                                      { "name": "Pressure Cookers & Pans" },
+                                      { "name": "Baking Dishes & Pans" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Tableware & Cutlery",
+                          "subcategories": [
+                              { "name": "Glasses & Tumblers" },
+                              { "name": "Jugs & Pitchers" },
+                              { "name": "Cutlery" },
+                              { "name": "Condiment Sets" }
+                          ]
+                      },
+                      {
+                          "name": "Coffee Mugs",
+                          "subcategories": [
+                              { "name": "AKUP Coffee Mugs" },
+                              { "name": "Shopmania Coffee Mugs" },
+                              { "name": "Rockmantra Coffee Mugs" },
+                              { "name": "Printland Coffee Mugs" },
+                              { "name": "Prithish Coffee Mugs" },
+                              { "name": "ZEVA Coffee Mugs" },
+                              { "name": "StyleStuffs Coffee Mugs" },
+                              { "name": "G&G Coffee Mugs" }
+                          ]
+                      },
+                      {
+                          "name": "Containers & Bottles",
+                          "subcategories": [
+                              { "name": "Lunch Boxes" },
+                              { "name": "Bottles & Sippers" },
+                              { "name": "Kitchen Containers" },
+                              { "name": "Storage Baskets" },
+                              { "name": "Oil Dispensers" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Bakeware",
+                  "subcategories": [
+                      { "name": "Baking Dishes & Pans" }
+                  ]
+              },
+              {
+                  "name": "Dinnerware & Crockery",
+                  "subcategories": [
+                      { "name": "Cups & Saucers" }
+                  ]
+              },
+              {
+                  "name": "Consumables & Disposables",
+                  "subcategories": [
+                      { "name": "Bowls" }
+                  ]
+              },
+              {
+                  "name": "Flasks & Casseroles"
+              },
+              {
+                  "name": "Lighting",
+                  "subcategories": [
+                      { "name": "Bulbs" }
+                  ]
+              },
+              {
+                  "name": "Housekeeping & Laundry",
+                  "subcategories": [
+                      { "name": "Bathroom Accessories" },
+                      { "name": "Home Cleaning" }
+                  ]
+              },
+              {
+                  "name": "Bar & Glassware",
+                  "subcategories": [
+                      { "name": "Bar Accessories" },
+                      { "name": "Bar Glasses" }
+                  ]
+              }
+          ]
+      },
+
+      {
+          "name": "Pens & Stationery",
+          "subcategories": [
+              {
+                  "name": "School Supplies",
+                  "subcategories": [
+                      {
+                          "name": "Water Bottles",
+                          "subcategories": [
+                              { "name": "Freelance Water Bottles" },
+                              { "name": "Freelance Vacuum Bottles" }
+                          ]
+                      },
+                      {
+                          "name": "Diaries & Notebooks",
+                          "subcategories": [
+                              {
+                                  "name": "Notebooks",
+                                  "subcategories": [
+                                      {
+                                          "name": "Designer",
+                                          "subcategories": [
+                                              { "name": "Shopmania Designer" },
+                                              { "name": "Tiara Diaries Designer" }
+                                          ]
+                                      }
+                                  ]
+                              },
+                              { "name": "Planners & Organisers" }
+                          ]
+                      },
+                      {
+                          "name": "Pencils, Pen & Pencil Boxes",
+                          "subcategories": [
+                              { "name": "Rulers" },
+                              { "name": "Pencil Boxes" }
+                          ]
+                      },
+                      {
+                          "name": "Art & Craft",
+                          "subcategories": [
+                              {
+                                  "name": "Paints",
+                                  "subcategories": [
+                                      { "name": "Paint Bottle Set" }
+                                  ]
+                              }
+                          ]
+                      },
+                      { "name": "Geometry, Pen & Pencil boxes" }
+                  ]
+              },
+              {
+                  "name": "College Supplies",
+                  "subcategories": [
+                      {
+                          "name": "Coin Banks",
+                          "subcategories": [
+                              { "name": "Shilpi Coin Banks" }
+                          ]
+                      },
+                      {
+                          "name": "College Bags",
+                          "subcategories": [
+                              { "name": "Vency creation College Bags" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Office Supplies",
+                  "subcategories": [
+                      {
+                          "name": "Packaging Security Bags"
+                      },
+                      {
+                          "name": "Boards & Dusters",
+                          "subcategories": [
+                              { "name": "Whiteboards" }
+                          ]
+                      },
+                      {
+                          "name": "Files and Folders",
+                          "subcategories": [
+                              { "name": "Hariom Enterprises Files and Folders" }
+                          ]
+                      },
+                      { "name": "Desk Organizers" },
+                      { "name": "Sketch & Paint Markers" },
+                      { "name": "Key Chains" },
+                      { "name": "Scissors" },
+                      { "name": "Calendars" },
+                      { "name": "Office Supplies Accessories" },
+                      { "name": "Punches & Punching Machines" }
+                  ]
+              },
+              {
+                  "name": "Art Supplies",
+                  "subcategories": [
+                      { "name": "Paint Brushes" }
+                  ]
+              },
+              {
+                  "name": "Office Equipments",
+                  "subcategories": [
+                      { "name": "Public Address Systems" },
+                      { "name": "Home Security Cameras" },
+                      { "name": "Biometric Devices" }
+                  ]
+              },
+              {
+                  "name": "Pens",
+                  "subcategories": [
+                      { "name": "Ball Pens" },
+                      { "name": "Mechanical Pencils" },
+                      { "name": "Roller Ball Pens" },
+                      { "name": "Fountain Pens" }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Furniture",
+          "subcategories": [
+              {
+                  "name": "Living Room Furniture",
+                  "subcategories": [
+                      { "name": "Sofa Beds & Futons" },
+                      { "name": "Sofas & Sectionals" },
+                      { "name": "Display Units" },
+                      { "name": "TV & Entertainment Units" }
+                  ]
+              },
+              {
+                  "name": "Kitchen & Dining Furniture",
+                  "subcategories": [
+                      {
+                          "name": "Dining Tables, Chairs & Sets",
+                          "subcategories": [
+                              { "name": "Dining Sets" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Study & Home Office Furniture",
+                  "subcategories": [
+                      { "name": "Portable Laptop Tables" },
+                      { "name": "Computer Tables" }
+                  ]
+              },
+              {
+                  "name": "Storage Furniture",
+                  "subcategories": [
+                      { "name": "Shoe Racks" }
+                  ]
+              },
+              {
+                  "name": "Kids Room Furniture",
+                  "subcategories": [
+                      { "name": "Kids Storage" },
+                      {
+                          "name": "Collapsible Wardrobes",
+                          "subcategories": [
+                              { "name": "Kids Bean Bags" }
+                          ]
+                      },
+                      { "name": "Kids Tables & Seating" }
+                  ]
+              },
+              {
+                  "name": "Bedroom Furniture",
+                  "subcategories": [
+                      { "name": "Mattresses" },
+                      { "name": "Beds" },
+                      { "name": "Dressing Tables" }
+                  ]
+              },
+              {
+                  "name": "General Utility Furniture",
+                  "subcategories": [
+                      { "name": "Puja Mandir & Temple" }
+                  ]
+              },
+              {
+                  "name": "Pet Furniture"
+              },
+              {
+                  "name": "Outdoor & Cafeteria Furniture",
+                  "subcategories": [
+                      { "name": "Outdoor & Cafeteria Chairs" },
+                      { "name": "Outdoor Kids Seating" }
+                  ]
+              },
+              {
+                  "name": "Bar Furniture",
+                  "subcategories": [
+                      { "name": "Wine Racks" }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Jewellery",
+          "subcategories": [
+              {
+                  "name": "Necklaces & Chains",
+                  "subcategories": [
+                      { "name": "Necklaces" },
+                      { "name": "Chains" }
+                  ]
+              },
+              {
+                  "name": "Bangles, Bracelets & Armlets",
+                  "subcategories": [
+                      { "name": "Bangles" },
+                      { "name": "Bracelets" },
+                      { "name": "Armlets" }
+                  ]
+              },
+              { "name": "Rings" },
+              { "name": "Earrings" },
+              { "name": "Pendants & Lockets" },
+              { "name": "Mangalsutras & Tanmaniyas" },
+              { "name": "Nose Rings & Studs" },
+              {
+                  "name": "Accessories",
+                  "subcategories": [
+                      { "name": "Brooches" },
+                      { "name": "Cufflinks & Tie Pins" }
+                  ]
+              },
+              { "name": "Jewellery Sets" }
+          ]
+      },
+      {
+          "name": "Clothing",
+          "subcategories": [
+              {
+                  "name": "Women's Clothing",
+                  "subcategories": [
+                      {
+                          "name": "Lingerie, Sleep & Swimwear",
+                          "subcategories": [
+                              { "name": "Lingerie Sets" },
+                              { "name": "Bras" },
+                              { "name": "Shorts" },
+                              { "name": "Night Dresses & Nighties" },
+                              { "name": "Panties" },
+                              { "name": "Swim & Beach Wear" }
+                          ]
+                      },
+                      {
+                          "name": "Sports & Gym Wear",
+                          "subcategories": [
+                              { "name": "Shorts" },
+                              { "name": "Track Pants" }
+                          ]
+                      },
+                      {
+                          "name": "Western Wear",
+                          "subcategories": [
+                              { "name": "Shirts, Tops & Tunics" },
+                              { "name": "Dresses & Skirts" },
+                              { "name": "Leggings & Jeggings" },
+                              { "name": "Trousers & Capris" }
+                          ]
+                      },
+                      {
+                          "name": "Ethnic Wear",
+                          "subcategories": [
+                              { "name": "Kurtas & Kurtis" },
+                              { "name": "Fabric" },
+                              {
+                                  "name": "Ethnic Bottoms",
+                                  "subcategories": [
+                                      { "name": "Harem Pants" },
+                                      { "name": "Patialas & Salwars" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Fusion Wear",
+                          "subcategories": [
+                              { "name": "Shirts, Tops & Tunics" },
+                              { "name": "Dresses & Skirts" }
+                          ]
+                      },
+                      {
+                          "name": "Formal Wear",
+                          "subcategories": [
+                              { "name": "Waistcoats" },
+                              { "name": "Dresses" }
+                          ]
+                      },
+                      {
+                          "name": "Winter & Seasonal Wear",
+                          "subcategories": [
+                              { "name": "Sweaters & Pullovers" },
+                              { "name": "Raincoats" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Kids' Clothing",
+                  "subcategories": [
+                      {
+                          "name": "Boys Wear",
+                          "subcategories": [
+                              { "name": "Polos & T-Shirts" },
+                              { "name": "Dungarees & Jumpsuits" },
+                              { "name": "Innerwear & Sleepwear" },
+                              { "name": "Trousers & Cargos" },
+                              { "name": "Winter & Seasonal Wear" },
+                              { "name": "Sports Wear" },
+                              { "name": "Suits and Blazers" }
+                          ]
+                      },
+                      {
+                          "name": "Girls Wear",
+                          "subcategories": [
+                              { "name": "Dresses & Skirts" },
+                              { "name": "T-Shirts & Tops" },
+                              { "name": "Innerwear & Sleepwear" },
+                              { "name": "Jeans" },
+                              { "name": "Sports Wear" },
+                              { "name": "Winter & Seasonal Wear" },
+                              { "name": "Ethnic Wear" }
+                          ]
+                      },
+                      {
+                          "name": "Infants Wear",
+                          "subcategories": [
+                              { "name": "Baby Boys" },
+                              { "name": "Baby Girls" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Men's Clothing",
+                  "subcategories": [
+                      { "name": "T-Shirts" },
+                      {
+                          "name": "Shirts",
+                          "subcategories": [
+                              { "name": "Casual & Party Wear Shirts" },
+                              { "name": "Formal Shirts" }
+                          ]
+                      },
+                      { "name": "Jeans" },
+                      { "name": "Cargos, Shorts & 3/4ths" },
+                      { "name": "Suits & Blazers" },
+                      {
+                          "name": "Winter & Seasonal Wear",
+                          "subcategories": [
+                              { "name": "Sweatshirts" },
+                              { "name": "Raincoats" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Accessories",
+                  "subcategories": [
+                      {
+                          "name": "Accessories & Combo Sets",
+                          "subcategories": [
+                              { "name": "Socks" },
+                              { "name": "Ties" },
+                              { "name": "Gloves" },
+                              { "name": "Belts" }
+                          ]
+                      },
+                      { "name": "Inner Wear & Sleep Wear" },
+                      { "name": "Scarves & Stoles" },
+                      { "name": "Mufflers" },
+                      { "name": "Jewelry" }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Footwear",
+          "subcategories": [
+              {
+                  "name": "Women's Footwear",
+                  "subcategories": [
+                      { "name": "Ballerinas" },
+                      {
+                          "name": "Casual Shoes",
+                          "subcategories": [
+                              { "name": "Boots" },
+                              { "name": "Canvas" },
+                              { "name": "Casual" },
+                              { "name": "Loafers" },
+                              { "name": "Mocassins" },
+                              { "name": "Sneakers" }
+                          ]
+                      },
+                      { "name": "Flats" },
+                      { "name": "Heels" },
+                      {
+                          "name": "Sports Shoes",
+                          "subcategories": [
+                              { "name": "Walking" }
+                          ]
+                      },
+                      { "name": "Slippers & Flip Flops" },
+                      { "name": "Sports Sandals" },
+                      { "name": "Wedges" }
+                  ]
+              },
+              {
+                  "name": "Men's Footwear",
+                  "subcategories": [
+                      {
+                          "name": "Casual Shoes",
+                          "subcategories": [
+                              { "name": "Casual" },
+                              { "name": "Sports" }
+                          ]
+                      },
+                      { "name": "Formal Shoes" },
+                      { "name": "Slippers & Flip Flops" },
+                      {
+                          "name": "Sports Shoes",
+                          "subcategories": [
+                              { "name": "Running" },
+                              { "name": "Walking" }
+                          ]
+                      },
+                      { "name": "Sandals & Floaters" }
+                  ]
+              },
+              {
+                  "name": "Kids' & Infant Footwear",
+                  "subcategories": [
+                      {
+                          "name": "For Boys",
+                          "subcategories": [
+                              {
+                                  "name": "Casual Shoes",
+                                  "subcategories": [
+                                      { "name": "Casual" },
+                                      { "name": "Sports" }
+                                  ]
+                              },
+                              { "name": "School Shoes" },
+                              { "name": "Slippers & Flip Flops" },
+                              { "name": "Sports Shoes" },
+                              { "name": "Sandals" }
+                          ]
+                      },
+                      {
+                          "name": "For Girls",
+                          "subcategories": [
+                              {
+                                  "name": "Casual Shoes",
+                                  "subcategories": [
+                                      { "name": "Casual" },
+                                      { "name": "Sports" }
+                                  ]
+                              },
+                              { "name": "School Shoes" },
+                              { "name": "Slippers & Flip Flops" },
+                              { "name": "Sports Shoes" },
+                              { "name": "Sandals" }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Mobiles & Accessories",
+          "subcategories": [
+              {
+                  "name": "Mobile Accessories",
+                  "subcategories": [
+                      { "name": "Mobile Body Panels" },
+                      { "name": "Mobile Pouches" },
+                      { "name": "Cases & Covers" },
+                      { "name": "Screen Guards" },
+                      { "name": "Mobile Chargers" },
+                      { "name": "Speakers" },
+                      { "name": "Headphones" },
+                      { "name": "Batteries" },
+                      { "name": "Cables" },
+                      { "name": "SIM Adapters" },
+                      { "name": "Earphone Cable Organizers" },
+                      { "name": "Chargers" },
+                      { "name": "Car Accessories" },
+                      { "name": "Anti Radiation Stickers & Chips" },
+                      { "name": "Mobile Displays" },
+                      { "name": "Mobile Phone Lens" },
+                      { "name": "Power Banks" },
+                      { "name": "Selfie Sticks" },
+                      { "name": "Styling & Maintenance" },
+                      { "name": "Screen Protectors" },
+                      { "name": "Screen Expander For Phones" },
+                      { "name": "Dyna Mobile Accessories" }
+                  ]
+              },
+              {
+                  "name": "Tablet Accessories",
+                  "subcategories": [
+                      { "name": "Cases & Covers" },
+                      { "name": "Keyboards" },
+                      { "name": "Screen Protectors" }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Automotive",
+          "subcategories": [
+              {
+                  "name": "Accessories & Spare parts",
+                  "subcategories": [
+                      {
+                          "name": "Car Interior & Exterior",
+                          "subcategories": [
+                              {
+                                  "name": "Car Interior",
+                                  "subcategories": [
+                                      { "name": "Car Mats" },
+                                      { "name": "Car Sun Shades" },
+                                      { "name": "Car Hanging Organizers" },
+                                      { "name": "Car Pillows & Neck Rests" },
+                                      { "name": "Car Armrests" },
+                                      { "name": "Car Tray Tables" },
+                                      { "name": "Car Bottle Holders" },
+                                      { "name": "Steering Covers" },
+                                      { "name": "Steering Knobs" }
+                                  ]
+                              },
+                              {
+                                  "name": "Car Exterior",
+                                  "subcategories": [
+                                      { "name": "Door & Bumper Guards" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Car & Bike Care",
+                          "subcategories": [
+                              { "name": "Vehicle Washing & Cleaning" },
+                              { "name": "Car Washer Liquids" },
+                              { "name": "Vehicle Washing Cloths" },
+                              { "name": "Car Body Covers" },
+                              { "name": "Bike Body Covers" }
+                          ]
+                      },
+                      {
+                          "name": "Car & Bike Styling",
+                          "subcategories": [
+                              { "name": "Car Styling" },
+                              { "name": "Car Grill Covers" },
+                              { "name": "Car Stickers & Decals" },
+                              { "name": "Sill Plates" }
+                          ]
+                      },
+                      {
+                          "name": "Car Electronics & Accessories",
+                          "subcategories": [
+                              { "name": "Car Mobile Accessories" },
+                              { "name": "Car Audio & Video" },
+                              { "name": "Car Bluetooth Devices" },
+                              { "name": "Car Speakers" }
+                          ]
+                      },
+                      {
+                          "name": "Car & Bike Lighting",
+                          "subcategories": [
+                              { "name": "Car Lighting" },
+                              { "name": "Car Headlights" },
+                              { "name": "Car Fog Lamps" },
+                              { "name": "Bike Lighting" },
+                              { "name": "Bike Light Bulbs" },
+                              { "name": "Projector Lens" }
+                          ]
+                      },
+                      {
+                          "name": "Spares & Performance Parts",
+                          "subcategories": [
+                              { "name": "Car Spare Parts" },
+                              { "name": "Vehicle Antennas" },
+                              { "name": "Vehicle Horns" },
+                              { "name": "Gear Knobs" },
+                              { "name": "Wipers" },
+                              { "name": "Bike Spare Parts" },
+                              { "name": "Handle Bars" },
+                              { "name": "Bike Side & Centre Stands" }
+                          ]
+                      },
+                      {
+                          "name": "Automotive Combo"
+                      }
+                  ]
+              },
+              {
+                  "name": "Car Accessories",
+                  "subcategories": [
+                      { "name": "Car Mats" },
+                      { "name": "Car Pressure Washers" }
+                  ]
+              },
+              {
+                  "name": "Bike Essentials",
+                  "subcategories": [
+                      { "name": "Bike Handle Grips" },
+                      { "name": "Locks" }
+                  ]
+              },
+              {
+                  "name": "Helmets & Riding Gear",
+                  "subcategories": [
+                      { "name": "Helmets" },
+                      { "name": "Helmet Locks" },
+                      { "name": "Riding Gear" },
+                      { "name": "Arm Sleeves" }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Home Decor & Festive Needs",
+          "subcategories": [
+              {
+                  "name": "Showpieces",
+                  "subcategories": [
+                      { "name": "Gramophones" },
+                      { "name": "Ethnic" },
+                      { "name": "Contemporary" },
+                      { "name": "Fengshui" },
+                      { "name": "Animal Figurines" },
+                      { "name": "Human Figurines" },
+                      { "name": "Others" },
+                      { "name": "Religious Idols" }
+                  ]
+              },
+              {
+                  "name": "Candles & Fragrances",
+                  "subcategories": [
+                      {
+                          "name": "Home Fragrances",
+                          "subcategories": [
+                              { "name": "Aroma Oils" },
+                              { "name": "Aroma Oil & Diffuser Sets" },
+                              { "name": "Handheld Air Fresheners" },
+                              { "name": "Potpourri" }
+                          ]
+                      },
+                      { "name": "Incense Sticks & Holders" }
+                  ]
+              },
+              {
+                  "name": "Table Decor & Handicrafts",
+                  "subcategories": [
+                      { "name": "Showpieces" },
+                      { "name": "Religious Idols" },
+                      { "name": "Human Figurines" },
+                      { "name": "Decorative Platters" },
+                      { "name": "Photo Frames" },
+                      { "name": "Decorative Bottles" }
+                  ]
+              },
+              {
+                  "name": "Wall Decor & Clocks",
+                  "subcategories": [
+                      { "name": "Key Holders" },
+                      { "name": "Clocks" },
+                      { "name": "Wallpapers" },
+                      { "name": "Wall Shelves" },
+                      { "name": "Wall Decals & Stickers" },
+                      { "name": "Paintings" },
+                      { "name": "Posters" },
+                      { "name": "Fridge Magnets" }
+                  ]
+              },
+              {
+                  "name": "Flowers, Plants & Vases",
+                  "subcategories": [
+                      { "name": "Flower Vase" },
+                      { "name": "Artificial Plants" },
+                      { "name": "Vase Fillers" }
+                  ]
+              },
+              {
+                  "name": "Garden & Leisure",
+                  "subcategories": [
+                      { "name": "Garden Stakes" },
+                      {
+                          "name": "Hookah & Hookah Flavors",
+                          "subcategories": [
+                              { "name": "Hookahs" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Decorative Lighting & Lamps",
+                  "subcategories": [
+                      { "name": "Table Lamps" },
+                      { "name": "Floor Lamps" },
+                      { "name": "Ceiling Lamps" },
+                      { "name": "Lanterns" },
+                      { "name": "Night Lamps" },
+                      { "name": "Series Lights" }
+                  ]
+              },
+              {
+                  "name": "Religion & Devotion",
+                  "subcategories": [
+                      { "name": "Shankh" },
+                      { "name": "Chowkis" },
+                      { "name": "Others" }
+                  ]
+              },
+              {
+                  "name": "Festive Decor",
+                  "subcategories": [
+                      { "name": "Holi Essentials" },
+                      { "name": "Rakhi" },
+                      { "name": "Greeting Cards" },
+                      { "name": "Festive Gift Boxes" }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Watches",
+          "subcategories": [
+              {
+                  "name": "Wrist Watches",
+                  "subcategories": [
+                      { "name": "Alfajr" },
+                      { "name": "Cobra Paris" },
+                      { "name": "Aries Gold" },
+                      { "name": "Maserati Time" },
+                      { "name": "Vizion" },
+                      { "name": "Camerii" },
+                      { "name": "Colat" },
+                      { "name": "Rochees" },
+                      { "name": "Rorlig" },
+                      { "name": "T STAR" },
+                      { "name": "TAG Heuer" },
+                      { "name": "Costa Swiss" },
+                      { "name": "Breitling" },
+                      { "name": "Calibro" },
+                      { "name": "Fluid" },
+                      { "name": "Disney" },
+                      { "name": "Cartier" },
+                      { "name": "Lois Caron" },
+                      { "name": "Felix" },
+                      { "name": "Kool Kidz" },
+                      { "name": "Franck Bella" },
+                      { "name": "Vencer Stella" },
+                      { "name": "Casela" },
+                      { "name": "Timer" },
+                      { "name": "Titan" },
+                      { "name": "Srushti Art Jewelry" },
+                      { "name": "Q&Q" },
+                      { "name": "Escort" },
+                      { "name": "Estilo" },
+                      { "name": "Jack klein" },
+                      { "name": "North Moon" },
+                      { "name": "Rich Club" },
+                      { "name": "Skmei" },
+                      { "name": "Kms" },
+                      { "name": "Swag" },
+                      { "name": "Hala" },
+                      { "name": "Ridas" },
+                      { "name": "Now" },
+                      { "name": "Jacques Farel" },
+                      { "name": "Oxter" },
+                      { "name": "Positif" },
+                      { "name": "D’SIGNER" },
+                      { "name": "Sale Funda" },
+                      { "name": "Britex" },
+                      { "name": "3wish" },
+                      { "name": "Elantra" },
+                      { "name": "Marvel" },
+                      { "name": "Eleganzza" },
+                      { "name": "Zoop" },
+                      { "name": "Shoppingekart" },
+                      { "name": "SwissFire" },
+                      { "name": "Timewel" },
+                      { "name": "SVM" },
+                      { "name": "HMT" },
+                      { "name": "Sir Time" },
+                      { "name": "Noise" },
+                      { "name": "Only Kidz" },
+                      { "name": "Gift Island" },
+                      { "name": "Global Nomad" },
+                      { "name": "Lamex" },
+                      { "name": "Fastrack" },
+                      { "name": "Neo Classic" },
+                      { "name": "Petrol" },
+                      { "name": "Timex" },
+                      { "name": "Playboy" },
+                      { "name": "Firstrace" },
+                      { "name": "CB Fashion" },
+                      { "name": "V-Luma" },
+                      { "name": "Fimex" },
+                      { "name": "FNB" },
+                      { "name": "Invaders" }
+                  ]
+              },
+              {
+                  "name": "Watch Accessories",
+                  "subcategories": [
+                      {
+                          "name": "Watch Boxes",
+                          "subcategories": [
+                              { "name": "Anno Dominii" }
+                          ]
+                      },
+                      {
+                          "name": "Wrist Bands",
+                          "subcategories": [
+                              { "name": "Crazy Deal" },
+                              { "name": "Merchant eshop" },
+                              { "name": "Sakhi Styles" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Clocks",
+                  "subcategories": [
+                      {
+                          "name": "Table Clocks",
+                          "subcategories": [
+                              { "name": "Like" }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Beauty and Personal Care",
+          "subcategories": [
+              {
+                  "name": "Fragrances",
+                  "subcategories": [
+                      { "name": "Deodorants" },
+                      {
+                          "name": "Combos",
+                          "subcategories": [
+                              { "name": "Engage Combos" },
+                              { "name": "Aero Care Combos" },
+                              { "name": "Point Blank Combos" },
+                              { "name": "Nike Combos" },
+                              { "name": "My Ego Combos" },
+                              { "name": "Yardley Combos" },
+                              { "name": "Adidas Combos" },
+                              { "name": "Layer'R Combos" },
+                              { "name": "Denver Combos" },
+                              { "name": "Wild Stone Combos" },
+                              { "name": "Cinthol Combos" },
+                              { "name": "Fogg Combos" },
+                              { "name": "Park Avenue Combos" },
+                              { "name": "Anare Andre Paris Combos" },
+                              { "name": "Envy-1000 Combos" },
+                              { "name": "Playboy Combos" },
+                              { "name": "Vincent Valentine Paris Combos" },
+                              { "name": "Ms Dhoni Combos" },
+                              { "name": "Armaf Combos" },
+                              { "name": "Killer X Combos" },
+                              { "name": "Fogg Combos" },
+                              { "name": "Jovan Combos" },
+                              { "name": "French Factor Combos" },
+                              { "name": "Beverly Hills Polo Club Combos" },
+                              { "name": "Euro Style Combos" },
+                              { "name": "Engage Combos" },
+                              { "name": "Spinz Combos" },
+                              { "name": "Kamasutra Combos" },
+                              { "name": "Striker Combos" },
+                              { "name": "Intellect Combos" },
+                              { "name": "Yardley Combos" },
+                              { "name": "Archie Combos" },
+                              { "name": "Oros Combos" },
+                              { "name": "Zero Gravity Combos" },
+                              { "name": "Denim Combos" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Bath and Spa",
+                  "subcategories": [
+                      {
+                          "name": "Soaps",
+                          "subcategories": [
+                              { "name": "Medimix Soaps" },
+                              { "name": "Aden & M Soaps" },
+                              { "name": "Aster Luxury Soaps" },
+                              { "name": "BEARDO Soaps" },
+                              { "name": "Park Avenue Soaps" },
+                              { "name": "Fuschia Soaps" }
+                          ]
+                      },
+                      {
+                          "name": "Bath and Spa Accessories",
+                          "subcategories": [
+                              {
+                                  "name": "Loofahs", "subcategories": [
+                                      { "name": "Basicare Loofahs" },
+                                      { "name": "Manufaktura Loofahs" }
+                                  ]
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Hair Care",
+                  "subcategories": [
+                      {
+                          "name": "Conditioners",
+                          "subcategories": [
+                              { "name": "TRESemme Conditioners" },
+                              { "name": "Burt's Bees Conditioners" },
+                              { "name": "Suave Conditioners" },
+                              { "name": "Dove Conditioners" },
+                              { "name": "Paul Mitchell Conditioners" },
+                              { "name": "Schwarzkopf Conditioners" },
+                              { "name": "TIGI BED HEAD Conditioners" },
+                              { "name": "OGX Conditioners" }
+                          ]
+                      },
+                      { "name": "Hair Styling" },
+                      {
+                          "name": "Hair Colors",
+                          "subcategories": [
+                              { "name": "L Oreal Hair Colors" },
+                              { "name": "Clairol Hair Colors" },
+                              { "name": "Garnier Hair Colors" },
+                              { "name": "Matrix Hair Colors" },
+                              { "name": "Krypton Hair Colors" }
+                          ]
+                      },
+                      {
+                          "name": "Shampoos",
+                          "subcategories": [
+                              { "name": "Dr. Thapar's Shampoos" },
+                              { "name": "Kerastase Shampoos" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Makeup",
+                  "subcategories": [
+                      {
+                          "name": "Vanity Boxes",
+                          "subcategories": [
+                              { "name": "Bulaky Vanity Boxes" },
+                              { "name": "Kalakruti Vanity Boxes" },
+                              { "name": "Krg Enterprises Vanity Boxes" },
+                              { "name": "Borse Vanity Boxes" },
+                              { "name": "KE Vanity Boxes" },
+                              { "name": "Kartique Vanity Boxes" },
+                              { "name": "Pride Vanity Boxes" },
+                              { "name": "Angelfish Vanity Boxes" },
+                              { "name": "Goldencollections Vanity Boxes" },
+                              { "name": "Merchbay Vanity Boxes" },
+                              { "name": "Celebrity Vanity Boxes" },
+                              { "name": "Uberlyfe Vanity Boxes" },
+                              { "name": "Recrafto Vanity Boxes" }
+                          ]
+                      },
+                      {
+                          "name": "Face",
+                          "subcategories": [
+                              {
+                                  "name": "Blushes",
+                                  "subcategories": [
+                                      { "name": "The Balm Blushes" },
+                                      { "name": "MAC Blushes" },
+                                      { "name": "E.L.F Blushes" },
+                                      { "name": "SHANY Blushes" },
+                                      { "name": "Femme Couture Bronzers" }
+                                  ]
+                              },
+                              {
+                                  "name": "Primers",
+                                  "subcategories": [
+                                      { "name": "NYX Primers" },
+                                      { "name": "Jouer Primers" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Eyes",
+                          "subcategories": [
+                              {
+                                  "name": "Eye Shadows",
+                                  "subcategories": [
+                                      { "name": "Milani Eye Shadows" },
+                                      { "name": "e.l.f. Cosmetics Eye Shadows" }
+                                  ]
+                              },
+                              {
+                                  "name": "Eye Liners",
+                                  "subcategories": [
+                                      { "name": "Menow Eye Liners" },
+                                      { "name": "Blue Heaven Eye Liners" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Lips",
+                          "subcategories": [
+                              {
+                                  "name": "Lip Liners",
+                                  "subcategories": [
+                                      { "name": "Giorgio Armani Lip Liners" }
+                                  ]
+                              },
+                              {
+                                  "name": "Lipsticks",
+                                  "subcategories": [
+                                      { "name": "Miss Claire Lipsticks" },
+                                      { "name": "Elfani Lipsticks" },
+                                      { "name": "Rythmx Lipsticks" },
+                                      { "name": "Cover Girl Lipsticks" },
+                                      { "name": "Foolzy Lipsticks" },
+                                      { "name": "Incolor Lipsticks" }
+                                  ]
+                              },
+                              {
+                                  "name": "Lip Balms",
+                                  "subcategories": [
+                                      { "name": "Lady Diana Lip Balms" },
+                                      { "name": "MUA MAKEUP ACADEMY Lip Balms" }
+                                  ]
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Body and Skin Care",
+                  "subcategories": [
+                      {
+                          "name": "Face Care",
+                          "subcategories": [
+                              {
+                                  "name": "Anti Ageing",
+                                  "subcategories": [
+                                      { "name": "Loreal Anti Ageing" },
+                                      { "name": "Nutrispa Anti Ageing" }
+                                  ]
+                              },
+                              {
+                                  "name": "Toners",
+                                  "subcategories": [
+                                      { "name": "Loreal Paris Toners" },
+                                      { "name": "ORIFLAME SWEDEN Toners" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Hand Care",
+                          "subcategories": [
+                              {
+                                  "name": "Manicure and Kits",
+                                  "subcategories": [
+                                      { "name": "Foolzy Manicure and Kits" },
+                                      { "name": "Sally Hansen Manicure and Kits" },
+                                      { "name": "Essie Manicure and Kits" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Lip Care",
+                          "subcategories": [
+                              {
+                                  "name": "Lip Balms",
+                                  "subcategories": [
+                                      { "name": "Khadi Lip Balms" },
+                                      { "name": "Good Way Lip Balms" },
+                                      { "name": "Lip Rageous Lip Balms" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Body and Skin Accessories",
+                          "subcategories": [
+                              { "name": "Nail Filers" }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Health Care",
+                  "subcategories": [
+                      {
+                          "name": "Health Care Devices",
+                          "subcategories": [
+                              { "name": "Electrotherapy" },
+                              { "name": "Digital Thermometers" },
+                              { "name": "Pulse Oximeters" }
+                          ]
+                      },
+                      {
+                          "name": "Medical Equipment & Accessories"
+                      },
+                      {
+                          "name": "Medicines & Treatment",
+                          "subcategories": [
+                              { "name": "First Aid", "subcategories": [{ "name": "Hot & Cold Packs" }] }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Beauty Accessories",
+                  "subcategories": [
+                      {
+                          "name": "Makeup Accessories",
+                          "subcategories": [
+                              {
+                                  "name": "Brushes and Applicators",
+                                  "subcategories": [
+                                      { "name": "YOA Brushes and Applicators" },
+                                      { "name": "LOTTIE LONDON Brushes and Applicators" }
+                                  ]
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Women's Hygiene",
+                  "subcategories": [
+                      { "name": "Menstrual Cups", "subcategories": [{ "name": "Generic Menstrual Cups" }] }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Home Furnishing",
+          "subcategories": [
+              {
+                  "name": "Bath Linen",
+                  "subcategories": [
+                      { "name": "Towels" },
+                      { "name": "Bath Mats" }
+                  ]
+              },
+              {
+                  "name": "Cushions, Pillows & Covers",
+                  "subcategories": [
+                      { "name": "Cushion Covers" },
+                      { "name": "Pillows" },
+                      { "name": "Cushions" }
+                  ]
+              },
+              {
+                  "name": "Curtains & Accessories",
+                  "subcategories": [
+                      { "name": "Curtains" },
+                      { "name": "Curtain Accessories" }
+                  ]
+              },
+              {
+                  "name": "Bed Linen",
+                  "subcategories": [
+                      { "name": "Bedsheets" },
+                      { "name": "Duvet Covers" },
+                      { "name": "Blankets, Quilts & Dohars" }
+                  ]
+              },
+              {
+                  "name": "Living Room Furnishing",
+                  "subcategories": [
+                      { "name": "Diwan Sets" },
+                      { "name": "Cushion Covers" },
+                      { "name": "Sofa Covers" }
+                  ]
+              },
+              {
+                  "name": "Kitchen & Dining Linen",
+                  "subcategories": [
+                      { "name": "Table Covers" },
+                      { "name": "Table Linen Sets" },
+                      { "name": "Coasters" },
+                      { "name": "Kitchen Linen Sets" },
+                      { "name": "Table Runners" }
+                  ]
+              },
+              {
+                  "name": "Floor Coverings",
+                  "subcategories": [
+                      { "name": "Carpets & Rugs" },
+                      { "name": "Mats" }
+                  ]
+              },
+              { "name": "Sovam Home Furnishing" },
+              { "name": "JMD Home Furnishing" },
+              { "name": "Kripa's Home Furnishing" },
+              { "name": "Tidy Home Furnishing" },
+              { "name": "Lushomes Living Room Furnishing" }
+          ]
+      },
+      {
+          "name": "Cameras & Accessories",
+          "subcategories": [
+              {
+                  "name": "Camera Accessories",
+                  "subcategories": [
+                      {
+                          "name": "Battery chargers",
+                          "subcategories": [
+                              { "name": "Uniross Battery chargers" },
+                              { "name": "Power Smart Battery chargers" },
+                              { "name": "Pearstone Battery chargers" },
+                              { "name": "Sony Battery chargers" },
+                              { "name": "Camelion Battery chargers" },
+                              { "name": "Tyfy Battery chargers" },
+                              { "name": "Pico Battery chargers" }
+                          ]
+                      },
+                      { "name": "Camera Lenses", "subcategories": [{ "name": "Polaroid Camera Lenses" }] },
+                      { "name": "Camera Mounts", "subcategories": [{ "name": "SD Camera Mounts" }] },
+                      {
+                          "name": "Flashes",
+                          "subcategories": [
+                              { "name": "SB RETAILS Flashes" }
+                          ]
+                      },
+                      {
+                          "name": "Lens Adapters",
+                          "subcategories": [
+                              { "name": "Npplastics Lens Adapters" },
+                              { "name": "Progear Lens Adapters" }
+                          ]
+                      },
+                      {
+                          "name": "Lens Hoods",
+                          "subcategories": [
+                              { "name": "Omax Lens Hoods" },
+                              { "name": "Fotodiox Inc. Lens Hoods" },
+                              { "name": "Big Mike's Lens Hoods" },
+                              { "name": "Saihan Lens Hoods" },
+                              { "name": "S Class Lens Hoods" },
+                              { "name": "Axcess Lens Hoods" },
+                              { "name": "JJC Lens Hoods" },
+                              { "name": "Flyfilms Lens Hoods" },
+                              { "name": "Canon Lens Hoods" },
+                              { "name": "Spe Lens Hoods" }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Tools & Hardware",
+          "subcategories": [
+              {
+                  "name": "Tools",
+                  "subcategories": [
+                      {
+                          "name": "Hardware & Electricals",
+                          "subcategories": [
+                              {
+                                  "name": "Hardware",
+                                  "subcategories": [
+                                      {
+                                          "name": "Wire Joints & Connectors",
+                                          "subcategories": [
+                                              { "name": "Rapter BNC-179 BNC Wire Connector" },
+                                              { "name": "Rapter BNC-047 BNC Wire Connector" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Shower Head",
+                                          "subcategories": [
+                                              { "name": "Oleanna Shower Head" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Wires",
+                                          "subcategories": [
+                                              { "name": "FAB-FLASH Fire Retardant PVC 2.5 sq/mm" },
+                                              { "name": "FAB-FLASH Fire Retardant PVC 4 sq/mm" },
+                                              { "name": "FAB-FLASH Fire Retardant PVC 1.5 sq/mm" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Hooks",
+                                          "subcategories": [
+                                              { "name": "martShophar Brass Wall Hook" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Racks & Shelves",
+                                          "subcategories": [
+                                              { "name": "Goldcave Plastic Wall Shelf" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Handles & Knobs",
+                                          "subcategories": [
+                                              { "name": "IndianShelf Ceramic Cabinet/Draw Knobs" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Towel Holders",
+                                          "subcategories": [
+                                              { "name": "Sheetal Stainless Steel Towel Holder" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Bathroom Fittings & Sanitary",
+                                          "subcategories": [
+                                              { "name": "BM BELMONTE EWC Toilet Seat" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Toothbrush Holders",
+                                          "subcategories": [
+                                              { "name": "Tech Fit Stainless Steel Toothbrush Holder" },
+                                              { "name": "Shopo Plastic Toothbrush Holder" },
+                                              { "name": "Skys&Ray Plastic Toothbrush Holder" }
+                                          ]
+                                      }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Gardening Tools",
+                          "subcategories": [
+                              {
+                                  "name": "Plant Containers & Sets",
+                                  "subcategories": [
+                                      { "name": "Importwala Plant Container Sets" }
+                                  ]
+                              },
+                              {
+                                  "name": "Plant Seeds",
+                                  "subcategories": [
+                                      {
+                                          "name": "Fruit Seeds",
+                                          "subcategories": [
+                                              { "name": "Futaba Dragon Eye Fruit Seed" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Vegetable Seeds",
+                                          "subcategories": [
+                                              { "name": "Imago Ims019 Capsicum Seed" }
+                                          ]
+                                      },
+                                      {
+                                          "name": "Herbs",
+                                          "subcategories": [
+                                              { "name": "Eplant ASD23 Seed" }
+                                          ]
+                                      }
+                                  ]
+                              },
+                              {
+                                  "name": "Garden Sprayers",
+                                  "subcategories": [
+                                      { "name": "SMS Lightweight Sprayers" },
+                                      { "name": "eSms Lightweight Hose Pipes" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Alternate Energy",
+                          "subcategories": [
+                              {
+                                  "name": "Solar Charge Controllers",
+                                  "subcategories": [
+                                      { "name": "PHOCOS CX10 MPPT Solar Charge Controller" },
+                                      { "name": "PHOCOS CML 5A Solar Charge Controller" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Home Organizers & Storage",
+                          "subcategories": [
+                              {
+                                  "name": "Mail Boxes",
+                                  "subcategories": [
+                                      { "name": "FURNXT Wall Mounted Mailbox" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Home Utilities",
+                          "subcategories": [
+                              {
+                                  "name": "Umbrellas",
+                                  "subcategories": [
+                                      { "name": "Elephant Brand Umbrellas" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Tool Accessories",
+                          "subcategories": [
+                              {
+                                  "name": "Safety Gear",
+                                  "subcategories": [
+                                      { "name": "Safety Helmets" }
+                                  ]
+                              },
+                              { "name": "Screwdriver Bit Sets" }
+                          ]
+                      },
+                      {
+                          "name": "Hand Tools",
+                          "subcategories": [
+                              { "name": "Swiss Knives" },
+                              { "name": "Cutters & Snips" }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Health & Personal Care Appliances",
+          "subcategories": [
+              {
+                  "name": "Health Care",
+                  "subcategories": [
+                      {
+                          "name": "Health Care Devices",
+                          "subcategories": [
+                              {
+                                  "name": "Massagers",
+                                  "subcategories": [
+                                      { "name": "PUSHCART REK-164-W W-B-MSG Massager" },
+                                      { "name": "STERN KS34SRI SPINE ROLL Massager" },
+                                      { "name": "CPEX Thrive 20 IN 1 Facial Megantic Face Pain Relief Massager" },
+                                      { "name": "Car vastra Brown & Beige Backrest Massager" }
+                                  ]
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Personal Care Appliances",
+                  "subcategories": [
+                      {
+                          "name": "Trimmers",
+                          "subcategories": [
+                              { "name": "Nova NS217 Trimmer, Clipper, Shaver" },
+                              { "name": "Kemei Professional 01400-0015 Trimmer" },
+                              { "name": "Blue Me Trimmer 216 B Shaver" },
+                              { "name": "NOVA Professional Hair NS216 Trimmer" },
+                              { "name": "s2s Trimmer rechargeable hair remover" }
+                          ]
+                      },
+                      {
+                          "name": "Vaping Devices",
+                          "subcategories": [
+                              {
+                                  "name": "E-Cigarettes",
+                                  "subcategories": [
+                                      { "name": "Being Trendy Quit-X eGo-Twist CE 5 Automatic E-Cigarette" },
+                                      { "name": "Being Trendy Quit-X eGo-Twist CE-4 Automatic E-Cigarette" }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Shavers",
+                          "subcategories": [
+                              { "name": "Nova Professional NHC-5916 Trimmer For Men" }
+                          ]
+                      },
+                      {
+                          "name": "Hair Straighteners",
+                          "subcategories": [
+                              { "name": "Ivon 208 Hair Straightener" }
+                          ]
+                      },
+                      {
+                          "name": "Hair Dryers",
+                          "subcategories": [
+                              { "name": "V&G Professional HD-36 Hair Dryer" },
+                              { "name": "Ovente Hair Dryer Bonnet" },
+                              { "name": "Barbar Hair Dryer Bonnet" },
+                              { "name": "BaBylissPRO Hair Dryer Bonnet" },
+                              { "name": "Conair Hair Dryer Bonnet" },
+                              { "name": "RX7 Superlite Hair Dryer" },
+                              { "name": "REDMOMD RF-510 Hair Dryer" },
+                              { "name": "Rusk Hair Dryer Bonnet" },
+                              { "name": "Salon Tech Hair Dryer Bonnet" },
+                              { "name": "Le Angelique Hair Dryer Bonnet" },
+                              { "name": "INEXT IN-031 Hair Dryer" },
+                              { "name": "HNK 2300W Professional Hair Dryer" }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Bags, Wallets & Belts",
+          "subcategories": [
+              {
+                  "name": "Bags",
+                  "subcategories": [
+                      { "name": "Hand Bags" },
+                      { "name": "Sling Bags" },
+                      { "name": "Backpacks" },
+                      {
+                          "name": "Wallets & Clutches"
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "Food & Nutrition",
+          "subcategories": [
+              {
+                  "name": "Health & Nutrition",
+                  "subcategories": [
+                      {
+                          "name": "Protein Supplements"
+                      }
+                  ]
+              }
+          ]
+      }
+  ]
+}

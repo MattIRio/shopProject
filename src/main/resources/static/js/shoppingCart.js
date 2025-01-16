@@ -7,23 +7,19 @@ function updateCartCount() {
 function getImages(product) {
     let imageArray = [];
 
-    // Перевіряємо, чи існує властивість image у product
     if (product && product.image) {
         const imageData = product.image;
-        console.log("product.image:", imageData);  // Діагностика: перевіряємо, що містить image
 
-        // Якщо це URL-адреса (починається з http), додаємо її як є
         if (typeof imageData === 'string' && imageData.startsWith("http")) {
-            imageArray = [imageData]; // Додаємо без змін
+            imageArray = [imageData];
         } else if (imageData.startsWith("/uploads")) {
-            // Якщо це локальний шлях, обробляємо як локальне зображення
-            imageArray = [imageData]; // Залишаємо локальний шлях без змін
+            imageArray = [imageData];
+            console.log(imageArray);
         } else {
-            // Якщо це інший формат (наприклад, JSON-рядок), намагаємось його обробити
             try {
-                // Пробуємо парсити як JSON
                 imageArray = JSON.parse(imageData || '[]')
                     .map(imageUrl => imageUrl.replace(/\\/g, '/')); // Заміняємо зворотні слеші на прямі
+                    console.log(imageArray);
             } catch (error) {
                 console.error("Error parsing image JSON:", error);
                 imageArray = []; // Якщо помилка, повертаємо порожній масив

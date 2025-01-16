@@ -56,6 +56,12 @@ fetch('http://localhost:8080/api/products/getallproducts')
                 // Якщо немає знижки
                 itemPrice.innerHTML = `${item.retailPrice} $`;
             }
+            
+            //дописать якщо нема по кількості
+            if (!item.retailPrice) {
+                itemImage.classList.add('not-available-image');
+                itemPrice.innerHTML = 'Not available';
+            }
 
             // Додавання класів для текстових елементів
             itemTitle.classList.add('item-title');

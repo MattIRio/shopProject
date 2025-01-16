@@ -9,23 +9,29 @@ const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttrib
 function getImages(product) {
     let imageArray = [];
 
-    // Перевіряємо, чи існує властивість image у product
     if (product && product.image) {
         const imageData = product.image;
-        console.log("product.image:", imageData);  // Діагностика: перевіряємо, що містить image
 
-        // Якщо це URL-адреса (починається з http), додаємо її як є
         if (typeof imageData === 'string' && imageData.startsWith("http")) {
-            imageArray = [imageData]; // Додаємо без змін
+            imageArray = [imageData];
         } else if (imageData.startsWith("/uploads")) {
-            // Якщо це локальний шлях, обробляємо як локальне зображення
-            imageArray = [imageData]; // Залишаємо локальний шлях без змін
+            imageArray = [imageData];
+            console.log(imageArray);
         } else {
-            // Якщо це інший формат (наприклад, JSON-рядок), намагаємось його обробити
             try {
-                // Пробуємо парсити як JSON
-                imageArray = JSON.parse(imageData || '[]')
-                    .map(imageUrl => imageUrl.replace(/\\/g, '/')); // Заміняємо зворотні слеші на прямі
+                const fixedJson = product.image
+                .replace(/\\/g, '\\\\') 
+                .replace(/,\s*C:/g, ',"C:')
+                .replace(/\[C:/g, '["C:')
+                .replace(/\.jpg/g, '.jpg"')
+                .replace(/\.webp/g, '.webp"') 
+                .replace(/\.png/g, '.png"'); 
+
+                imageArray = JSON.parse(fixedJson || '[]')
+                    .map(imageUrl => imageUrl.includes("\\uploads")
+                        ? "/uploads" + imageUrl.split("uploads")[1].replace(/\\/g, '/')
+                        : imageUrl
+                    );
             } catch (error) {
                 console.error("Error parsing image JSON:", error);
                 imageArray = []; // Якщо помилка, повертаємо порожній масив
@@ -36,29 +42,41 @@ function getImages(product) {
     return imageArray; // Завжди повертаємо масив
 }
 
-document.addEventListener('DOMContentLoaded', () => {
 
-    fetch(`/addrecomendationtouser/${productId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            [csrfHeader]: csrfToken
-        }
-    })
-        .then(response => {
+async function isUserAuthenticated() {
+    const isUserAuthenticatedResponse = await fetch("/isuserauthenticated");
+    if (!isUserAuthenticatedResponse.ok) {
+        throw new Error(`Failed to check user authentication. Status: ${isUserAuthenticatedResponse.status}`);
+    }
 
-            if (!response.ok) {
-                return Promise.reject(`Server error: ${response.status}`);
+    const isUserAuthenticated = await isUserAuthenticatedResponse.json();
+    return isUserAuthenticated;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    if (await isUserAuthenticated()) {
+        fetch(`/addrecomendationtouser/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken
             }
-            return response.text();
         })
-        .then(text => {
-            console.log('Response text:', text);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
 
+                if (!response.ok) {
+                    return Promise.reject(`Server error: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                console.log('Response text:', text);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     fetch(`http://localhost:8080/api/products/getproductbyid/${productId}`)
         .then(response => response.json())
@@ -74,9 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('product-details').innerHTML = `
     <div class="product-main">
         <h2>${productName}</h2>
-        <p><strong>Brand:</strong> ${brand}</p>
+        <p><strong>Brand:</strong> ${brand || "No Brand"}</p>
         <div class="price">
-            <p>Price:</p>
+            <p class="price-title">Price:</p>
             ${discountedPrice && discountedPrice < price
                     ? `
                     <p class="original-price"><del>${price} $</del></p>
@@ -125,6 +143,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.thumbs-slider').style.display = 'none';
             }
 
+            if (!price) {
+                // itemImage.classList.add('not-available-image');
+                document.querySelector('.final-price').innerHTML = 'Not available';
+                document.getElementById('add-to-cart-btn').disabled = true;
+                document.querySelector('.price-title').style.display = 'none';
+            }
+
+
+            let categoryData = product.category;
+
+            // Перевіряємо, чи це JSON-рядок
+            try {
+                categoryData = JSON.parse(categoryData);
+            } catch (e) {
+                // Якщо це не JSON, залишаємо як є
+                console.warn("Category is not JSON formatted. Proceeding as raw string.");
+            }
+            
+            // Нормалізуємо категорію до масиву
+            let parsedCategory;
+            if (Array.isArray(categoryData)) {
+                // Якщо це масив, об'єднуємо в рядок
+                parsedCategory = categoryData.join(", ").trim();
+            } else if (typeof categoryData === "string") {
+                // Якщо це рядок, просто обрізаємо пробіли
+                parsedCategory = categoryData.trim();
+            } else {
+                // Якщо категорія не відповідає очікуваному формату
+                console.error("Unexpected category format:", categoryData);
+                parsedCategory = ""; // Значення за замовчуванням
+            }
+            
+            // Отримуємо збережені категорії
+            const storedCategories = JSON.parse(localStorage.getItem("lastCategories")) || [];
+            
+            // Додаємо нову категорію, якщо вона існує
+            if (parsedCategory) {
+                storedCategories.push(parsedCategory);
+            }
+            
+            // Обрізаємо список до останніх 5 елементів
+            const updatedCategories = storedCategories.slice(-5);
+            
+            // Зберігаємо оновлений список у localStorage
+            localStorage.setItem("lastCategories", JSON.stringify(updatedCategories));
+            
+            // Читаємо збережені категорії для перевірки
+            const viewedCategories = JSON.parse(localStorage.getItem("lastCategories"));
+            console.log("Viewed Categories:", viewedCategories);
 
             // Ініціалізація Swiper
             const thumbsSwiper = new Swiper('.thumbs-slider', {
@@ -234,6 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             itemWrapper.className = 'swiper-slide';
                             sameBrandItemsSliderWrapper.append(itemWrapper);
+
+                            if (!item.retailPrice) {
+                                itemImage.classList.add('not-available-image');
+                                itemPrice.innerHTML = 'Not available';
+                            }
                         });
 
                         const sameBrandItemsSlider = new Swiper('.same-brand-items-slider', {
@@ -252,100 +324,129 @@ document.addEventListener('DOMContentLoaded', () => {
             showSameBrandItems();
 
             function showRecommendedItems() {
-                fetch('http://localhost:8080/getrecomendations')
-                    .then(response => response.json())
-                    .then(recommendedItems => {
-                        const recommendedItemsSliderWrapper = document.getElementById('recommended-items-slider-wrapper');
-                        recommendedItems.forEach(item => {
+                // Перевіряємо, чи користувач залогований
+                isUserAuthenticated().then(isAuthenticated => {
+                    let url = '';
+                    let requestOptions = {};
 
-                            const itemWrapper = document.createElement("div");
-                            const itemTitleWrapper = document.createElement('div');
-                            const itemTitle = document.createElement('h4');
-                            const itemDiscountPrice = document.createElement('p');
-                            const itemPrice = document.createElement('p');
-                            const itemBrand = document.createElement('p');
-                            const itemImageWrapper = document.createElement('div');
-
-                            itemImageWrapper.classList.add('item-image-wrapper');
-
-                            // Створення зображення
-                            const itemImage = document.createElement('img');
-                            let imageArray = getImages(item);
-                            if (imageArray.length > 0) {
-                                itemImage.src = imageArray[0];
-                            } else {
-                                itemImage.src = '../../css/img/noImageAvailable.png';
-                            }
-
-                            // Додавання класу для зображення
-                            itemImage.classList.add('item-image');
-
-                            // Створюємо посилання для фото
-                            const sanitizedProductName = item.productName.replace(/\//g, '-');
-
-                            const imageLink = document.createElement('a');
-                            imageLink.href = `/itempage/${item.uniqId}/${sanitizedProductName}`;
-                            imageLink.appendChild(itemImage); // Обгортаємо зображення в посилання
-                            itemImageWrapper.appendChild(imageLink);
-
-                            // Створюємо посилання для назви
-                            const titleLink = document.createElement('a');
-                            titleLink.href = `/itempage/${item.uniqId}/${sanitizedProductName}`;
-                            titleLink.textContent = item.productName;
-                            titleLink.classList.add('item-title-link'); // Клас для стилізації
-                            itemTitle.appendChild(titleLink);
-
-                            itemBrand.innerHTML = item.brand;
-
-                            // Перевірка, чи є знижена ціна
-                            if (item.discountedPrice && item.discountedPrice < item.retailPrice) {
-                                itemPrice.innerHTML = `<del>${item.retailPrice} $</del>`; // Звичайна ціна
-                                itemDiscountPrice.innerHTML = `${item.discountedPrice} $`; // Знижена ціна
-                                itemPrice.classList.add('item-price');
-                                itemDiscountPrice.classList.add('item-discounted-price');
-                            } else {
-                                itemPrice.innerHTML = `${item.retailPrice} $`; // Якщо знижки немає
-                                itemPrice.classList.add('item-price');
-                                itemPrice.classList.add('item-price-no-discount');
-                            }
-
-                            // Додавання класів для текстових елементів
-                            itemTitleWrapper.classList.add('item-title-wrapper');
-                            itemTitle.classList.add('item-title');
-                            itemBrand.classList.add('item-brand');
-
-                            // Вставка всіх елементів в картку товару
-                            itemTitleWrapper.appendChild(itemTitle);
-                            itemWrapper.append(itemImageWrapper, itemTitleWrapper, itemPrice);
-
-                            // Додаємо блок зі знижкою, якщо є
-                            if (item.discountedPrice && item.discountedPrice < item.retailPrice) {
-                                itemWrapper.append(itemDiscountPrice);
-                            }
-
-                            itemWrapper.className = 'swiper-slide';
-                            recommendedItemsSliderWrapper.append(itemWrapper);
-                        });
-
-                        // Ініціалізація слайдера Swiper
-                        const recommendedItemsSlider = new Swiper('.recommended-items-slider', {
-                            loop: false,
-                            spaceBetween: 0,
-                            slidesPerView: 6,
-                            allowTouchMove: true,
-                            watchSlidesProgress: true,
-                            navigation: {
-                                prevEl: '.swiper-button-prev',
-                                nextEl: '.swiper-button-next',
+                    if (isAuthenticated) {
+                        // Якщо користувач залогований, робимо запит на отримання товарів
+                        url = 'http://localhost:8080/getrecomendations';
+                        requestOptions = {
+                            method: 'GET'
+                        };
+                    } else {
+                        // Якщо користувач не залогований, відправляємо категорії
+                        url = 'http://localhost:8080/getrecomendationsfornotloggeduser';
+                        requestOptions = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                [csrfHeader]: csrfToken
                             },
+                            body: JSON.stringify(viewedCategories) || '',
+                        };
+                    }
+
+                    fetch(url, requestOptions)
+                        .then(response => response.json())
+                        .then(recommendedItems => {
+                            const recommendedItemsSliderWrapper = document.getElementById('recommended-items-slider-wrapper');
+
+                            recommendedItems.forEach(item => {
+                                const itemWrapper = document.createElement("div");
+                                const itemTitleWrapper = document.createElement('div');
+                                const itemTitle = document.createElement('h4');
+                                const itemDiscountPrice = document.createElement('p');
+                                const itemPrice = document.createElement('p');
+                                const itemBrand = document.createElement('p');
+                                const itemImageWrapper = document.createElement('div');
+
+                                itemImageWrapper.classList.add('item-image-wrapper');
+
+                                // Створення зображення
+                                const itemImage = document.createElement('img');
+                                let imageArray = getImages(item);
+                                if (imageArray.length > 0) {
+                                    itemImage.src = imageArray[0];
+                                } else {
+                                    itemImage.src = '../../css/img/noImageAvailable.png';
+                                }
+
+                                // Додавання класу для зображення
+                                itemImage.classList.add('item-image');
+
+                                // Створюємо посилання для фото
+                                const sanitizedProductName = item.productName.replace(/\//g, '-');
+
+                                const imageLink = document.createElement('a');
+                                imageLink.href = `/itempage/${item.uniqId}/${sanitizedProductName}`;
+                                imageLink.appendChild(itemImage); // Обгортаємо зображення в посилання
+                                itemImageWrapper.appendChild(imageLink);
+
+                                // Створюємо посилання для назви
+                                const titleLink = document.createElement('a');
+                                titleLink.href = `/itempage/${item.uniqId}/${sanitizedProductName}`;
+                                titleLink.textContent = item.productName;
+                                titleLink.classList.add('item-title-link'); // Клас для стилізації
+                                itemTitle.appendChild(titleLink);
+
+                                itemBrand.innerHTML = item.brand;
+
+                                // Перевірка, чи є знижена ціна
+                                if (item.discountedPrice && item.discountedPrice < item.retailPrice) {
+                                    itemPrice.innerHTML = `<del>${item.retailPrice} $</del>`; // Звичайна ціна
+                                    itemDiscountPrice.innerHTML = `${item.discountedPrice} $`; // Знижена ціна
+                                    itemPrice.classList.add('item-price');
+                                    itemDiscountPrice.classList.add('item-discounted-price');
+                                } else {
+                                    itemPrice.innerHTML = `${item.retailPrice} $`; // Якщо знижки немає
+                                    itemPrice.classList.add('item-price');
+                                    itemPrice.classList.add('item-price-no-discount');
+                                }
+
+                                // Додавання класів для текстових елементів
+                                itemTitleWrapper.classList.add('item-title-wrapper');
+                                itemTitle.classList.add('item-title');
+                                itemBrand.classList.add('item-brand');
+
+                                // Вставка всіх елементів в картку товару
+                                itemTitleWrapper.appendChild(itemTitle);
+                                itemWrapper.append(itemImageWrapper, itemTitleWrapper, itemPrice);
+
+                                // Додаємо блок зі знижкою, якщо є
+                                if (item.discountedPrice && item.discountedPrice < item.retailPrice) {
+                                    itemWrapper.append(itemDiscountPrice);
+                                }
+
+                                itemWrapper.className = 'swiper-slide';
+                                recommendedItemsSliderWrapper.append(itemWrapper);
+
+                                if (!item.retailPrice) {
+                                    itemImage.classList.add('not-available-image');
+                                    itemPrice.innerHTML = 'Not available';
+                                }
+                            });
+
+                            // Ініціалізуємо слайдер
+                            const recommendedItemsSlider = new Swiper('.recommended-items-slider', {
+                                loop: false,
+                                spaceBetween: 0,
+                                slidesPerView: 6,
+                                allowTouchMove: true,
+                                watchSlidesProgress: true,
+                                navigation: {
+                                    prevEl: '.swiper-button-prev',
+                                    nextEl: '.swiper-button-next',
+                                },
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching recommended items:', error);
                         });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching recommended items:', error);
-                    });
+                });
             }
 
-            // Викликаємо функцію для відображення рекомендацій
             showRecommendedItems();
         });
 });

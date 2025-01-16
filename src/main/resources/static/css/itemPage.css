@@ -101,6 +101,18 @@ strong {
     transition: background-color 0.3s ease;
 }
 
+#add-to-cart-btn:hover {
+    background-color: green;
+}
+
+#add-to-cart-btn:disabled {
+    background-color: grey;
+    cursor: default;
+}
+
+.not-available-image {
+    filter: grayscale(30%);
+}
 
 
 button {

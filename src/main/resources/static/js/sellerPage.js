@@ -145,26 +145,31 @@ async function getItemsFromSeller() {
             const sanitizedProductName = product.productName.replace(/\//g, '-');
 
             const productDiv = document.createElement('div');
-            // const imageArray = JSON.parse(product.image || '[]'); // Масив зображень для кожного товару
-
             let imageArray = [];
 
             if (product.image) {
-                const fixedJson = product.image
-                    .replace(/\\/g, '\\\\') // Екрануємо всі зворотні слеші
-                    .replace(/,\s*C:/g, ',"C:') // Додаємо лапки навколо шляхів після ком
-                    .replace(/\[C:/g, '["C:') // Додаємо лапки для першого елемента
-                    .replace(/\.jpg/g, '.jpg"') // Закриваємо лапки після файлів
-                    .replace(/\.webp/g, '.webp"') // Закриваємо лапки після файлів
-                    .replace(/\.png/g, '.png"'); // Закриваємо лапки після файлів
+                try {
+                    // Форматуємо рядок, щоб він став коректним JSON
+                    const fixedJson = product.image
+                        .replace(/\\/g, '/') // Змінюємо зворотні слеші на прямі
+                        .replace(/,\s*C:/g, ',"C:') // Додаємо лапки після ком
+                        .replace(/\[C:/g, '["C:') // Додаємо лапки для першого елемента
+                        .replace(/C:/g, '"C:') // Додаємо лапки для C:
+                        .replace(/\.jpg(?!")/g, '.jpg"') // Закриваємо лапки після .jpg
+                        .replace(/\.webp(?!")/g, '.webp"') // Закриваємо лапки після .webp
+                        .replace(/\.png(?!")/g, '.png"') // Закриваємо лапки після .png
+                        .replace(/"C:/g, 'C:'); // Виправляємо зайві лапки навколо C:
 
-                imageArray = JSON.parse(fixedJson || '[]')
-                    .map(imageUrl => imageUrl.includes("\\uploads")
-                        ? "/uploads" + imageUrl.split("uploads")[1].replace(/\\/g, '/')
-                        : imageUrl
+
+                    // Парсимо оброблений JSON
+                    imageArray = JSON.parse(fixedJson || '[]').map(imageUrl =>
+                        imageUrl.includes('/uploads') ? '/uploads' + imageUrl.split('uploads')[1] : imageUrl
                     );
+                } catch (error) {
+                    console.error("Error parsing product.image:", error);
+                    imageArray = []; // У разі помилки повертаємо порожній масив
+                }
             }
-
 
             productDiv.classList.add('product');
 
@@ -257,8 +262,8 @@ async function openEditModal(product, imageArray) {
     document.querySelector('.delete-item-btn').addEventListener('click', async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`/api/products/deleteproduct/${product.uniqId}`, { // Додаємо await
-                method: 'PUT',
+            const response = await fetch(`/deleteproductfromcurrentseller/${product.uniqId}`, {
+                method: 'DELETE',
                 headers: {
                     [csrfHeader]: csrfToken, // Додаємо CSRF токен
                 },
@@ -272,6 +277,8 @@ async function openEditModal(product, imageArray) {
             getItemsFromSeller()
 
         } catch (error) {
+            modal.style.display = "none";
+            document.querySelector('.overlay').style.display = 'none';
             console.error('Unexpected item delete error:', error);
         }
     });
@@ -323,7 +330,7 @@ async function saveEditedProduct(productId) {
         description: document.getElementById('edit-description').value,
         brand: document.getElementById('edit-brand').value,
         category: document.getElementById('edit-category').value,
-        quantity: document.getElementById('edit-quantity').value,
+        quantity: document.getElementById('edit-quantity').value
     };
 
 
@@ -371,6 +378,7 @@ async function saveEditedProduct(productId) {
         document.querySelector('.overlay').style.display = 'none';
         getItemsFromSeller(brand); // Оновлюємо список для того ж бренду
     } else {
+        document.querySelector('.overlay').style.display = 'none';
         alert('Failed to update product');
     }
 }
@@ -757,7 +765,7 @@ function urlToBlobAdding(urlFile) {
 async function urlToBlobEditing(urlFile) {
     try {
         const response = await fetch(urlFile);
-        
+
         if (!response.ok) {
             throw new Error(`Failed to fetch file: ${response.statusText}`);
         }
