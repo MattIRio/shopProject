@@ -123,13 +123,17 @@ public class ProductsService {
     }
 
     public List<ProductModel> getProductsByName(String searchedProductName) {
-        List<ProductModel> productList = productRepository.findByProductNameStartingWithIgnoreCase(searchedProductName);
+        List<ProductModel> productsStartsWith = productRepository.findByProductNameStartsWith(searchedProductName);
+        List<ProductModel> productsContains = productRepository.findByProductNameContains(searchedProductName);
+        productsContains.removeAll(productsStartsWith);
+        productsStartsWith.addAll(productsContains);
 
-        if (productList.isEmpty()) {
+
+        if (productsStartsWith.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
         }
-        int limit = Math.min(productList.size(), 20);
-        return productList.subList(0, limit);
+        int limit = Math.min(productsStartsWith.size(), 20);
+        return productsStartsWith.subList(0, limit);
     }
 
     public ProductModel getProductById(UUID id) {
