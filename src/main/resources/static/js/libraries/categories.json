@@ -1,0 +1,236 @@
+{
+    "categories": [
+      {
+        "name": "Kitchen & Dining",
+        "subcategories": [
+          {
+            "name": "Kitchen Tools",
+            "subcategories": [
+              {
+                "name": "Kitchen Implements",
+                "subcategories": [
+                  { "name": "Pizza Cutters" },
+                  { "name": "Hand Juicers" },
+                  { "name": "Choppers & Peelers" },
+                  { "name": "Spatulas & Ladles" },
+                  { "name": "Kitchen Scissors" }
+                ]
+              },
+              {
+                "name": "Cookware",
+                "subcategories": [
+                  {
+                    "name": "Pots & Pans",
+                    "subcategories": [
+                      { "name": "Pans & Tawas" },
+                      { "name": "Woks & Kadhais" },
+                      { "name": "Pressure Cookers & Pans" },
+                      { "name": "Baking Dishes & Pans" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Tableware & Cutlery",
+                "subcategories": [
+                  { "name": "Glasses & Tumblers" },
+                  { "name": "Jugs & Pitchers" },
+                  { "name": "Cutlery" },
+                  { "name": "Condiment Sets" }
+                ]
+              },
+              {
+                "name": "Coffee Mugs",
+                "subcategories": [
+                  { "name": "AKUP Coffee Mugs" },
+                  { "name": "Shopmania Coffee Mugs" },
+                  { "name": "Rockmantra Coffee Mugs" },
+                  { "name": "Printland Coffee Mugs" },
+                  { "name": "Prithish Coffee Mugs" },
+                  { "name": "ZEVA Coffee Mugs" },
+                  { "name": "StyleStuffs Coffee Mugs" },
+                  { "name": "G&G Coffee Mugs" }
+                ]
+              },
+              {
+                "name": "Containers & Bottles",
+                "subcategories": [
+                  { "name": "Lunch Boxes" },
+                  { "name": "Bottles & Sippers" },
+                  { "name": "Kitchen Containers" },
+                  { "name": "Storage Baskets" },
+                  { "name": "Oil Dispensers" }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Bakeware",
+            "subcategories": [
+              { "name": "Baking Dishes & Pans" }
+            ]
+          },
+          {
+            "name": "Dinnerware & Crockery",
+            "subcategories": [
+              { "name": "Cups & Saucers" }
+            ]
+          },
+          {
+            "name": "Consumables & Disposables",
+            "subcategories": [
+              { "name": "Bowls" }
+            ]
+          },
+          {
+            "name": "Flasks & Casseroles"
+          },
+          {
+            "name": "Lighting",
+            "subcategories": [
+              { "name": "Bulbs" }
+            ]
+          },
+          {
+            "name": "Housekeeping & Laundry",
+            "subcategories": [
+              { "name": "Bathroom Accessories" },
+              { "name": "Home Cleaning" }
+            ]
+          },
+          {
+            "name": "Bar & Glassware",
+            "subcategories": [
+              { "name": "Bar Accessories" },
+              { "name": "Bar Glasses" }
+            ]
+          }
+        ]
+      },
+
+      {
+      "name": "Pens & Stationery",
+      "subcategories": [
+        {
+          "name": "School Supplies",
+          "subcategories": [
+            {
+              "name": "Water Bottles",
+              "subcategories": [
+                { "name": "Freelance Water Bottles" },
+                { "name": "Freelance Vacuum Bottles" }
+              ]
+            },
+            {
+              "name": "Diaries & Notebooks",
+              "subcategories": [
+                {
+                  "name": "Notebooks",
+                  "subcategories": [
+                    {
+                      "name": "Designer",
+                      "subcategories": [
+                        { "name": "Shopmania Designer" },
+                        { "name": "Tiara Diaries Designer" }
+                      ]
+                    }
+                  ]
+                },
+                { "name": "Planners & Organisers" }
+              ]
+            },
+            {
+              "name": "Pencils, Pen & Pencil Boxes",
+              "subcategories": [
+                { "name": "Rulers" },
+                { "name": "Pencil Boxes" }
+              ]
+            },
+            {
+              "name": "Art & Craft",
+              "subcategories": [
+                {
+                  "name": "Paints",
+                  "subcategories": [
+                    { "name": "Paint Bottle Set" }
+                  ]
+                }
+              ]
+            },
+            { "name": "Geometry, Pen & Pencil boxes" }
+          ]
+        },
+        {
+          "name": "College Supplies",
+          "subcategories": [
+            {
+              "name": "Coin Banks",
+              "subcategories": [
+                { "name": "Shilpi Coin Banks" }
+              ]
+            },
+            {
+              "name": "College Bags",
+              "subcategories": [
+                { "name": "Vency creation College Bags" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Office Supplies",
+          "subcategories": [
+            {
+              "name": "Packaging Security Bags"
+            },
+            {
+              "name": "Boards & Dusters",
+              "subcategories": [
+                { "name": "Whiteboards" }
+              ]
+            },
+            {
+              "name": "Files and Folders",
+              "subcategories": [
+                { "name": "Hariom Enterprises Files and Folders" }
+              ]
+            },
+            { "name": "Desk Organizers" },
+            { "name": "Sketch & Paint Markers" },
+            { "name": "Key Chains" },
+            { "name": "Scissors" },
+            { "name": "Calendars" },
+            { "name": "Office Supplies Accessories" },
+            { "name": "Punches & Punching Machines" }
+          ]
+        },
+        {
+          "name": "Art Supplies",
+          "subcategories": [
+            { "name": "Paint Brushes" }
+          ]
+        },
+        {
+          "name": "Office Equipments",
+          "subcategories": [
+            { "name": "Public Address Systems" },
+            { "name": "Home Security Cameras" },
+            { "name": "Biometric Devices" }
+          ]
+        },
+        {
+          "name": "Pens",
+          "subcategories": [
+            { "name": "Ball Pens" },
+            { "name": "Mechanical Pencils" },
+            { "name": "Roller Ball Pens" },
+            { "name": "Fountain Pens" }
+          ]
+        }
+      ]
+    }
+
+
+    ]
+  }
+  

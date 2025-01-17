@@ -17,9 +17,19 @@ function getImages(product) {
             console.log(imageArray);
         } else {
             try {
-                imageArray = JSON.parse(imageData || '[]')
-                    .map(imageUrl => imageUrl.replace(/\\/g, '/')); // Заміняємо зворотні слеші на прямі
-                    console.log(imageArray);
+                const fixedJson = product.image
+                .replace(/\\/g, '\\\\') 
+                .replace(/,\s*C:/g, ',"C:')
+                .replace(/\[C:/g, '["C:')
+                .replace(/\.jpg/g, '.jpg"')
+                .replace(/\.webp/g, '.webp"') 
+                .replace(/\.png/g, '.png"'); 
+
+                imageArray = JSON.parse(fixedJson || '[]')
+                    .map(imageUrl => imageUrl.includes("\\uploads")
+                        ? "/uploads" + imageUrl.split("uploads")[1].replace(/\\/g, '/')
+                        : imageUrl
+                    );
             } catch (error) {
                 console.error("Error parsing image JSON:", error);
                 imageArray = []; // Якщо помилка, повертаємо порожній масив
@@ -214,3 +224,82 @@ document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
 
 updateCartCount();
 updateCartModal();
+
+const searchBar = document.getElementById('search-bar');
+const searchResultsContainer = document.getElementById('results-container');
+const overlay = document.querySelector('.search-overlay');
+let searchTimer;
+
+// Функція для виконання пошуку
+const fetchResults = (query) => {
+    fetch(`/api/products/getproductsbyname/${query}`)
+        .then(response => response.json())
+        .then(data => {
+            data = data.slice(0, 10);
+            searchResultsContainer.style.display = 'block';
+            searchResultsContainer.innerHTML = ""; // Очищаємо контейнер
+
+            if (data.length === 0) {
+                searchResultsContainer.innerHTML = "<div>No results found</div>";
+                return;
+            }
+
+            // Створюємо список результатів
+            const ul = document.createElement("ul");
+            ul.classList.add("results-list"); // Додаємо клас для стилізації
+
+            data.forEach(item => {
+                const li = document.createElement("li");
+
+                const link = document.createElement("a");
+                link.textContent = item.productName;
+                const sanitizedProductName = item.productName.replace(/\//g, '-');
+                link.href = `/itempage/${item.uniqId}/${sanitizedProductName}`;
+
+                li.appendChild(link);
+                ul.appendChild(li);
+            });
+
+            searchResultsContainer.appendChild(ul); // Додаємо список до контейнера
+        })
+        .catch(error => {
+            searchResultsContainer.innerHTML = "<div>No such item</div>";
+        });
+};
+
+// Обробка події "input"
+searchBar.addEventListener("input", () => {
+    clearTimeout(searchTimer); // Скидаємо попередній таймер
+
+    searchTimer = setTimeout(() => {
+        const query = searchBar.value.trim();
+
+        if (query) {
+            searchResultsContainer.style.padding = "10px";
+            fetchResults(query); // Викликаємо пошук
+        } else {
+            searchResultsContainer.innerHTML = "";
+            searchResultsContainer.style.padding = "0px";
+
+        }
+    }, 500);
+});
+
+// Обробка події "focus"
+searchBar.addEventListener("focus", () => {
+    const query = searchBar.value.trim();
+    overlay.style.display = "block";
+    searchResultsContainer.style.display = 'block';
+
+    if (query) {
+        fetchResults(query); // Викликаємо пошук, якщо поле не порожнє
+    }
+});
+
+document.addEventListener("mousedown", (event) => {
+    if (!searchBar.contains(event.target) && !searchResultsContainer.contains(event.target)) {
+        overlay.style.display = "none";
+        searchResultsContainer.style.display = 'none';
+        searchBar.blur();
+    }
+});
