@@ -31,5 +31,14 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
     @Query("SELECT p FROM ProductModel p WHERE p.category LIKE %:name%")
     List<ProductModel> findByCategory(@Param("name") String name);
 
+    @Query("SELECT DISTINCT  p.brand FROM ProductModel p WHERE p.category LIKE %:name%")
+    List<String> findBrandByCategory(@Param("name") String name);
+
+    @Query("SELECT DISTINCT  p.sellerId FROM ProductModel p WHERE p.category LIKE %:name%")
+    List<Integer> findSellerIdByCategory(@Param("name") String name);
+
+    @Query("SELECT DISTINCT p FROM ProductModel p WHERE p.retailPrice BETWEEN :min AND :max")
+    List<ProductModel> findProductsByPriceRange(@Param("min") int min, @Param("max") int max);
+
 
 }

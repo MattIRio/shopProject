@@ -2,9 +2,11 @@ package newproject.newproject.controller.products;
 
 import jakarta.transaction.Transactional;
 import newproject.newproject.model.ProductModel;
+import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import newproject.newproject.service.products.ProductsService;
+import newproject.newproject.service.products.ProductsSorting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,11 @@ import java.util.UUID;
     UsersRepository usersRepository;
 
     private final ProductsService productsService;
+    private final ProductsSorting productsSorting;
 
-    public ProductsController(ProductsService productsService) {
+    public ProductsController(ProductsService productsService, ProductsSorting productsSorting) {
         this.productsService = productsService;
+        this.productsSorting = productsSorting;
     }
 
     @GetMapping("/getallproducts")
@@ -105,10 +109,22 @@ import java.util.UUID;
         }
     }
 
+    @GetMapping("/getsellersbycategory/{searchedCategory}")
+    public ResponseEntity<List<UserModel>> findSellersByCategory(@PathVariable String searchedCategory) {
+        try {
+            List<UserModel> products = productsSorting.findSellersByCategory(searchedCategory);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
     @GetMapping("/getproductsbycategory/{searchedCategory}")
     public ResponseEntity<List<ProductModel>> findByProductNameByCategory(@PathVariable String searchedCategory) {
         try {
-            List<ProductModel> products = productsService.findProductByCategory(searchedCategory);
+            List<ProductModel> products = productsSorting.findProductByCategory(searchedCategory);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -117,10 +133,34 @@ import java.util.UUID;
         }
     }
 
+    @GetMapping("/getproductsbypricerange/{minPrice}/{maxPrice}")
+    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandge(@PathVariable Integer minPrice, @PathVariable Integer maxPrice) {
+        try {
+            List<ProductModel> products = productsSorting.findProductByPriceInRange(minPrice, maxPrice);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @GetMapping("/getbrandsbycategory/{searchedCategory}")
+    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory) {
+        try {
+            List<String> products = productsSorting.findBrandsByCategory(searchedCategory);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
     @GetMapping("/getproductsbysellerid/{sellerid}")
     public ResponseEntity<List<ProductModel>> findByProductsBySellerId(@PathVariable int sellerid) {
         try {
-            List<ProductModel> products = productsService.findProductBySellerId(sellerid);
+            List<ProductModel> products = productsSorting.findProductBySellerId(sellerid);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -132,7 +172,7 @@ import java.util.UUID;
     @GetMapping("/getproductsbybrand/{brand}")
     public ResponseEntity<?> findByProductsByBrand(@PathVariable String brand) {
         try {
-            List<ProductModel> products = productsService.findProductByBrand(brand);
+            List<ProductModel> products = productsSorting.findProductByBrand(brand);
             return ResponseEntity.ok(products);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
