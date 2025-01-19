@@ -15,7 +15,7 @@
     display: flex;
     flex-wrap: wrap;
     /* Перенесення карток на новий ряд */
-    gap: 15px;
+    gap: 3px;
     /* Відстань між картками */
     padding: 10px;
     justify-content: center;
@@ -27,9 +27,9 @@
 
 /* Картка товару */
 .item-catalog li {
-    flex: 1 1 calc(20% - 15px);
+    flex: 1 1 calc(12.5% - 3px);
     /* Максимум 5 карток в ряд */
-    max-width: calc(20% - 15px);
+    max-width: calc(12.5% - 3px);
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -45,7 +45,7 @@
 }
 
 .item-title {
-    height: 2.8rem;
+    height: 34px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -56,7 +56,7 @@
     text-overflow: ellipsis;
     /* Додати три крапки */
     overflow: hidden;
-    font-size: 1.1rem;
+    font-size: 14px;
     margin: 10px 0;
     color: #444;
 }
@@ -65,15 +65,20 @@
     color: #00a046;
 }
 
+.item-brand {
+    height: 16px;
+    font-size: 14px;
+}
+
 .item-price {
     font-weight: bold;
 }
 
 .item-discounted-price {
     font-weight: bold;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: #f84147;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 /* Контейнер для зображення */
@@ -101,25 +106,25 @@
 /* Адаптивність для менших екранів */
 @media (max-width: 1200px) {
     .item-catalog li {
-        flex: 1 1 calc(25% - 15px);
+        flex: 1 1 calc(16.6% - 3px);
         /* 4 картки в ряд */
-        max-width: calc(25% - 15px);
+        max-width: calc(16.6% - 3px);
     }
 }
 
 @media (max-width: 900px) {
     .item-catalog li {
-        flex: 1 1 calc(33.33% - 15px);
+        flex: 1 1 calc(25% - 3px);
         /* 3 картки в ряд */
-        max-width: calc(33.33% - 15px);
+        max-width: calc(25% - 3px);
     }
 }
 
 @media (max-width: 600px) {
     .item-catalog li {
-        flex: 1 1 calc(50% - 15px);
+        flex: 1 1 calc(33.33% - 3px);
         /* 2 картки в ряд */
-        max-width: calc(50% - 15px);
+        max-width: calc(33.33% - 3px);
     }
 }
 

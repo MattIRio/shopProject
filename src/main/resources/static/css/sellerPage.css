@@ -252,16 +252,29 @@ form input,
 form textarea {
     width: 100%;
     padding: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 4px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+.price-input-wrapper::after {
+    content: '$';
+    position: absolute;
+    right: 30px;
+    padding-top: 7px;
+    color: grey;
 }
 
 form input:focus,
 form textarea:focus {
     border-color: #4CAF50;
     outline: none;
+}
+
+.form-error-text {
+    color: red;
+    font-size: 12px;
 }
 
 /* Кнопка відправки форми */
@@ -647,8 +660,10 @@ img[alt="The image to crop"] {
 /* Кнопки підтвердження і скасування змін */
 .confirm-btn,
 .cancel-btn,
-.confirm-category-btn,
-.cancel-category-btn {
+.confirm-edit-category-btn,
+.cancel-edit-category-btn,
+.confirm-add-category-btn,
+.cancel-add-category-btn {
     padding: 5px 10px;
     font-size: 14px;
     border: none;
@@ -660,24 +675,28 @@ img[alt="The image to crop"] {
 }
 
 .confirm-btn,
-.confirm-category-btn {
+.confirm-edit-category-btn,
+.confirm-add-category-btn {
     background-color: #28a745;
     color: #fff;
 }
 
 .confirm-btn:hover,
-.confirm-category-btn:hover  {
+.confirm-edit-category-btn:hover,
+.confirm-add-category-btn:hover {
     background-color: #218838;
 }
 
 .cancel-btn,
-.cancel-category-btn {
+.cancel-edit-category-btn,
+.cancel-add-category-btn {
     background-color: #dc3545;
     color: #fff;
 }
 
 .cancel-btn:hover,
-.cancel-category-btn:hover {
+.cancel-edit-category-btn:hover,
+.cancel-add-category-btn:hover {
     background-color: #c82333;
 }
 
@@ -732,7 +751,8 @@ img[alt="The image to crop"] {
     display: flex;
 }
 
-.edit-category-btn {
+#edit-category-btn,
+#add-category-btn {
     color: white;
     background-color: #8962fe;
     padding: 0px 10px;

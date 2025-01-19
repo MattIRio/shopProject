@@ -41,7 +41,7 @@ function addEditHandlers(userData) {
 
 function handleEdit(selector, field, userData, button) {
     const element = document.querySelector(selector);
-    const originalValue = element.innerText;
+    let originalValue = element.innerText;
 
     element.innerHTML = `<input type="text" class="edit-input" value="${originalValue}" />`;
     const input = element.querySelector('.edit-input');
@@ -73,6 +73,7 @@ function handleEdit(selector, field, userData, button) {
 
             // Повернення кнопки "Редагувати"
             cleanupEdit(button, confirmButton, cancelButton);
+            originalValue = element.innerText
         } else {
             document.querySelector('.data-validation-error').style.display = "block";
         }
@@ -121,6 +122,7 @@ async function updateUserData(updatedData) {
 
         if (response.ok) {
             console.log('User data updated successfully');
+            uploadUserPhotoAndName();
         } else {
             console.error('Failed to update user data', await response.text());
         }
@@ -157,6 +159,7 @@ async function getItemsFromSeller() {
                         .replace(/C:/g, '"C:') // Додаємо лапки для C:
                         .replace(/\.jpg(?!")/g, '.jpg"') // Закриваємо лапки після .jpg
                         .replace(/\.webp(?!")/g, '.webp"') // Закриваємо лапки після .webp
+                        .replace(/\.jpeg(?!")/g, '.jpeg"') // Закриваємо лапки після .webp
                         .replace(/\.png(?!")/g, '.png"') // Закриваємо лапки після .png
                         .replace(/"C:/g, 'C:'); // Виправляємо зайві лапки навколо C:
 
@@ -223,6 +226,8 @@ async function openEditModal(product, imageArray) {
     });
     modal.style.display = 'flex';
 
+    document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+
     document.querySelector('.overlay').style.display = 'block';
 
     // Заповнюємо форму даними
@@ -233,6 +238,72 @@ async function openEditModal(product, imageArray) {
     document.getElementById('edit-brand').value = product.brand;
     document.getElementById('edit-description').value = product.description;
     document.getElementById('edit-quantity').value = product.quantity;
+
+    const nameEditError = document.querySelector(".edit-item-name-error");
+    const priceEditError = document.querySelector(".edit-item-price-error");
+    const quantityEditError = document.querySelector(".edit-item-quantity-error");
+    const discountPriceEditError = document.querySelector(".edit-item-discounted-price-error");
+
+    function validateName(inputValue) {
+        const isOnlyNumbers = /^\d+$/.test(inputValue);
+        const isTooShort = inputValue.trim().length < 3;
+        return isOnlyNumbers || isTooShort;
+    }
+    // Обробник події вводу
+    document.getElementById('edit-name').addEventListener('blur', () => {
+        if (document.getElementById('edit-name').value === "") {
+            nameEditError.style.display = "none";
+        } else if (validateName(document.getElementById('edit-name').value)) {
+            nameEditError.style.display = "block";
+        } else {
+            nameEditError.style.display = "none";
+        }
+    });
+
+    const isValidPrice = (str) => /^\d+(\.\d{1,2})?$/.test(str);
+
+    document.getElementById('edit-quantity').addEventListener('blur', () => {
+        if (document.getElementById('edit-quantity').value < 1) {
+            quantityAddError.style.display = 'block';
+        } else {
+            priceAddError.style.display = 'none';
+        }
+    })
+
+    document.getElementById('edit-price').addEventListener('blur', () => {
+        if (document.getElementById('edit-price').value === '') {
+            priceEditError.style.display = 'none';
+        } else if (!isValidPrice(document.getElementById('edit-price').value) || document.getElementById('edit-price').value <= 0) {
+            priceEditError.style.display = 'block';
+        } else if (document.getElementById('edit-price').value < document.getElementById('edit-discount-price').value && document.getElementById('edit-discount-price').value !== '') {
+            discountPriceAddError.style.display = 'block';
+        } else {
+            priceEditError.style.display = 'none';
+            discountPriceAddError.style.display = 'none';
+        }
+    })
+
+    document.getElementById('edit-quantity').addEventListener('blur', () => {
+        if (document.getElementById('edit-quantity').value === '') {
+            quantityEditError.style.display = 'none';
+        } else if (document.getElementById('edit-quantity').value < 1) {
+            quantityEditError.style.display = 'block';
+        } else {
+            quantityEditError.style.display = 'none';
+        }
+    })
+
+    document.getElementById('edit-discount-price').addEventListener('blur', () => {
+        if (document.getElementById('edit-discount-price').value === '') {
+            discountPriceEditError.style.display = 'none';
+        } else if (!isValidPrice(document.getElementById('edit-discount-price').value)
+            || document.getElementById('edit-discount-price').value <= 0
+            || document.getElementById('edit-discount-price').value >= document.getElementById('edit-price').value) {
+            discountPriceEditError.style.display = 'block';
+        } else {
+            discountPriceEditError.style.display = 'none';
+        }
+    })
 
     const galleryContainer = document.getElementById('editGalleryContainer');
     galleryContainer.innerHTML = ''; // Очищаємо галерею
@@ -259,7 +330,7 @@ async function openEditModal(product, imageArray) {
         }
     }
 
-    editItemCategoryHandler();
+    editItemCategoryHandler('edit-category-btn', "edit-category", '.confirm-edit-category-btn', '.cancel-edit-category-btn');
 
     document.querySelector('.delete-item-btn').addEventListener('click', async (event) => {
         event.preventDefault();
@@ -282,6 +353,8 @@ async function openEditModal(product, imageArray) {
             modal.style.display = "none";
             document.querySelector('.overlay').style.display = 'none';
             console.error('Unexpected item delete error:', error);
+            document.querySelectorAll('.product').forEach(element => element.remove());
+            getItemsFromSeller()
         }
     });
 
@@ -301,38 +374,142 @@ async function openEditModal(product, imageArray) {
 
 }
 
-let isHandlerAttached = false;  // Флаг для контролю кількості обробників
+let selectedAddCategoriesFullfilled = false;
+let selectedEditCategoriesFullfilled = false;
 
-function editItemCategoryHandler() {
-    const editButton = document.querySelector(".edit-category-btn");
-    const inputField = document.querySelector("#edit-category");
-    const categoryContainer = document.querySelector(".category-container");
-    const confirmButton = document.querySelector(".confirm-category-btn");
-    const cancelButton = document.querySelector(".cancel-category-btn");
+function loadCategories(categoryContainer, inputField, confirmButton) {
+    fetch('http://localhost:3000/categories')
+        .then(response => response.json())
+        .then(data => {
+            const categoryData = data;
+
+            const container = document.getElementById(categoryContainer);
+
+            // Функція для створення нового <select>
+            const createSelect = (options, onChangeCallback) => {
+                const select = document.createElement("select");
+                select.classList.add('select-category-list');
+                select.innerHTML = `<option value="">Select an option</option>`;
+                for (const option of options) {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = option.name;
+                    optionElement.textContent = option.name;
+                    select.appendChild(optionElement);
+                }
+                select.addEventListener("change", () => onChangeCallback(select));
+                return select;
+            };
+
+            // Функція для обробки вибору
+            const handleSelection = (parent, data, selectedCategories) => {
+                while (parent.nextSibling) {
+                    parent.nextSibling.remove();
+                }
+
+                const selectedValue = parent.value;
+                if (selectedValue) {
+                    const currentIndex = Array.from(container.children).indexOf(parent);
+                    selectedCategories.length = currentIndex + 1; // Зберігаємо тільки до поточного рівня
+                    selectedCategories[currentIndex] = selectedValue;
+
+                    inputField.value = `${selectedCategories.join(" >> ")}`;
+
+                    const selectedCategory = data.find(category => category.name === selectedValue);
+                    if (selectedCategory && selectedCategory.subcategories && selectedCategory.subcategories.length > 0) {
+                        const subCategories = selectedCategory.subcategories;
+                        const newSelect = createSelect(subCategories, (newSelectParent) => {
+                            handleSelection(newSelectParent, selectedCategory.subcategories, selectedCategories);
+                        });
+                        container.appendChild(newSelect);
+                    }
+                }
+            };
+
+            const selectedCategories = [];
+            const rootSelect = createSelect(categoryData, (select) => {
+                handleSelection(select, categoryData, selectedCategories);
+                confirmButton.disabled = selectedCategories.length === 0; // Оновлюємо стан кнопки
+            });
+            container.appendChild(rootSelect);
+
+            function confirmCategoryButtonHandler() {
+                const selectedCategory = categoryData.find(category => category.name === selectedCategories[0]);
+
+                let currentCategory = selectedCategory;
+                for (let i = 1; i < selectedCategories.length; i++) {
+                    if (currentCategory && currentCategory.subcategories) {
+                        currentCategory = currentCategory.subcategories.find(sub => sub.name === selectedCategories[i]);
+                    }
+                }
+
+                if (categoryContainer === 'add-category-list-container') {
+                    console.log(currentCategory);
+                    console.log(currentCategory.subcategories);
+                    console.log(currentCategory);
+                    if ((currentCategory && currentCategory.subcategories && currentCategory.subcategories.length > 0) || inputField.value === '' || inputField.value === undefined) {
+                        console.log(inputField.value);
+                        document.querySelector('.add-item-category-error').style.display = 'block';
+                        selectedAddCategoriesFullfilled = false;
+
+                    } else {
+                        document.querySelector('.confirm-add-category-btn').style.display = 'none';
+                        document.querySelector('.cancel-add-category-btn').style.display = 'none';
+                        document.getElementById('add-category-btn').style.display = 'block';
+                        document.querySelector('.add-item-category-error').style.display = 'none';
+                        document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+                        selectedAddCategoriesFullfilled = true;
+                        confirmButton.removeEventListener("click", confirmCategoryButtonHandler);
+                    }
+                }
+
+                if (confirmButton.classList.value === 'confirm-edit-category-btn') {
+                    console.log(currentCategory);
+                    console.log(currentCategory.subcategories);
+                    console.log(currentCategory);
+                    if ((currentCategory && currentCategory.subcategories && currentCategory.subcategories.length > 0) || inputField.value === '' || inputField.value === undefined) {
+                        document.querySelector('.edit-item-category-error').style.display = 'block';
+                        selectedEditCategoriesFullfilled = false;
+                    } else {
+                        document.querySelector('.confirm-edit-category-btn').style.display = 'none';
+                        document.querySelector('.cancel-edit-category-btn').style.display = 'none';
+                        document.getElementById('edit-category-btn').style.display = 'block';
+                        document.querySelector('.edit-item-category-error').style.display = 'none';
+                        document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+                        selectedEditCategoriesFullfilled = true;
+                        confirmButton.removeEventListener("click", confirmCategoryButtonHandler);
+                    }
+                }
+            }
+
+            confirmButton.addEventListener("click", confirmCategoryButtonHandler);
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+}
+
+let isEditHandlerAttached = false;
+let isAddHandlerAttached = false;
+
+function editItemCategoryHandler(initialiseButton, categoryField, confirmBtn, cancelBtn) {
+    const editCategoryButton = document.getElementById(initialiseButton);
+    const inputField = document.getElementById(categoryField);
+    const confirmButton = document.querySelector(confirmBtn);
+    const cancelButton = document.querySelector(cancelBtn);
 
     function cleanupCategoryEdit() {
         cancelButton.style.display = 'none';
         confirmButton.style.display = 'none';
         document.querySelectorAll('.select-category-list').forEach(element => element.remove());
-        editButton.style.display = "inline-block"; // Показуємо кнопку редагування
+        editCategoryButton.style.display = "inline-block"; // Показуємо кнопку редагування
     }
 
     // Оголошуємо обробник події
-    const editButtonHandler = () => {
+    const buttonHandler = () => {
         const originalValue = inputField.value;
         inputField.value = '';
-        editButton.style.display = "none"; // Ховаємо кнопку редагування
+        editCategoryButton.style.display = "none"; // Ховаємо кнопку редагування
         cancelButton.style.display = "inline-block";
         confirmButton.style.display = 'inline-block';
 
-        confirmButton.addEventListener("click", () => {
-            const newValue = inputField.value.trim();
-            if (newValue) {
-                cleanupCategoryEdit();
-            } else {
-                alert("Поле не може бути порожнім");
-            }
-        });
 
         // Обробка натискання кнопки скасування
         cancelButton.addEventListener("click", () => {
@@ -340,84 +517,20 @@ function editItemCategoryHandler() {
             cleanupCategoryEdit();
         });
 
-        fetch('http://localhost:3000/categories')
-            .then(response => response.json())
-            .then(data => {
-                const categoryData = data;
+        loadCategories("category-list-container", inputField, confirmButton);
+        loadCategories("add-category-list-container", inputField, confirmButton);
 
-                const container = document.getElementById("category-list-container");
-
-                // Функція для створення нового <select>
-                const createSelect = (options, onChangeCallback) => {
-                    const select = document.createElement("select");
-                    select.classList.add('select-category-list');
-                    select.innerHTML = `<option value="">Select an option</option>`;
-                    for (const option of options) {
-                        const optionElement = document.createElement("option");
-                        optionElement.value = option.name;
-                        optionElement.textContent = option.name;
-                        select.appendChild(optionElement);
-                    }
-                    select.addEventListener("change", () => onChangeCallback(select));
-                    return select;
-                };
-
-                // Функція для обробки вибору
-                const handleSelection = (parent, data, selectedCategories) => {
-                    while (parent.nextSibling) {
-                        parent.nextSibling.remove();
-                    }
-
-                    const selectedValue = parent.value;
-                    if (selectedValue) {
-                        const currentIndex = Array.from(container.children).indexOf(parent);
-                        selectedCategories.length = currentIndex + 1; // Зберігаємо тільки до поточного рівня
-                        selectedCategories[currentIndex] = selectedValue;
-
-                        inputField.value = `${selectedCategories.join(" >> ")}`;
-
-                        const selectedCategory = data.find(category => category.name === selectedValue);
-                        if (selectedCategory && selectedCategory.subcategories && selectedCategory.subcategories.length > 0) {
-                            const subCategories = selectedCategory.subcategories;
-                            const newSelect = createSelect(subCategories, (newSelectParent) => {
-                                handleSelection(newSelectParent, selectedCategory.subcategories, selectedCategories);
-                            });
-                            container.appendChild(newSelect);
-                        }
-                    }
-                };
-
-                const selectedCategories = [];
-                const rootSelect = createSelect(categoryData, (select) => {
-                    handleSelection(select, categoryData, selectedCategories);
-                    confirmButton.disabled = selectedCategories.length === 0; // Оновлюємо стан кнопки
-                });
-                container.appendChild(rootSelect);
-
-                confirmButton.addEventListener("click", () => {
-                    const selectedCategory = categoryData.find(category => category.name === selectedCategories[0]);
-
-                    let currentCategory = selectedCategory;
-                    for (let i = 1; i < selectedCategories.length; i++) {
-                        if (currentCategory && currentCategory.subcategories) {
-                            currentCategory = currentCategory.subcategories.find(sub => sub.name === selectedCategories[i]);
-                        }
-                    }
-
-                    if (currentCategory && currentCategory.subcategories && currentCategory.subcategories.length > 0) {
-                        console.warn("Warning: There are still subcategories available for the current selection.");
-                    } else {
-                        console.log(`Selected Categories: ${selectedCategories.join(" >> ")}`);
-                    }
-                });
-            })
-            .catch(error => console.error('Error loading JSON:', error));
     };
 
     // Перевіряємо, чи вже додано обробник
-    if (!isHandlerAttached) {
-        editButton.addEventListener("click", editButtonHandler); // Додаємо обробник тільки якщо він ще не доданий
-        isHandlerAttached = true;  // Оновлюємо флаг, що обробник тепер доданий
+    if (!isEditHandlerAttached && initialiseButton === 'edit-category-btn') {
+        editCategoryButton.addEventListener("click", buttonHandler); // Додаємо обробник тільки якщо він ще не доданий
+        isEditHandlerAttached = true;  // Оновлюємо флаг, що обробник тепер доданий
+    }
+
+    if (!isAddHandlerAttached && initialiseButton === 'add-category-btn') {
+        editCategoryButton.addEventListener("click", buttonHandler); // Додаємо обробник тільки якщо він ще не доданий
+        isAddHandlerAttached = true;  // Оновлюємо флаг, що обробник тепер доданий
     }
 }
 
@@ -509,9 +622,12 @@ openModalBtn.addEventListener('click', () => {
         top: 0,
         behavior: 'smooth'
     });
+    document.querySelectorAll('.select-category-list').forEach(element => element.remove());
     photoToUploadEditItem = [];
     modal.style.display = 'flex';
     document.querySelector('.overlay').style.display = 'block';
+    editItemCategoryHandler('add-category-btn', "category", '.confirm-add-category-btn', '.cancel-add-category-btn');
+
 });
 
 // Закриття модального вікна при кліку на кнопку закриття
@@ -519,6 +635,12 @@ closeModalBtn.addEventListener('click', () => {
     photoToUploadEditItem = [];
     modal.style.display = 'none';
     document.querySelector('.overlay').style.display = 'none';
+    document.querySelector('.cancel-add-category-btn').style.display = 'none';
+    document.querySelector('.confirm-add-category-btn').style.display = 'none';
+    document.querySelector('#add-category-btn').style.display = "inline-block"; // Показуємо кнопку редагування
+    try {
+        document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+    } catch { }
 
 });
 
@@ -528,8 +650,21 @@ window.addEventListener('click', (e) => {
     if (e.target === editModal) {
         editModal.style.display = 'none';
         document.querySelector('.overlay').style.display = 'none';
+        document.querySelector('.cancel-edit-category-btn').style.display = 'none';
+        document.querySelector('.confirm-edit-category-btn').style.display = 'none';
+        document.querySelector('#edit-category-btn').style.display = "inline-block"; // Показуємо кнопку редагування
+        try {
+            document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+        } catch { }
+
     }
     if (e.target === modal) {
+        document.querySelector('.cancel-add-category-btn').style.display = 'none';
+        document.querySelector('.confirm-add-category-btn').style.display = 'none';
+        document.querySelector('#add-category-btn').style.display = "inline-block"; // Показуємо кнопку редагування
+        try {
+            document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+        } catch { }
         photoToUploadEditItem = [];
         modal.style.display = 'none';
         document.querySelector('.overlay').style.display = 'none';
@@ -778,7 +913,6 @@ function setupImageCropper(inputId, galleryId, imgContainerClass) {
 setupImageCropper('editFileInput', 'editGalleryContainer', 'edit-image-wrapper');
 setupImageCropper('fileInput', 'galleryContainer', 'image-wrapper');
 
-//Add Form Gathering
 const nameInput = document.getElementById('name');
 const priceInput = document.getElementById('price');
 const quantityInput = document.getElementById('quantity');
@@ -787,8 +921,79 @@ const discountPriceInput = document.getElementById('discountPrice');
 const descriptionInput = document.getElementById('description');
 const categoryInput = document.getElementById('category');
 
+const nameAddError = document.querySelector(".add-item-name-error");
+const priceAddError = document.querySelector(".add-item-price-error");
+const quantityAddError = document.querySelector(".add-item-quantity-error");
+const discountPriceAddError = document.querySelector(".add-item-discounted-price-error");
+
+function validateName(inputValue) {
+    const isOnlyNumbers = /^\d+$/.test(inputValue);
+    const isTooShort = inputValue.trim().length < 3;
+    return isOnlyNumbers || isTooShort;
+}
+// Обробник події вводу
+nameInput.addEventListener('blur', () => {
+    if (nameInput.value === "") {
+        nameAddError.style.display = "none";
+    } else if (validateName(nameInput.value)) {
+        nameAddError.style.display = "block";
+    } else {
+        nameAddError.style.display = "none";
+    }
+});
+
+const isValidPrice = (str) => /^\d+(\.\d{1,2})?$/.test(str);
+
+quantityInput.addEventListener('blur', () => {
+    if (quantityInput.value < 1) {
+        quantityAddError.style.display = 'block';
+    } else {
+        priceAddError.style.display = 'none';
+    }
+})
+
+priceInput.addEventListener('blur', () => {
+    if (priceInput.value === '') {
+        priceAddError.style.display = 'none';
+    } else if (!isValidPrice(priceInput.value) || priceInput.value <= 0) {
+        priceAddError.style.display = 'block';
+    } else if (priceInput.value < discountPriceInput.value && discountPriceInput.value !== '') {
+        discountPriceAddError.style.display = 'block';
+    } else {
+        priceAddError.style.display = 'none';
+        discountPriceAddError.style.display = 'none';
+    }
+})
+
+quantityInput.addEventListener('blur', () => {
+    if (quantityInput.value === '') {
+        quantityAddError.style.display = 'none';
+    } else if (quantityInput.value < 1) {
+        quantityAddError.style.display = 'block';
+    } else {
+        quantityAddError.style.display = 'none';
+    }
+})
+
+discountPriceInput.addEventListener('blur', () => {
+    if (discountPriceInput.value === '') {
+        discountPriceAddError.style.display = 'none';
+    } else if (!isValidPrice(discountPriceInput.value) || discountPriceInput.value <= 0 || discountPriceInput.value >= priceInput.value) {
+        discountPriceAddError.style.display = 'block';
+    } else {
+        discountPriceAddError.style.display = 'none';
+    }
+})
+
 document.querySelector('.form').addEventListener('submit', async function (event) {
     event.preventDefault();
+
+    if (validateName(nameInput.value) || nameInput.value === "" || quantityInput.value < 1
+        || priceInput.value === '' || !isValidPrice(priceInput.value) || priceInput.value <= 0
+        || (priceInput.value < discountPriceInput.value && discountPriceInput.value !== '')
+        || quantityInput.value === '' || quantityInput.value < 1 || !selectedAddCategoriesFullfilled) {
+        return;
+    }
 
     const userData = {
         productName: nameInput.value,
@@ -801,6 +1006,8 @@ document.querySelector('.form').addEventListener('submit', async function (event
     };
 
     console.log(userData);
+
+
 
     // Відправляємо запит на сервер через fetch
     await fetch('http://localhost:8080/api/products/saveproduct', {
@@ -853,6 +1060,10 @@ document.querySelector('.form').addEventListener('submit', async function (event
             categoryInput.value = '';
             document.querySelectorAll('.image-wrapper').forEach(element => element.remove());
             photoToUploadAddItem = [];
+            document.querySelector('.cancel-add-category-btn').style.display = 'none';
+            document.querySelector('.confirm-add-category-btn').style.display = 'none';
+            document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+            document.querySelector('#add-category-btn').style.display = "inline-block";
 
             modal.style.display = "none";
             document.querySelector('.overlay').style.display = 'none';
