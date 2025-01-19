@@ -16,6 +16,8 @@
 
 <body>
     <header>
+        <div class="search-overlay"></div>
+        <div id="results-container"></div>
         <div class="header-wrapper">
             <div class="logo">
                 <a href="/mainpage">
@@ -86,15 +88,15 @@
                 </div>
                 <div class="data-validation-error" style="display: none; color: red;">Your data is not correct</div>
             </div>
-            
+
             <div class="logout">
                 <img src="/css/img/logout-icon.png" alt="logout-icon" class="logout-icon">
                 <a href="/logout" class="logout-text"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
 
-            <form id="logout-form" action="/logout" method="POST" style="display: none;">
-                <input type="hidden" name="_csrf" value="${_csrf.token}" />
-            </form>
+                <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                </form>
             </div>
         </div>
 
@@ -201,7 +203,15 @@
                 <input type="number" id="edit-quantity" min="1" required>
 
                 <label for="edit-category">Category:</label>
-                <input type="text" id="edit-category">
+                <div id="category-list-container"></div>
+                <div class="category-container">
+
+                    <input type="text" id="edit-category" disabled>
+                    <button class="edit-category-btn" type="button">Edit category</button>
+                    <button id="confirm-btn" class="confirm-category-btn" style="display: none;" type="button">✔</button>
+                    <button id="cancel-btn" class="cancel-category-btn" style="display: none;" type="button">X</button>
+                </div>
+
 
                 <label for="edit-brand">Brand:</label>
                 <input type="text" id="edit-brand">
@@ -209,7 +219,7 @@
                 <label for="edit-description">Description:</label>
                 <textarea id="edit-description" rows="6"></textarea>
 
-                
+
                 <div class="modal-buttons">
                     <button type="submit" class="submit-btn">Save Changes</button>
                     <button type="button" class="delete-item-btn submit-btn">Delete Item</button>

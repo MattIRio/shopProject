@@ -25,22 +25,24 @@ header {
     margin-left: 50px;
 }
 
-.logo a img{
+.logo a img {
     height: 100%;
 }
 
-.search-wrapper{
+.search-wrapper {
     display: flex;
     position: absolute;
     width: 45%;
     height: 100%;
     left: 45%;
-    transform: translateX(-50%); /* Розташовує по центру */
+    transform: translateX(-50%);
+    /* Розташовує по центру */
     align-items: center;
+    z-index: 3;
 
 }
 
-#search-bar{
+#search-bar {
     position: absolute;
     /* padding-left: 20px; */
     font-size: 16px;
@@ -50,6 +52,10 @@ header {
     padding-left: 40px;
     border: none;
 }
+
+#search-bar:focus-visible {
+    outline: none;
+} 
 
 #search-icon {
     position: absolute;
@@ -85,29 +91,31 @@ header {
 }
 
 .cart-icon {
-    width: 30px; 
+    width: 30px;
     height: 30px;
 }
 
 .cart-badge {
     position: absolute;
     top: 0;
-    right: -10px; 
-    background-color: #00a046; 
-    color: white; 
-    border-radius: 50%; 
-    width: 20px; 
+    right: -10px;
+    background-color: #00a046;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
     height: 20px;
-    text-align: center; 
-    font-size: 12px; 
-    line-height: 20px; 
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
     font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
+
 /* Header end */
 
 .cart-modal {
-    display: none; /* Початково приховане */
+    display: none;
+    /* Початково приховане */
     position: fixed;
     z-index: 3;
     left: 0;
@@ -151,7 +159,7 @@ header {
     cursor: pointer;
 }
 
-#cart-items li{
+#cart-items li {
     list-style: none;
 }
 
@@ -168,11 +176,16 @@ header {
 
 /* Стиль для зображення товару */
 .cart-item-image {
-    width: 80px; /* Ширина зображення */
-    height: 80px; /* Висота зображення */
-    object-fit: contain; /* Зберігає пропорції зображення */
-    margin-right: 15px; /* Відступ праворуч від зображення */
-    border-radius: 5px; /* Округлені кути */
+    width: 80px;
+    /* Ширина зображення */
+    height: 80px;
+    /* Висота зображення */
+    object-fit: contain;
+    /* Зберігає пропорції зображення */
+    margin-right: 15px;
+    /* Відступ праворуч від зображення */
+    border-radius: 5px;
+    /* Округлені кути */
 }
 
 .buttons {
@@ -182,7 +195,7 @@ header {
     padding: 10px 30px;
 }
 
-.delete-btn-wrapper{
+.delete-btn-wrapper {
     margin-left: auto;
     padding: 20px 0px;
     width: 40px;
@@ -245,7 +258,7 @@ header {
     display: flex;
     align-items: center;
     margin-right: 20px;
-    
+
 }
 
 .item-quantity {
@@ -288,7 +301,6 @@ header {
 .signup-badge-href {
     display: flex;
     color: white
-
 }
 
 #default-user-icon {
@@ -305,9 +317,47 @@ header {
     font-size: 18px;
 }
 
+
+#results-container {
+    position: absolute;
+    background-color: white;
+    top: 60px;
+    z-index: 3;
+    left: 22.5%;
+    width: 45%;
+    border-radius: 8px;
+}
+
+#results-container ul {
+    list-style-type: none;
+    line-height: 26px;
+}
+
+#results-container ul a {
+    text-decoration: none;
+    color: #00a046;
+    font-size: 14px;
+}
+
+#results-container ul a:hover {
+    text-decoration: underline;
+}
+
+.search-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    transition: opacity 0.3s ease;
+}
+
 @media (max-width: 930px) {
     #user-name-header {
-        display: none; /* Приховати елемент */
+        display: none;
     }
 
     #logo-desktop {
@@ -317,6 +367,10 @@ header {
     .search-wrapper {
         width: 55%;
         left: 50%;
+    }
+
+    #results-container {
+        width: 55%;
     }
 
 }

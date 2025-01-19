@@ -259,6 +259,8 @@ async function openEditModal(product, imageArray) {
         }
     }
 
+    editItemCategoryHandler();
+
     document.querySelector('.delete-item-btn').addEventListener('click', async (event) => {
         event.preventDefault();
         try {
@@ -299,19 +301,131 @@ async function openEditModal(product, imageArray) {
 
 }
 
-// Функція для видалення зображення з галереї товару
+let isHandlerAttached = false;  // Флаг для контролю кількості обробників
+
+function editItemCategoryHandler() {
+    const editButton = document.querySelector(".edit-category-btn");
+    const inputField = document.querySelector("#edit-category");
+    const categoryContainer = document.querySelector(".category-container");
+    const confirmButton = document.querySelector(".confirm-category-btn");
+    const cancelButton = document.querySelector(".cancel-category-btn");
+
+    function cleanupCategoryEdit() {
+        cancelButton.style.display = 'none';
+        confirmButton.style.display = 'none';
+        document.querySelectorAll('.select-category-list').forEach(element => element.remove());
+        editButton.style.display = "inline-block"; // Показуємо кнопку редагування
+    }
+
+    // Оголошуємо обробник події
+    const editButtonHandler = () => {
+        const originalValue = inputField.value;
+        inputField.value = '';
+        editButton.style.display = "none"; // Ховаємо кнопку редагування
+        cancelButton.style.display = "inline-block";
+        confirmButton.style.display = 'inline-block';
+
+        confirmButton.addEventListener("click", () => {
+            const newValue = inputField.value.trim();
+            if (newValue) {
+                cleanupCategoryEdit();
+            } else {
+                alert("Поле не може бути порожнім");
+            }
+        });
+
+        // Обробка натискання кнопки скасування
+        cancelButton.addEventListener("click", () => {
+            inputField.value = originalValue;
+            cleanupCategoryEdit();
+        });
+
+        fetch('http://localhost:3000/categories')
+            .then(response => response.json())
+            .then(data => {
+                const categoryData = data;
+
+                const container = document.getElementById("category-list-container");
+
+                // Функція для створення нового <select>
+                const createSelect = (options, onChangeCallback) => {
+                    const select = document.createElement("select");
+                    select.classList.add('select-category-list');
+                    select.innerHTML = `<option value="">Select an option</option>`;
+                    for (const option of options) {
+                        const optionElement = document.createElement("option");
+                        optionElement.value = option.name;
+                        optionElement.textContent = option.name;
+                        select.appendChild(optionElement);
+                    }
+                    select.addEventListener("change", () => onChangeCallback(select));
+                    return select;
+                };
+
+                // Функція для обробки вибору
+                const handleSelection = (parent, data, selectedCategories) => {
+                    while (parent.nextSibling) {
+                        parent.nextSibling.remove();
+                    }
+
+                    const selectedValue = parent.value;
+                    if (selectedValue) {
+                        const currentIndex = Array.from(container.children).indexOf(parent);
+                        selectedCategories.length = currentIndex + 1; // Зберігаємо тільки до поточного рівня
+                        selectedCategories[currentIndex] = selectedValue;
+
+                        inputField.value = `${selectedCategories.join(" >> ")}`;
+
+                        const selectedCategory = data.find(category => category.name === selectedValue);
+                        if (selectedCategory && selectedCategory.subcategories && selectedCategory.subcategories.length > 0) {
+                            const subCategories = selectedCategory.subcategories;
+                            const newSelect = createSelect(subCategories, (newSelectParent) => {
+                                handleSelection(newSelectParent, selectedCategory.subcategories, selectedCategories);
+                            });
+                            container.appendChild(newSelect);
+                        }
+                    }
+                };
+
+                const selectedCategories = [];
+                const rootSelect = createSelect(categoryData, (select) => {
+                    handleSelection(select, categoryData, selectedCategories);
+                    confirmButton.disabled = selectedCategories.length === 0; // Оновлюємо стан кнопки
+                });
+                container.appendChild(rootSelect);
+
+                confirmButton.addEventListener("click", () => {
+                    const selectedCategory = categoryData.find(category => category.name === selectedCategories[0]);
+
+                    let currentCategory = selectedCategory;
+                    for (let i = 1; i < selectedCategories.length; i++) {
+                        if (currentCategory && currentCategory.subcategories) {
+                            currentCategory = currentCategory.subcategories.find(sub => sub.name === selectedCategories[i]);
+                        }
+                    }
+
+                    if (currentCategory && currentCategory.subcategories && currentCategory.subcategories.length > 0) {
+                        console.warn("Warning: There are still subcategories available for the current selection.");
+                    } else {
+                        console.log(`Selected Categories: ${selectedCategories.join(" >> ")}`);
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading JSON:', error));
+    };
+
+    // Перевіряємо, чи вже додано обробник
+    if (!isHandlerAttached) {
+        editButton.addEventListener("click", editButtonHandler); // Додаємо обробник тільки якщо він ще не доданий
+        isHandlerAttached = true;  // Оновлюємо флаг, що обробник тепер доданий
+    }
+}
+
 function removeImageFromEditGallery(imageElement, product, imageArray) {
     const imageUrl = imageElement.querySelector('img').src;
-
-    // Видаляємо зображення з масиву
     const updatedImages = imageArray.filter(image => image !== imageUrl);
-
-    // Оновлюємо масив зображень у базі даних (необхідно відправити оновлені дані на сервер)
     product.image = JSON.stringify(updatedImages);
-
-    imageElement.remove(); // видаляємо елемент DOM
-
-    // Видаляємо файл з photoToUploadEditItem
+    imageElement.remove();
     const imageIndex = photoToUploadEditItem.findIndex(image => image.name === imageUrl.split('/').pop());
     if (imageIndex !== -1) {
         photoToUploadEditItem.splice(imageIndex, 1);
@@ -320,8 +434,9 @@ function removeImageFromEditGallery(imageElement, product, imageArray) {
     console.log('Image removed, new image array:', photoToUploadEditItem);
 }
 
+
 async function saveEditedProduct(productId) {
-    // Отримуємо дані, які змінюються в процесі редагування
+
     const updatedProduct = {
         uniqId: productId,
         productName: document.getElementById('edit-name').value,
@@ -333,8 +448,6 @@ async function saveEditedProduct(productId) {
         quantity: document.getElementById('edit-quantity').value
     };
 
-
-    // Відправляємо PUT запит з оновленими даними
     const putResponse = await fetch(`/api/products/changeproductinfo`, {
         method: 'PUT',
         headers: {
@@ -347,19 +460,19 @@ async function saveEditedProduct(productId) {
     const formDataPhoto = new FormData();
 
     photoToUploadEditItem.forEach((file) => {
-        formDataPhoto.append(`file`, file); // Додаємо кожен файл з унікальним ключем
+        formDataPhoto.append(`file`, file);
     });
 
     formDataPhoto.forEach((value, key) => {
         console.log(key, value);
     });
 
-    // fetch(`/upload/uploadproductspics/${productId}`, {
-    fetch(`/upload/uploadeditedproductspics/${productId}`, {
+    fetch(`/upload/uploadproductspics/${productId}`, {
+        // fetch(`/upload/uploadeditedproductspics/${productId}`, {
         method: 'POST',
         body: formDataPhoto,
         headers: {
-            [csrfHeader]: csrfToken // Додаємо CSRF токен в заголовки
+            [csrfHeader]: csrfToken
         }
     }).then(response => {
         console.log(response);
@@ -739,7 +852,7 @@ document.querySelector('.form').addEventListener('submit', async function (event
             descriptionInput.value = '';
             categoryInput.value = '';
             document.querySelectorAll('.image-wrapper').forEach(element => element.remove());
-            photoToUploadAddItem = '';
+            photoToUploadAddItem = [];
 
             modal.style.display = "none";
             document.querySelector('.overlay').style.display = 'none';
