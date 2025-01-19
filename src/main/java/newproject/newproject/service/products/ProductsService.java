@@ -146,36 +146,6 @@ public class ProductsService {
         return product;
     }
 
-    public List<ProductModel> findProductByCategory(String searchedCategory){
-        List<ProductModel> productList = productRepository.findByCategory(searchedCategory);
-
-        if (productList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
-        }
-        int limit = Math.min(productList.size(), 100);
-        return productList.subList(0,limit);
-    }
-
-    public List<ProductModel> findProductBySellerId(int sellerId){
-        List<ProductModel> productList = productRepository.findBySellerId(sellerId);
-
-        if (productList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
-        }
-        int limit = Math.min(productList.size(), 20);
-        return productList.subList(0,limit);
-    }
-
-    public List<ProductModel> findProductByBrand(String brand){
-        List<ProductModel> productList = productRepository.findByBrand(brand);
-
-        if (productList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product data is missing or invalid.");
-        }
-        int limit = Math.min(productList.size(), 20);
-        return productList.subList(0,limit);
-    }
-
     public void deleteOrderFromCurrentSeller(UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);
         if (userService.getUserRole() != "SELLER"){
