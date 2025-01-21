@@ -149,21 +149,36 @@
 
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" placeholder="Item name" required>
+                <p class="add-item-name-error form-error-text" style="display: none;">Enter valid name</p>
 
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="price" placeholder="Item price" required>
+                <div class="price-input-wrapper">
+                    <input type="text" id="price" name="price" placeholder="Item price" pattern="^[0-9]+(\.[0-9]{2})?$" required>
+                </div>
+                <p class="add-item-price-error form-error-text" style="display: none;">Enter valid price</p>
 
                 <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" placeholder="Quantity" min="1" required>
+                <input type="number" id="quantity" name="quantity" placeholder="Quantity" min="0" required>
+                <p class="add-item-quantity-error form-error-text" style="display: none;">Enter valid item quantity</p>
 
                 <label for="brand">Brand:</label>
                 <input type="text" id="brand" name="brand" placeholder="Item Brand" required>
 
                 <label for="discountPrice">Discount Price:</label>
-                <input type="number" id="discountPrice" name="discountPrice" placeholder="Discount price">
+                <div class="price-input-wrapper">
+                    <input type="text" id="discountPrice" name="discountPrice" placeholder="Discount price" pattern="^[0-9]+(\.[0-9]{2})?$">
+                </div>
+                <p class="add-item-discounted-price-error form-error-text" style="display: none;">Discount price should be correct and less than retail price</p>
 
                 <label for="category">Category:</label>
-                <input type="text" id="category" name="category" placeholder="Category">
+                <div id="add-category-list-container"></div>
+                <div class="category-container">
+                    <input type="text" id="category" disabled>
+                    <button id="add-category-btn" type="button">Add category</button>
+                    <button id="confirm-btn" class="confirm-add-category-btn" style="display: none;" type="button">✔</button>
+                    <button id="cancel-btn" class="cancel-add-category-btn" style="display: none;" type="button">X</button>
+                </div>
+                <p class="add-item-category-error form-error-text" style="display: none;">Enter all categories and subcategories</p>
 
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" placeholder="Description" rows="6"></textarea>
@@ -192,26 +207,35 @@
                 <!-- Поля форми для редагування товару -->
                 <label for="edit-name">Name:</label>
                 <input type="text" id="edit-name" required>
-
+                <p class="edit-item-name-error form-error-text" style="display: none;">Enter valid name</p>
+                
                 <label for="edit-price">Price:</label>
-                <input type="number" id="edit-price" required>
+                <div class="price-input-wrapper">
+                    <input type="text" id="edit-price" required pattern="^[0-9]+(\.[0-9]{2})?$">
+                </div>
+                <p class="edit-item-price-error form-error-text" style="display: none;">Enter valid price</p>
+
 
                 <label for="edit-discount-price">Discount Price:</label>
                 <input type="number" id="edit-discount-price">
+                <p class="add-item-discounted-price-error form-error-text" style="display: none;">Discount price should be correct and less than retail price</p>
+
 
                 <label for="edit-quantity">Quantity:</label>
                 <input type="number" id="edit-quantity" min="1" required>
+                <p class="edit-item-quantity-error form-error-text" style="display: none;">Enter valid item quantity</p>
+
 
                 <label for="edit-category">Category:</label>
                 <div id="category-list-container"></div>
                 <div class="category-container">
 
                     <input type="text" id="edit-category" disabled>
-                    <button class="edit-category-btn" type="button">Edit category</button>
-                    <button id="confirm-btn" class="confirm-category-btn" style="display: none;" type="button">✔</button>
-                    <button id="cancel-btn" class="cancel-category-btn" style="display: none;" type="button">X</button>
+                    <button id="edit-category-btn" type="button">Edit category</button>
+                    <button id="confirm-btn" class="confirm-edit-category-btn" style="display: none;" type="button">✔</button>
+                    <button id="cancel-btn" class="cancel-edit-category-btn" style="display: none;" type="button">X</button>
                 </div>
-
+                <p class="edit-item-category-error form-error-text" style="display: none;">Enter all categories and subcategories</p>
 
                 <label for="edit-brand">Brand:</label>
                 <input type="text" id="edit-brand">
