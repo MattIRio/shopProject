@@ -4,27 +4,24 @@ import jakarta.transaction.Transactional;
 import newproject.newproject.authentication.OauthAndPrincipalAuthController;
 import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;
-import newproject.newproject.model.UserOrderedProduct;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import newproject.newproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,8 +35,8 @@ public class ProductsService {
     @Autowired
     UserService userService;
 
-    public List<ProductModel> allProducts() {
-        List<ProductModel> productList = productRepository.getAllProductsInRandomOrder();                 //returning first 20 products
+    public List<ProductModel> allProducts(PageRequest pageRequest) {
+        List<ProductModel> productList = productRepository.getAllProducts(pageRequest);                 //returning first 20 products
         return productList;
     }
 
@@ -122,7 +119,7 @@ public class ProductsService {
         productRepository.delete(localProduct);
     }
 
-    public List<ProductModel> getProductsByName(String searchedProductName) {
+    public List<ProductModel> searchProductsByName(String searchedProductName) {
         List<ProductModel> productsStartsWith = productRepository.findByProductNameStartsWith(searchedProductName);
         List<ProductModel> productsContains = productRepository.findByProductNameContains(searchedProductName);
         productsContains.removeAll(productsStartsWith);
@@ -145,6 +142,33 @@ public class ProductsService {
 
         return product;
     }
+
+    public List<ProductModel> getProductsByName(String searchedProductName, PageRequest pageRequest) {
+        List<ProductModel> productsStartsWith = productRepository.getByProductNameStartsWith(searchedProductName, pageRequest);
+        List<ProductModel> productsContains = productRepository.getByProductNameContains(searchedProductName, pageRequest);
+        productsContains.removeAll(productsStartsWith);
+        productsStartsWith.addAll(productsContains);
+
+
+        if (productsStartsWith.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+        }
+
+
+        return productsStartsWith;
+    }
+
+
+    public List<String> getBrandsByCategoryAndName(String category,String searcheBrandName) {
+        List<String> brandsList = productRepository.findBrandByName(category,searcheBrandName);
+
+        if (brandsList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
+        }
+
+        return brandsList;
+    }
+
 
     public void deleteOrderFromCurrentSeller(UUID productId, Principal principal, @AuthenticationPrincipal OAuth2User authentication) {
         UserModel currentUser = oauthAndPrincipalAuthController.getCurrentUser(principal, authentication);

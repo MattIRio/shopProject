@@ -5,9 +5,12 @@ import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,8 +75,8 @@ public class ProductsSorting {
         return foundSellers;
     }
 
-    public List<ProductModel> findProductByPriceInRange(int minPrice, int maxPrice){
-        List<ProductModel> productList = productRepository.findProductsByPriceRange(minPrice,maxPrice);
+    public List<ProductModel> findProductByPriceInRange(int minPrice, int maxPrice, String category, PageRequest pageRequest){
+        List<ProductModel> productList = productRepository.findProductsByPriceRange(minPrice,maxPrice, category, pageRequest);
 
         if (productList.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no products with such price");

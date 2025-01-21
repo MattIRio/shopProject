@@ -1,5 +1,6 @@
 package newproject.newproject.controller.products;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import newproject.newproject.model.ProductModel;
 import newproject.newproject.model.UserModel;
@@ -8,6 +9,8 @@ import newproject.newproject.repositories.UsersRepository;
 import newproject.newproject.service.products.ProductsService;
 import newproject.newproject.service.products.ProductsSorting;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.awt.*;
+import java.awt.print.Pageable;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -39,8 +44,8 @@ import java.util.UUID;
     }
 
     @GetMapping("/getallproducts")
-    public ResponseEntity<List<ProductModel>> allProducts() {
-        List<ProductModel> products = productsService.allProducts();
+    public ResponseEntity<List<ProductModel>> allProducts(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "20") int size) {
+        List<ProductModel> products = productsService.allProducts(PageRequest.of(page, size));
         return ResponseEntity.ok(products);
     }
 
@@ -85,15 +90,41 @@ import java.util.UUID;
 //        }
 //    }
 
-    @GetMapping("/getproductsbyname/{searchedProductName}")
-    public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String searchedProductName){
+    @GetMapping("/searchproductsbyname/{searchedProductName}")
+    public ResponseEntity<List<ProductModel>> searchProductsByName(@PathVariable String searchedProductName) {
         try {
-            List<ProductModel> products = productsService.getProductsByName(searchedProductName);
-        return ResponseEntity.ok(products);
+            List<ProductModel> products = productsService.searchProductsByName(searchedProductName);
+            return ResponseEntity.ok(products);
         } catch (Exception e) {
-        System.out.println("Unexpected error: " + e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .build();
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @GetMapping("/getproductsbyname/{searchedProductName}")
+    public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String searchedProductName,
+                                                                @RequestParam(required = false, defaultValue = "0") int page,
+                                                                @RequestParam(required = false, defaultValue = "20") int size) {
+        try {
+            List<ProductModel> products = productsService.getProductsByName(searchedProductName, PageRequest.of(page, size));
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @GetMapping("/getproductbrandsbycategory/{category}/{brandName}")
+    public ResponseEntity<List<String>> getProductBrandsByCategory(@PathVariable String category, @PathVariable String brandName) {
+        try {
+            List<String> products = productsService.getBrandsByCategoryAndName(category, brandName);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -133,10 +164,14 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getproductsbypricerange/{minPrice}/{maxPrice}")
-    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandge(@PathVariable Integer minPrice, @PathVariable Integer maxPrice) {
+    @GetMapping("/getproductsbypricerange/{minPrice}/{maxPrice}/{category}")
+    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandge(@PathVariable Integer minPrice,
+                                                                          @PathVariable Integer maxPrice,
+                                                                          @PathVariable String category,
+                                                                          @RequestParam(required = false, defaultValue = "0") int page,
+                                                                          @RequestParam(required = false, defaultValue = "20") int size ) {
         try {
-            List<ProductModel> products = productsSorting.findProductByPriceInRange(minPrice, maxPrice);
+            List<ProductModel> products = productsSorting.findProductByPriceInRange(minPrice, maxPrice, category, PageRequest.of(page, size));
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -146,10 +181,10 @@ import java.util.UUID;
     }
 
     @GetMapping("/getbrandsbycategory/{searchedCategory}")
-    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory) {
+    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory, HttpSession session) {
         try {
-            List<String> products = productsSorting.findBrandsByCategory(searchedCategory);
-            return ResponseEntity.ok(products);
+            List<String> brands = productsSorting.findBrandsByCategory(searchedCategory);
+            return ResponseEntity.ok(brands);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
