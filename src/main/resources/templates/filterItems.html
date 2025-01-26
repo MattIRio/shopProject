@@ -5,15 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" /> -->
 
-    <link rel="stylesheet" href="/css/header.css"> -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/mainGallery.css">
+    <link rel="stylesheet" href="/css/filterItems.css">
 
     <title>Document</title>
 </head>
 
 <body>
-    <!-- <header>
+    <header>
         <div class="search-overlay"></div>
         <div id="results-container"></div>
         <div class="header-wrapper">
@@ -44,9 +46,9 @@
                 <span class="cart-badge">0</span>
             </div>
         </div>
-    </header> -->
+    </header>
 
-    <!-- <div id="cart-modal" class="cart-modal">
+    <div id="cart-modal" class="cart-modal">
         <div class="cart-modal-content">
             <span id="close-cart" class="close">&times;</span>
             <h2>Your Cart</h2>
@@ -58,7 +60,7 @@
             </div>
 
         </div>
-    </div> -->
+    </div>
 
 
     <div class="gallery-wrapper">
@@ -69,12 +71,14 @@
         <div class="sorting-container">
             <div class="filter-container">
                 <div class="brand-filter">
+                    <p class="brand-filter-title filter-title">Brand<span class="number-of-brands"></span></p>
                     <input type="text" name="" id="brand-filter-input">
                     <div class="brand-filter-brands"></div>
                 </div>
                 <div class="price-filter">
-                    <input type="number" name="low-price-number" id="low-price-number-input">
-                    <input type="number" name="top-price-number" id="top-price-number-input">
+                    <p class="price-filter-title filter-title">Price</p>
+                    <input type="number" name="low-price-number" class="price-input" id="low-price-number-input">
+                    <span> — </span><input type="number" class="price-input" name="top-price-number" id="top-price-number-input">
                     <button id="price-filter-btn">OK</button>
                 </div>
                 <div class="seller-filter">
@@ -82,15 +86,17 @@
                     <div class="seller-filter-brands"></div>
                 </div>
             </div>
-            <div class="filtered-item-container"></div>
+            <div class="item-catalog"></div>
         </div>
     </div>
 
 
 
 
-    <!-- <script src="/js/shoppingCart.js"></script>
-    <script src="/js/isUserAuthenticated.js"></script> -->
+
+    <script src="/js/shoppingCart.js"></script>
+    <script src="/js/isUserAuthenticated.js"></script>
+    <script src="/js/filterItems.js"></script>
 </body>
 
 </html>

@@ -13,15 +13,12 @@
 /* Контейнер з картками товарів */
 .item-catalog {
     display: flex;
+    flex: 0 0 80%;
     flex-wrap: wrap;
-    /* Перенесення карток на новий ряд */
     gap: 3px;
-    /* Відстань між картками */
     padding: 10px;
     justify-content: center;
-    /* Вирівнювання по центру */
     list-style: none;
-    /* Прибираємо маркери списку */
     margin: 0;
 }
 
@@ -67,6 +64,7 @@
 
 .item-brand {
     height: 16px;
+    overflow: hidden;
     font-size: 14px;
 }
 
@@ -130,4 +128,67 @@
 
 .not-available-image {
     filter: grayscale(30%);
+}
+
+.category {
+    display: block;
+    text-decoration: none;
+    color: #00a046;
+    font-weight: bold;
+}
+
+.main-page-wrapper {
+    display: flex;
+}
+
+.main-page-categories {
+    margin-left: 10px;
+    flex: 0 0 20%;
+}
+
+.category-wrapper {
+    display: flex;
+    /* margin-bottom: 12px; */
+    gap: 10px;
+    font-size: 18px;
+}
+
+.category-wrapper img {
+    width: 25px;
+    object-fit: contain;
+    height: 25px;
+}
+
+details summary {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+    /* Прибираємо стандартний маркер */
+}
+
+.category-item {
+    margin-bottom: 10px;
+}
+
+.subcategory-list {
+    font-size: 16px;
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+.subcategory-list li {
+    margin-left: 10px;
+    margin-bottom: 4px;
+}
+
+.subcategory-list li a {
+    text-decoration: none;
+    color: #00a046;
+    transition: transform .3s ease;
+}
+
+.subcategory-list li a:hover {
+    color: green;
 }
