@@ -5,14 +5,16 @@ import newproject.newproject.model.UserModel;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+
+import java.util.*;
 
 @Service
 public class ProductsSorting {
@@ -72,8 +74,8 @@ public class ProductsSorting {
         return foundSellers;
     }
 
-    public List<ProductModel> findProductByPriceInRange(int minPrice, int maxPrice){
-        List<ProductModel> productList = productRepository.findProductsByPriceRange(minPrice,maxPrice);
+    public List<ProductModel> findByProductsByPriceRandgeAndCategory(int minPrice, int maxPrice, String category, PageRequest pageRequest){
+        List<ProductModel> productList = productRepository.findProductsByPriceRange(minPrice,maxPrice, category, pageRequest);
 
         if (productList.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no products with such price");
@@ -101,4 +103,51 @@ public class ProductsSorting {
         int limit = Math.min(productList.size(), 20);
         return productList.subList(0,limit);
     }
+
+//    public List<ProductModel> findProductByBrands(List<String> brand){
+//
+//        Set<ProductModel> productSet = new LinkedHashSet<>();
+//
+//        for (int i = 0; i < brand.size(); i++) {
+//            productSet.addAll(productRepository.findByBrand(brand.get(i)));
+//        }
+//        if (productSet.isEmpty()) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product data is missing or invalid.");
+//        }
+//
+//        List<ProductModel> productList = new ArrayList<>(productSet);
+//        int limit = Math.min(productList.size(), 20);
+//        return productList.subList(0,limit);
+//    }
+
+    public List<ProductModel> findProductByBrandsCategoryInPriceRange(String category, List<String> brand, Integer minPrice, Integer maxPrice, String productName, PageRequest pageRequest){
+
+
+        Set<ProductModel> productSet = new LinkedHashSet<>();
+        if (category != "" && !brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                                //Search by name and brand in category with price range
+            productSet.addAll(productRepository.findProductByBrandsCategoryInPriceRange(category, brand, productName, minPrice, maxPrice, pageRequest));
+        } else if (category != null && brand.isEmpty() && minPrice == null && maxPrice == null && productName.equals("")){                                         //Search only by category
+            productSet.addAll(productRepository.findByCategory(category));
+        } else if (category != null && !brand.isEmpty() && minPrice == null && maxPrice == null && productName.equals("")){                                         //Search by brand in category
+            productSet.addAll(productRepository.findByCategoryAndBrand(category, brand));
+        } else if (category != null && brand.isEmpty() && minPrice == null && maxPrice == null && !productName.equals("")){                                         //Search by name in category
+            productSet.addAll(productRepository.findByCategoryAndName(category, productName));
+        } else if (category != null && brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                         //Search by name and price range in category
+            productSet.addAll(productRepository.findByCategoryAndNameInPriceRange(category, productName, minPrice, maxPrice));
+        } else if (category != null && !brand.isEmpty() && minPrice != null && maxPrice != null && productName.equals("")){                                         //Search by brand and price range in category
+            productSet.addAll(productRepository.findByCategoryAndBrandInPriceRange(category, brand, minPrice, maxPrice));
+        } else if (category != null && !brand.isEmpty() && minPrice == null && maxPrice == null && !productName.equals("")){                                        //Search by name and brand in category
+            productSet.addAll(productRepository.findByCategoryNameAndBrand(category, productName, brand));
+        } else if (category != null && brand.isEmpty() && minPrice != null && maxPrice != null && productName.equals("")){                                         //Search by price range in category
+            productSet.addAll(productRepository.findByCategoryInPriceRange(category, minPrice, maxPrice));
+
+        } else if (productSet.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product data is missing or invalid.");
+        }
+
+        List<ProductModel> productList = new ArrayList<>(productSet);
+        int limit = Math.min(productList.size(), 20);
+        return productList.subList(0,limit);
+    }
+
 }

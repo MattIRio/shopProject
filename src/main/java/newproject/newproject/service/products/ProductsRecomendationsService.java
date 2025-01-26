@@ -7,6 +7,7 @@ import newproject.newproject.repositories.PreferencesRepository;
 import newproject.newproject.repositories.ProductRepository;
 import newproject.newproject.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,11 +16,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -281,6 +280,106 @@ public class ProductsRecomendationsService {
             recomendedProducts.addAll(preferencesRepository.findTopBy3rdCategory(separatedCategory3));
             recomendedProducts.addAll(preferencesRepository.findTopBy4thCategory(separatedCategory4));
             recomendedProducts.addAll(preferencesRepository.findTopBy5thCategory(separatedCategory5));
+
+
+            return ResponseEntity.ok(recomendedProducts);
+        } catch (Exception e) {
+            System.err.println("An error occurred while creating recomendations: " + e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @PostMapping("/getbestoffersfornotloggeduser")
+    public ResponseEntity<List<ProductModel>> GetBestOffersForNotLoggedUser(@RequestBody List<String> preferencesList,
+                                                                            @RequestParam(required = false, defaultValue = "0") int page,
+                                                                            @RequestParam(required = false, defaultValue = "20") int size)
+    {
+        try {
+            String separatedCategory1 = "";
+            String separatedCategory2 = "";
+            String separatedCategory3 = "";
+            String separatedCategory4 = "";
+            String separatedCategory5 = "";
+
+
+            List<String> listOfRecomendedCategories = new ArrayList<>();
+            listOfRecomendedCategories.add("Men's Clothing");
+            listOfRecomendedCategories.add("Women's Clothing");
+            listOfRecomendedCategories.add("Bangles, Bracelets");
+            listOfRecomendedCategories.add("Jewellery");
+            listOfRecomendedCategories.add("Bags");
+            listOfRecomendedCategories.add("Laptop Accessories");
+            listOfRecomendedCategories.add("Festive Needs");
+            listOfRecomendedCategories.add("Accessories & Spare parts");
+            listOfRecomendedCategories.add("Art Supplies");
+
+
+            if (preferencesList.size() < 5){
+                for (int i = preferencesList.size(); i < 5; i++){
+                    preferencesList.add(listOfRecomendedCategories.get((int) (Math.random() * 8) + 1));
+                }
+            }
+
+
+            for (int i = 0; i < preferencesList.size(); i++){
+                for (int j = i+1; j < preferencesList.size(); j++){
+                    if (preferencesList.get(i).equals(preferencesList.get(j)) || preferencesList.get(i).equals("")){
+                        preferencesList.set(j, listOfRecomendedCategories.get((int) (Math.random() * 8) + 1));
+                    }
+                }
+            }
+
+            if (preferencesList.size() > 0) {
+                String[] category1 = preferencesList.get(0).split(",");
+                if (category1.length > 1 && category1[1] != null) {
+                    separatedCategory1 = category1[1];
+                } else if (category1.length == 1) {
+                    separatedCategory1 = category1[0];
+                }
+            }
+            if (preferencesList.size() > 1) {
+                String[] category2 = preferencesList.get(1).split(",");
+                if (category2.length > 1 && category2[1] != null) {
+                    separatedCategory2 = category2[1];
+                } else if (category2.length == 1) {
+                    separatedCategory2 = category2[0];
+                }
+            }
+
+            if (preferencesList.size() > 2) {
+                String[] category3 = preferencesList.get(2).split(",");
+                if (category3.length > 1 && category3[1] != null) {
+                    separatedCategory3 = category3[1];
+                } else if (category3.length == 1) {
+                    separatedCategory3 = category3[0];
+                }
+            }
+
+            if (preferencesList.size() > 3) {
+                String[] category4 = preferencesList.get(3).split(",");
+                if (category4.length > 1 && category4[1] != null) {
+                    separatedCategory4 = category4[1];
+                } else if (category4.length == 1) {
+                    separatedCategory4 = category4[0];
+                }
+            }
+
+            if (preferencesList.size() > 4) {
+                String[] category5 = preferencesList.get(4).split(",");
+                if (category5.length > 1 && category5[1] != null) {
+                    separatedCategory5 = category5[1];
+                } else if (category5.length == 1) {
+                    separatedCategory5 = category5[0];
+                }
+            }
+            List<ProductModel> recomendedProducts = new ArrayList<>();
+            recomendedProducts.addAll(preferencesRepository.findTopBy1stCategoryBestOffers(separatedCategory1, PageRequest.of(page, size-5)).getContent());
+            recomendedProducts.addAll(preferencesRepository.findTopBy2ndCategoryBestOffers(separatedCategory2,  PageRequest.of(page, size-10)).getContent());
+            recomendedProducts.addAll(preferencesRepository.findTopBy3rdCategoryBestOffers(separatedCategory3, PageRequest.of(page, size-13)).getContent());
+            recomendedProducts.addAll(preferencesRepository.findTopBy4thCategoryBestOffers(separatedCategory4, PageRequest.of(page, size-15)).getContent());
+            recomendedProducts.addAll(preferencesRepository.findTopBy5thCategoryBestOffers(separatedCategory5, PageRequest.of(page, size-15)).getContent());
 
 
             return ResponseEntity.ok(recomendedProducts);

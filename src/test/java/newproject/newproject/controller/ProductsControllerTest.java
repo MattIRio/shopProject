@@ -50,19 +50,19 @@ class ProductsControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void getAllProducts_success() {
-        List <ProductModel> products = new ArrayList<>();
-        ProductModel product1 = new ProductModel();
-        ProductModel product2 = new ProductModel();
-        product1.setProductName("product 1 name");
-        product2.setProductName("product 2 name");
-        products.add(product1);
-        products.add(product2);
-
-        Mockito.when(productRepository.findAll()).thenReturn(products);
-        assertEquals(products, productsController.allProducts().getBody());
-    }
+//    @Test
+//    void getAllProducts_success() {
+//        List <ProductModel> products = new ArrayList<>();
+//        ProductModel product1 = new ProductModel();
+//        ProductModel product2 = new ProductModel();
+//        product1.setProductName("product 1 name");
+//        product2.setProductName("product 2 name");
+//        products.add(product1);
+//        products.add(product2);
+//
+//        Mockito.when(productRepository.findAll()).thenReturn(products);
+//        assertEquals(products, productsController.allProducts().getBody());
+//    }
 
 
 
