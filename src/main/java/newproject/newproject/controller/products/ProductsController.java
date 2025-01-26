@@ -164,38 +164,14 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getproductsbypricerange/{minPrice}/{maxPrice}/{category}")
-    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandge(@PathVariable Integer minPrice,
+    @GetMapping("/getproductsbypricerangeandcategory/{minPrice}/{maxPrice}/{category}")
+    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandgeAndCategory(@PathVariable Integer minPrice,
                                                                           @PathVariable Integer maxPrice,
                                                                           @PathVariable String category,
                                                                           @RequestParam(required = false, defaultValue = "0") int page,
                                                                           @RequestParam(required = false, defaultValue = "20") int size ) {
         try {
-            List<ProductModel> products = productsSorting.findProductByPriceInRange(minPrice, maxPrice, category, PageRequest.of(page, size));
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
-
-    @GetMapping("/getbrandsbycategory/{searchedCategory}")
-    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory, HttpSession session) {
-        try {
-            List<String> brands = productsSorting.findBrandsByCategory(searchedCategory);
-            return ResponseEntity.ok(brands);
-        } catch (Exception e) {
-            System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
-
-    @GetMapping("/getproductsbysellerid/{sellerid}")
-    public ResponseEntity<List<ProductModel>> findByProductsBySellerId(@PathVariable int sellerid) {
-        try {
-            List<ProductModel> products = productsSorting.findProductBySellerId(sellerid);
+            List<ProductModel> products = productsSorting.findByProductsByPriceRandgeAndCategory(minPrice, maxPrice, category, PageRequest.of(page, size));
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -217,6 +193,54 @@ import java.util.UUID;
                     .body("An unexpected error occurred.");
         }
     }
+
+//    @GetMapping("/getproductsbybrand")
+//    public ResponseEntity<?> findByProductsByBrands(@RequestParam List<String> brand) {
+//        try {
+//            List<ProductModel> products = productsSorting.findProductByBrands(brand);
+//            return ResponseEntity.ok(products);
+//        } catch (ResponseStatusException e) {
+//            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+//        } catch (Exception e) {
+//            System.out.println("Unexpected error: " + e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("An unexpected error occurred.");
+//        }
+//    }
+
+
+
+    @GetMapping("/getbrandsbycategory/{searchedCategory}")
+    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory, HttpSession session) {
+        try {
+            List<String> brands = productsSorting.findBrandsByCategory(searchedCategory);
+            return ResponseEntity.ok(brands);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @GetMapping("/findProductByBrandsCategoryInPriceRange")
+    public ResponseEntity<List<ProductModel>> findProductByBrandsCategoryInPriceRange(@RequestParam(required = false, defaultValue = "") String category,
+                                                                       @RequestParam(required = false, defaultValue = "") List<String> brand,
+                                                                       @RequestParam(required = false, defaultValue = "") Integer minPrice,
+                                                                       @RequestParam(required = false, defaultValue = "") Integer maxPrice,
+                                                                       @RequestParam(required = false, defaultValue = "") String productName,
+                                                                       @RequestParam(required = false, defaultValue = "0") int page,
+                                                                       @RequestParam(required = false, defaultValue = "20") int size) {
+        try {
+            List<ProductModel> products = productsSorting.findProductByBrandsCategoryInPriceRange(category, brand, minPrice, maxPrice, productName, PageRequest.of(page, size));
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+
 
 
 }
