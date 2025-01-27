@@ -36,6 +36,7 @@ import java.util.UUID;
     @Autowired
     UsersRepository usersRepository;
 
+
     private final ProductsService productsService;
     private final ProductsSorting productsSorting;
 
@@ -95,6 +96,20 @@ import java.util.UUID;
                                                                 @RequestParam(required = false, defaultValue = "20") int size) {
         try {
             List<ProductModel> products = productsService.getProductsByName(searchedProductName, PageRequest.of(page, size));
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @GetMapping("/getproductsbysellerid/{sellerid}")
+    public ResponseEntity<List<ProductModel>> getProductsBySellerId(@PathVariable Integer sellerid,
+                                                                @RequestParam(required = false, defaultValue = "0") int page,
+                                                                @RequestParam(required = false, defaultValue = "20") int size) {
+        try {
+            List<ProductModel> products = productsSorting.findProductBySellerId(sellerid);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
