@@ -1,37 +1,8 @@
-function getImages(product) {
-    let imageArray = [];
+const params = new URLSearchParams(window.location.search);
 
-    if (product && product.image) {
-        const imageData = product.image[0];
-
-        if (typeof imageData === 'string' && imageData.startsWith("http")) {
-            imageArray = [imageData];
-        } else if (imageData.startsWith("/uploads")) {
-            imageArray = [imageData];
-        } else {
-            try {
-                const fixedJson = product.image
-                .replace(/\\/g, '\\\\') 
-                .replace(/,\s*C:/g, ',"C:')
-                .replace(/\[C:/g, '["C:')
-                .replace(/\.jpg/g, '.jpg"')
-                .replace(/\.webp/g, '.webp"') 
-                .replace(/\.png/g, '.png"'); 
-
-                imageArray = JSON.parse(fixedJson || '[]')
-                    .map(imageUrl => imageUrl.includes("\\uploads")
-                        ? "/uploads" + imageUrl.split("uploads")[1].replace(/\\/g, '/')
-                        : imageUrl
-                    );
-            } catch (error) {
-                console.error("Error parsing image JSON:", error);
-                imageArray = []; // Якщо помилка, повертаємо порожній масив
-            }
-        }
-    }
-
-    return imageArray; // Завжди повертаємо масив
-}
+const category = params.get('category');
+const brand = params.get('brand');
+console.log(category);
 
 let currentPage = 1; // Номер сторінки для завантаження
 let isLoading = false; // Для уникнення дублювання запитів
@@ -41,7 +12,7 @@ const loadProducts = () => {
     if (isLoading) return; // Перевірка, чи йде вже завантаження
     isLoading = true;
 
-    fetch(`http://localhost:8080/api/products/getallproducts?page=${currentPage}`)
+    fetch(`http://localhost:8080/api/products/getproductsbycategory/${category}`)
         .then(res => res.json())
         .then(json => {
             if (json.length === 0) {
@@ -113,7 +84,7 @@ const loadProducts = () => {
             });
 
             currentPage++;
-            isLoading = false; 
+            isLoading = false;
         })
         .catch(error => {
             console.error("Error loading products:", error);
@@ -136,79 +107,89 @@ window.addEventListener("scroll", handleScroll);
 // Завантажуємо перші товари
 loadProducts();
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3000/categories')
-        .then(response => response.json())
-        .then(data => {
-            console.log('API Response:', data); // Лог для перевірки
 
-            const categoryWrappers = document.querySelectorAll('.category-wrapper');
-            const allDetails = []; // Масив для зберігання всіх елементів details
-
-            categoryWrappers.forEach(wrapper => {
-                const categoryLink = wrapper.querySelector('a.category');
-                const categoryName = categoryLink.textContent.trim();
-
-                const categoryData = data.find(cat => cat.name === categoryName);
-
-                if (categoryData && categoryData.subcategories) {
-                    const details = document.createElement('details');
-                    details.className = 'category-item';
-
-                    const summary = document.createElement('summary');
-                    summary.appendChild(wrapper.cloneNode(true));
-                    details.appendChild(summary);
-
-                    const ul = createSubcategoryList(categoryData.subcategories, categoryName);
-                    details.appendChild(ul);
-
-                    wrapper.replaceWith(details);
-                    
-                    // Додаємо details до масиву
-                    allDetails.push(details);
-
-                    // Додаємо подію для відкриття/закриття при натисканні на category-wrapper
-                    const categoryWrapper = details.querySelector('.category-wrapper');
-                    categoryWrapper.addEventListener('click', (event) => {
-                        event.preventDefault(); // Зупиняємо перехід за посиланням
-                        const isOpen = details.hasAttribute('open');
-                        details.open = !isOpen;
-
-                        // Закриваємо всі інші елементи details
-                        allDetails.forEach(d => {
-                            if (d !== details) {
-                                d.removeAttribute('open');
-                            }
-                        });
-                    });
-                }
-            });
+function getBrandsByCategory(category) {
+    return fetch(`/api/products/getbrandsbycategory/${category}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
         })
-        .catch(error => console.error('Error fetching categories:', error));
-});
-
-// Функція для створення списку підкатегорій з посиланнями
-function createSubcategoryList(subcategories, categoryName) {
-    const ul = document.createElement('ul');
-    ul.classList.add('subcategory-list');
-
-    subcategories.forEach(subcategory => {
-        const li = document.createElement('li');
-        
-        // Створюємо посилання
-        const link = document.createElement('a');
-        const subcategoryName = subcategory.name;
-        const categoryEncoded = encodeURIComponent(categoryName); // Кодуємо категорію
-        const subcategoryEncoded = encodeURIComponent(subcategoryName); // Кодуємо підкатегорію
-        link.href = `http://localhost:8080/mainpage/search?category=${categoryEncoded} >> ${subcategoryEncoded}`;
-        link.textContent = subcategoryName;
-
-        // Додаємо стиль для посилання
-        link.style.margin = '5px 0';
-        link.style.cursor = 'pointer';
-        li.appendChild(link);
-        ul.appendChild(li);
-    });
-
-    return ul;
+        .then(brands => {
+            const filteredBrands = brands.filter(brand => brand !== null);
+            document.querySelector('.number-of-brands').innerHTML = ` (${filteredBrands.length})`;
+            return filteredBrands.sort((a, b) => a.localeCompare(b));
+        })
+        .catch(error => {
+            console.error('Error fetching brands:', error);
+            return [];
+        });
 }
+
+const brandContainer = document.querySelector('.brand-filter-brands');
+const brandFilterInput = document.querySelector('#brand-filter-input');
+
+// Функція для оновлення списку брендів
+function updateBrandList(filteredBrands) {
+    brandContainer.innerHTML = ''; // Очищаємо контейнер
+
+    if (filteredBrands.length === 0) {
+        const noBrandsMessage = document.createElement('span');
+        noBrandsMessage.textContent = 'No such brand';
+        brandContainer.appendChild(noBrandsMessage);
+        return; // Завершуємо виконання функції, якщо немає брендів
+    }
+
+    filteredBrands.forEach(brand => {
+        // Створюємо контейнер для кожного бренду
+        const brandItemContainer = document.createElement('div');
+        brandItemContainer.className = 'brand-item-container';
+        
+        // Створюємо чекбокс для кожного бренду
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'brand-checkbox';
+        checkbox.id = brand; // Можна задати id, використовуючи назву бренду
+
+        // Створюємо мітку (label), щоб вона була пов'язана з чекбоксом
+        const label = document.createElement('label');
+        label.htmlFor = brand; // Вказуємо на id чекбокса
+        label.className = 'brand-item';
+        label.textContent = brand;
+
+        // Додаємо чекбокс і мітку в контейнер
+        brandItemContainer.appendChild(checkbox);
+        brandItemContainer.appendChild(label);
+
+        // Додаємо обробник події на весь контейнер, щоб кліки перемикали чекбокс
+        brandItemContainer.addEventListener('click', (event) => {
+            // Перевіряємо, чи клік був не на чекбоксі, і перемикаємо його стан
+            if (event.target !== checkbox && event.target !== label) {
+                checkbox.checked = !checkbox.checked; // Перемикаємо стан чекбокса
+            }
+        });
+
+        // Додаємо контейнер бренду в основний контейнер
+        brandContainer.appendChild(brandItemContainer);
+    });
+}
+
+// Отримуємо бренди і виводимо їх на екран
+getBrandsByCategory(category)
+    .then(brands => {
+        const brandsArray = brands;
+        updateBrandList(brandsArray);
+        brandFilterInput.addEventListener('input', () => {
+            const filterValue = brandFilterInput.value.toLowerCase();
+
+            const filteredBrands = brandsArray.filter(brand =>
+                brand.toLowerCase().includes(filterValue)
+            );
+
+            updateBrandList(filteredBrands);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
