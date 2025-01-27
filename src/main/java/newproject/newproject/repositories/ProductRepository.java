@@ -85,6 +85,16 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
     @Query("SELECT DISTINCT p FROM ProductModel p WHERE p.category LIKE %:category% AND COALESCE(p.discountedPrice, p.retailPrice) BETWEEN :min AND :max AND p.brand IN :brand AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<ProductModel> findProductByBrandsCategoryInPriceRange(@Param("category") String category, @Param("brand") List<String> brands, @Param("name") String name, @Param("min") int min, @Param("max") int max, PageRequest pageRequest);
 
+    @Query("SELECT DISTINCT p FROM ProductModel p WHERE COALESCE(p.discountedPrice, p.retailPrice) BETWEEN :min AND :max AND p.brand IN :brand AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<ProductModel> findProductByNameAndBrandInPriceRange(@Param("brand") List<String> brands, @Param("name") String name, @Param("min") int min, @Param("max") int max, PageRequest pageRequest);
+
+    @Query("SELECT p FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
+    List<ProductModel> findByNameAndBrand(@Param("productName") String productName, @Param("brand") List<String> brands, PageRequest pageRequest);
+
+    @Query("SELECT p FROM ProductModel p WHERE COALESCE(p.discountedPrice, p.retailPrice) BETWEEN :min AND :max AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<ProductModel> findByNameInPriceRange(@Param("name") String name, @Param("min") int min, @Param("max") int max, PageRequest pageRequest);
+
+
 
 
     @Query("SELECT COUNT(p) FROM ProductModel p WHERE p.category LIKE %:category% AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :productName, '%'))")

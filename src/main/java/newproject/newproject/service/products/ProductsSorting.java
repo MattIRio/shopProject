@@ -147,8 +147,16 @@ public class ProductsSorting {
             productSet.addAll(productRepository.findByCategoryAndBrandInPriceRange(category, brand, minPrice, maxPrice, pageRequest));
         } else if (category != null && !brand.isEmpty() && minPrice == null && maxPrice == null && !productName.equals("")){                                        //Search by name and brand in category
             productSet.addAll(productRepository.findByCategoryNameAndBrand(category, productName, brand, pageRequest));
-        } else if (category != null && brand.isEmpty() && minPrice != null && maxPrice != null && productName.equals("")){                                         //Search by price range in category
+        } else if (category != null && brand.isEmpty() && minPrice != null && maxPrice != null && productName.equals("")) {                                         //Search by price range in category
             productSet.addAll(productRepository.findByCategoryInPriceRange(category, minPrice, maxPrice, pageRequest));
+
+
+        } else if (category == null && !brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                          //Search by name and brand with price range
+            productSet.addAll(productRepository.findProductByNameAndBrandInPriceRange(brand, productName, minPrice, maxPrice, pageRequest));
+        } else if (category == null && !brand.isEmpty() && minPrice == null && maxPrice == null && !productName.equals("")){                                         //Search by brand in name
+            productSet.addAll(productRepository.findByNameAndBrand(productName, brand, pageRequest));
+        } else if (category == null && brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                         //Search by price range in name
+            productSet.addAll(productRepository.findByNameInPriceRange(productName, minPrice, maxPrice, pageRequest));
 
         } else if (productSet.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product data is missing or invalid.");
