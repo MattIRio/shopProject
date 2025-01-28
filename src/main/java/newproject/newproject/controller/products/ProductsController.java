@@ -104,7 +104,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getproductsbysellerid/{sellerid}")
+        @GetMapping("/getproductsbysellerid/{sellerid}")
     public ResponseEntity<List<ProductModel>> getProductsBySellerId(@PathVariable Integer sellerid,
                                                                 @RequestParam(required = false, defaultValue = "0") int page,
                                                                 @RequestParam(required = false, defaultValue = "20") int size) {
@@ -122,18 +122,6 @@ import java.util.UUID;
     public ResponseEntity<List<String>> getProductBrandsByCategory(@PathVariable String category, @PathVariable String brandName) {
         try {
             List<String> products = productsService.getBrandsByCategoryAndName(category, brandName);
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
-
-    @GetMapping("/get-max-and-min-price-by-category/{category}")
-    public ResponseEntity<Map<String, Integer>> getMaxAndMinPriceByCateory(@PathVariable String category) {
-        try {
-            Map<String, Integer> products = productsSorting.getMaxAndMinPriceByCateory(category);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -166,21 +154,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getproductsbypricerangeandcategory/{minPrice}/{maxPrice}/{category}")
-    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandgeAndCategory(@PathVariable Integer minPrice,
-                                                                          @PathVariable Integer maxPrice,
-                                                                          @PathVariable String category,
-                                                                          @RequestParam(required = false, defaultValue = "0") int page,
-                                                                          @RequestParam(required = false, defaultValue = "20") int size ) {
-        try {
-            List<ProductModel> products = productsSorting.findByProductsByPriceRandgeAndCategory(minPrice, maxPrice, category, PageRequest.of(page, size));
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
+
 
     @GetMapping("/getproductsbybrand/{brand}")
     public ResponseEntity<?> findByProductsByBrand(@PathVariable String brand) {
@@ -255,18 +229,38 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/count-Products-By-Name")
-    public ResponseEntity<Integer> countProductByBrandsCategoryInPriceRange(@RequestParam(required = false, defaultValue = "") String productName)
-    {
+    @GetMapping("/get-max-and-min-price-by-category-or-name")
+    public ResponseEntity<Map<String, Integer>> getMaxAndMinPriceByCateory(@RequestParam(required = false, defaultValue = "") String category,
+                                                                           @RequestParam(required = false, defaultValue = "") List<String> brand,
+                                                                           @RequestParam(required = false, defaultValue = "") String productName) {
         try {
-            Integer amountOfFoundProducts = productsSorting.countProductsByName(productName);
-            return ResponseEntity.ok(amountOfFoundProducts);
+            Map<String, Integer> products = productsSorting.getMaxAndMinPriceByCategoryOrName(category, brand, productName);
+            return ResponseEntity.ok(products);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }
     }
+
+
+
+
+
+
+
+//    @GetMapping("/count-Products-By-Name")
+//    public ResponseEntity<Integer> countProductByBrandsCategoryInPriceRange(@RequestParam(required = false, defaultValue = "") String productName)
+//    {
+//        try {
+//            Integer amountOfFoundProducts = productsSorting.countProductsByName(productName);
+//            return ResponseEntity.ok(amountOfFoundProducts);
+//        } catch (Exception e) {
+//            System.out.println("Unexpected error: " + e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .build();
+//        }
+//    }
 
 
 //    @DeleteMapping("/deleteproduct/{productId}")
@@ -308,7 +302,21 @@ import java.util.UUID;
 //        }
 //    }
 
-
+//    @GetMapping("/getproductsbypricerangeandcategory/{minPrice}/{maxPrice}/{category}")
+//    public ResponseEntity<List<ProductModel>> findByProductsByPriceRandgeAndCategory(@PathVariable Integer minPrice,
+//                                                                                     @PathVariable Integer maxPrice,
+//                                                                                     @PathVariable String category,
+//                                                                                     @RequestParam(required = false, defaultValue = "0") int page,
+//                                                                                     @RequestParam(required = false, defaultValue = "20") int size ) {
+//        try {
+//            List<ProductModel> products = productsSorting.findByProductsByPriceRandgeAndCategory(minPrice, maxPrice, category, PageRequest.of(page, size));
+//            return ResponseEntity.ok(products);
+//        } catch (Exception e) {
+//            System.out.println("Unexpected error: " + e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .build();
+//        }
+//    }
 
 
 }

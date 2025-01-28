@@ -45,6 +45,24 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
     @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category%")
     Integer findMinPriceInCategory(@Param("category") String category);
 
+    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category% AND p.brand IN :brand")
+    Integer findMaxPriceInCategoryByBrand(@Param("category") String category, @Param("brand") List<String> brand);
+
+    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category% AND p.brand IN :brand")
+    Integer findMinPriceInCategoryByBrand(@Param("category") String category, @Param("brand") List<String> brand);
+
+    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName%")
+    Integer findMaxPriceByName(@Param("productName") String productName);
+
+    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName%")
+    Integer findMinPriceByName(@Param("productName") String productName);
+
+    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
+    Integer findMaxPriceByNameAndBrand(@Param("productName") String productName, @Param("brand") List<String> brand);
+
+    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
+    Integer findMinPriceByNameAndBrand(@Param("productName") String productName, @Param("brand") List<String> brand);
+
     @Query("SELECT DISTINCT p.brand FROM ProductModel p WHERE p.category LIKE %:name%")
     List<String> findBrandByCategory(@Param("name") String name);
 
@@ -117,6 +135,15 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
 
     @Query("SELECT COUNT(p) FROM ProductModel p WHERE p.category LIKE %:category% AND COALESCE(p.discountedPrice, p.retailPrice) BETWEEN :min AND :max AND p.brand IN :brand AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
     Integer countProductByBrandsCategoryInPriceRange(@Param("category") String category, @Param("brand") List<String> brands, @Param("name") String name, @Param("min") int min, @Param("max") int max);
+
+    @Query("SELECT DISTINCT COUNT(p) FROM ProductModel p WHERE COALESCE(p.discountedPrice, p.retailPrice) BETWEEN :min AND :max AND p.brand IN :brand AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    Integer countProductByNameAndBrandInPriceRange(@Param("brand") List<String> brands, @Param("name") String name, @Param("min") int min, @Param("max") int max);
+
+    @Query("SELECT COUNT(p) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
+    Integer countByNameAndBrand(@Param("productName") String productName, @Param("brand") List<String> brands);
+
+    @Query("SELECT COUNT(p) FROM ProductModel p WHERE COALESCE(p.discountedPrice, p.retailPrice) BETWEEN :min AND :max AND LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    Integer countByNameInPriceRange(@Param("name") String name, @Param("min") int min, @Param("max") int max);
 
     @Query("SELECT COUNT(p) FROM ProductModel p WHERE p.category LIKE %:category%")
     Integer countByCategory(@Param("category") String category);

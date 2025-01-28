@@ -57,17 +57,29 @@ public class ProductsSorting {
         return brandsByProductsStartsWith;
     }
 
-    public  Map<String, Integer> getMaxAndMinPriceByCateory(String searchedCategory){
+    public  Map<String, Integer> getMaxAndMinPriceByCategoryOrName(String category, List<String> brand, String productName ){
         Map<String, Integer> minAndMaxValue = new HashMap<>();
-        minAndMaxValue.put("minValue", productRepository.findMinPriceInCategory(searchedCategory));
-        minAndMaxValue.put("maxValue",productRepository.findMaxPriceInCategory(searchedCategory));
-
+        if (!category.equals("") && brand.isEmpty() && productName.equals("")) {
+            minAndMaxValue.put("minValue", productRepository.findMinPriceInCategory(category));
+            minAndMaxValue.put("maxValue", productRepository.findMaxPriceInCategory(category));
+        }else if (!category.equals("") && !brand.isEmpty() && productName.equals("")) {
+            minAndMaxValue.put("minValue", productRepository.findMinPriceInCategoryByBrand(category, brand));
+            minAndMaxValue.put("maxValue", productRepository.findMaxPriceInCategoryByBrand(category, brand));
+        }else if (category.equals("") && brand.isEmpty() && !productName.equals("")) {
+            minAndMaxValue.put("minValue", productRepository.findMinPriceByName(productName));
+            minAndMaxValue.put("maxValue", productRepository.findMaxPriceByName(productName));
+        }else if (category.equals("") && !brand.isEmpty() && !productName.equals("")) {
+            minAndMaxValue.put("minValue", productRepository.findMinPriceByName(productName));
+            minAndMaxValue.put("maxValue", productRepository.findMaxPriceByName(productName));
+        }
         if (minAndMaxValue.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
         }
 
         return minAndMaxValue;
     }
+
+
 
     public List<UserModel> findSellersByCategory(String searchedCategory){
         List<String> sellersNames = new ArrayList<>();
@@ -99,15 +111,7 @@ public class ProductsSorting {
         return foundSellers;
     }
 
-    public List<ProductModel> findByProductsByPriceRandgeAndCategory(int minPrice, int maxPrice, String category, PageRequest pageRequest){
-        List<ProductModel> productList = productRepository.findProductsByPriceRange(minPrice,maxPrice, category, pageRequest);
 
-        if (productList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no products with such price");
-        }
-        int limit = Math.min(productList.size(), 20);
-        return productList.subList(0,limit);
-    }
 
     public List<ProductModel> findProductBySellerId(int sellerId){
         List<ProductModel> productList = productRepository.findBySellerId(sellerId);
@@ -185,6 +189,17 @@ public class ProductsSorting {
         } else if (category != null && brand.isEmpty() && minPrice != null && maxPrice != null && productName.equals("")){                                         //Count by price range in category
             productsAmount = (productRepository.countByCategoryInPriceRange(category, minPrice, maxPrice));
 
+
+        } else if (category == null && !brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                          //Count by name and brand with price range
+            productsAmount = (productRepository.countProductByNameAndBrandInPriceRange(brand, productName, minPrice, maxPrice));
+        } else if (category == null && !brand.isEmpty() && minPrice == null && maxPrice == null && !productName.equals("")){                                         //Count by brand in name
+            productsAmount = (productRepository.countByNameAndBrand(productName, brand));
+        } else if (category == null && brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                         //Count by price range in name
+            productsAmount = (productRepository.countByNameInPriceRange(productName, minPrice, maxPrice));
+        } else if (category == null && brand.isEmpty() && minPrice != null && maxPrice != null && !productName.equals("")){                                         //Count by name
+            productsAmount = (productRepository.countByName(productName));
+
+
         } else if (productsAmount == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products with such parametrs were found");
         }
@@ -192,15 +207,6 @@ public class ProductsSorting {
         return productsAmount;
     }
 
-
-    public Integer countProductsByName(String productName) {
-        Integer productsAmount = (productRepository.countByName(productName));
-        if (productsAmount == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products with such parametrs were found");
-        }
-
-        return productsAmount;
-    }
 
 
 
@@ -221,4 +227,13 @@ public class ProductsSorting {
 //        return productList.subList(0,limit);
 //    }
 
+//    public List<ProductModel> findByProductsByPriceRandgeAndCategory(int minPrice, int maxPrice, String category, PageRequest pageRequest){
+//        List<ProductModel> productList = productRepository.findProductsByPriceRange(minPrice,maxPrice, category, pageRequest);
+//
+//        if (productList.isEmpty()) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no products with such price");
+//        }
+//        int limit = Math.min(productList.size(), 20);
+//        return productList.subList(0,limit);
+//    }
 }
