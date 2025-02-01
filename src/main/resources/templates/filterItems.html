@@ -63,6 +63,11 @@
     </div>
 
 
+    <h1 class="title"></h1>
+    <div class="applied-filters">
+        <span class="filtered-amount"></span>
+        <div id="selected-filters"></div>
+    </div>
     <div class="gallery-wrapper">
         <div class="gallery-categories"></div>
         <p class="category-name"></p>
@@ -77,14 +82,14 @@
                 </div>
                 <div class="price-filter">
                     <p class="price-filter-title filter-title">Price</p>
-                    <input type="number" name="low-price-number" class="price-input" id="low-price-number-input">
-                    <span> — </span><input type="number" class="price-input" name="top-price-number" id="top-price-number-input">
+                    <input type="number" name="min-price-number" class="price-input" id="min-price-number-input">
+                    <span> — </span><input type="number" class="price-input" name="max-price-number" id="max-price-number-input">
                     <button id="price-filter-btn">OK</button>
                 </div>
-                <div class="seller-filter">
+                <!-- <div class="seller-filter">
                     <input type="text" name="" id="seller-filter-input">
                     <div class="seller-filter-brands"></div>
-                </div>
+                </div> -->
             </div>
             <div class="item-catalog"></div>
         </div>
