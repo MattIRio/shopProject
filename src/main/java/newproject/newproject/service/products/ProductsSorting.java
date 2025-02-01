@@ -83,8 +83,8 @@ public class ProductsSorting {
             minAndMaxValue.put("minValue", productRepository.findMinPriceByName(productName));
             minAndMaxValue.put("maxValue", productRepository.findMaxPriceByName(productName));
         }else if (category.equals("") && !brand.isEmpty() && !productName.equals("")) {
-            minAndMaxValue.put("minValue", productRepository.findMinPriceByName(productName));
-            minAndMaxValue.put("maxValue", productRepository.findMaxPriceByName(productName));
+            minAndMaxValue.put("minValue", productRepository.findMinPriceByNameAndBrand(productName, brand));
+            minAndMaxValue.put("maxValue", productRepository.findMaxPriceByNameAndBrand(productName, brand));
         }
         if (minAndMaxValue.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
