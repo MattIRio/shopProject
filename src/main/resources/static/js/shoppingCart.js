@@ -18,12 +18,12 @@ function getImages(product) {
         } else {
             try {
                 const fixedJson = product.image
-                .replace(/\\/g, '\\\\') 
-                .replace(/,\s*C:/g, ',"C:')
-                .replace(/\[C:/g, '["C:')
-                .replace(/\.jpg/g, '.jpg"')
-                .replace(/\.webp/g, '.webp"') 
-                .replace(/\.png/g, '.png"'); 
+                    .replace(/\\/g, '\\\\')
+                    .replace(/,\s*C:/g, ',"C:')
+                    .replace(/\[C:/g, '["C:')
+                    .replace(/\.jpg/g, '.jpg"')
+                    .replace(/\.webp/g, '.webp"')
+                    .replace(/\.png/g, '.png"');
 
                 imageArray = JSON.parse(fixedJson || '[]')
                     .map(imageUrl => imageUrl.includes("\\uploads")
@@ -229,6 +229,7 @@ const searchBar = document.getElementById('search-bar');
 const searchResultsContainer = document.getElementById('results-container');
 const overlay = document.querySelector('.search-overlay');
 let searchTimer;
+let isSearchSuccessfull = false;
 
 // Функція для виконання пошуку
 const fetchResults = (query) => {
@@ -237,10 +238,12 @@ const fetchResults = (query) => {
         .then(data => {
             data = data.slice(0, 10);
             searchResultsContainer.style.display = 'block';
+            isSearchSuccessfull = true;
             searchResultsContainer.innerHTML = ""; // Очищаємо контейнер
 
             if (data.length === 0) {
                 searchResultsContainer.innerHTML = "<div>No results found</div>";
+                isSearchSuccessfull = false;
                 return;
             }
 
@@ -264,10 +267,17 @@ const fetchResults = (query) => {
         })
         .catch(error => {
             searchResultsContainer.innerHTML = "<div>No such item</div>";
+            isSearchSuccessfull = false;
         });
 };
 
-// Обробка події "input"
+searchBar.addEventListener("focus", () => {
+    if (searchBar.value) {
+        searchResultsContainer.style.padding = "10px";
+    }
+
+});
+
 searchBar.addEventListener("input", () => {
     clearTimeout(searchTimer); // Скидаємо попередній таймер
 
@@ -275,8 +285,9 @@ searchBar.addEventListener("input", () => {
         const query = searchBar.value.trim();
 
         if (query) {
-            searchResultsContainer.style.padding = "10px";
+
             fetchResults(query); // Викликаємо пошук
+            searchResultsContainer.style.padding = "10px";
         } else {
             searchResultsContainer.innerHTML = "";
             searchResultsContainer.style.padding = "0px";
@@ -303,3 +314,25 @@ document.addEventListener("mousedown", (event) => {
         searchBar.blur();
     }
 });
+
+
+const searchButton = document.getElementById('search-button');
+
+searchButton.addEventListener('click', () => {
+    const searchInput = document.getElementById('search-bar').value;
+    if (isSearchSuccessfull && searchInput != null) {
+        search(searchInput);
+    }
+})
+
+searchBar.addEventListener('keydown', function (event) {
+    const searchInput = document.getElementById('search-bar').value;
+    if (event.key === 'Enter' && isSearchSuccessfull && searchInput != null) {
+        event.preventDefault();
+        search(searchInput);
+    }
+});
+
+function search(searchText) {
+    window.location.href = `http://localhost:8080/mainpage/search?productName=${searchText}`
+}

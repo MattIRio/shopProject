@@ -171,27 +171,27 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/get-brands-by-category/{searchedCategory}")
-    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory,
-                                                             @RequestParam(required = false, defaultValue = "") Integer minPrice,
-                                                             @RequestParam(required = false, defaultValue = "") Integer maxPrice) {
-        try {
-            List<String> brands = productsSorting.findBrandsByCategory(searchedCategory);
-            return ResponseEntity.ok(brands);
-        } catch (Exception e) {
-            System.out.println("Unexpected error: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
+    // @GetMapping("/get-brands-by-category/{searchedCategory}")
+    // public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory,
+    //                                                          @RequestParam(required = false, defaultValue = "") Integer minPrice,
+    //                                                          @RequestParam(required = false, defaultValue = "") Integer maxPrice) {
+    //     try {
+    //         List<String> brands = productsSorting.findBrandsByCategory(searchedCategory);
+    //         return ResponseEntity.ok(brands);
+    //     } catch (Exception e) {
+    //         System.out.println("Unexpected error: " + e);
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .build();
+    //     }
+    // }
 
     @GetMapping("/get-brands")
-    public ResponseEntity<HashSet<String>> findBrandsByProductName(@RequestParam(required = false, defaultValue = "") String searchedName,
-                                                                   @RequestParam(required = false, defaultValue = "") String searchedCategory,
+    public ResponseEntity<HashSet<String>> findBrandsByProductName(@RequestParam(required = false, defaultValue = "") String productName,
+                                                                   @RequestParam(required = false, defaultValue = "") String category,
                                                                    @RequestParam(required = false) Integer minPrice,
                                                                    @RequestParam(required = false) Integer maxPrice) {
         try {
-            HashSet<String> brands = productsSorting.findBrands(searchedName, searchedCategory,minPrice, maxPrice);
+            HashSet<String> brands = productsSorting.findBrands(productName, category, minPrice, maxPrice);
             return ResponseEntity.ok(brands);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -200,7 +200,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/find-Products-By-Brands-Category-Name-In-Price-Range")
+    @GetMapping("/search")
     public ResponseEntity<List<ProductModel>> findProductByBrandsCategoryInPriceRange(@RequestParam(required = false, defaultValue = "") String category,
                                                                        @RequestParam(required = false, defaultValue = "") List<String> brand,
                                                                        @RequestParam(required = false, defaultValue = "") Integer minPrice,

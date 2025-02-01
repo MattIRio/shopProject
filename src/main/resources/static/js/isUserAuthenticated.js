@@ -7,7 +7,6 @@ async function uploadUserPhotoAndName() {
 
         const isUserAuthenticated = await isUserAuthenticatedResponse.json(); // Очікуємо true або false
         if (!isUserAuthenticated) {
-            console.log("User is not authenticated. Skipping user data upload.");
             return;
         }
 

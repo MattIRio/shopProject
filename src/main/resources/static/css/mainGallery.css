@@ -13,7 +13,7 @@
 /* Контейнер з картками товарів */
 .item-catalog {
     display: flex;
-    flex: 0 0 80%;
+    flex: 0 0 79%;
     flex-wrap: wrap;
     gap: 3px;
     padding: 10px;
@@ -24,21 +24,19 @@
 
 /* Картка товару */
 .item-catalog li {
-    flex: 1 1 calc(12.5% - 3px);
-    /* Максимум 5 карток в ряд */
-    max-width: calc(12.5% - 3px);
+    flex: 1 1 calc(19.5% - 3px);
+    max-width: calc(19.5% - 3px);
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    /* text-align: center; */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 5px;
     transition: transform 0.3s ease;
+    height: max-content;
 }
 
 .item-catalog li:hover {
     transform: translateY(-5px);
-    /* Підняття картки при наведенні */
 }
 
 .item-title {
@@ -74,7 +72,8 @@
 
 .item-discounted-price {
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 22px;
+    height: 22px;;
     color: #f84147;
     margin-bottom: 6px;
 }
