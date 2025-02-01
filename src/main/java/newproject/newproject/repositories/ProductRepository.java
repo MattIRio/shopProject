@@ -39,28 +39,28 @@ public interface ProductRepository extends JpaRepository<ProductModel, String> {
     @Query("SELECT p FROM ProductModel p WHERE p.category LIKE %:name%")
     List<ProductModel> findByCategory(@Param("name") String name, PageRequest pageReques);
 
-    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category%")
+    @Query("SELECT MAX(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.category LIKE %:category%")
     Integer findMaxPriceInCategory(@Param("category") String category);
 
-    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category%")
+    @Query("SELECT MIN(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.category LIKE %:category%")
     Integer findMinPriceInCategory(@Param("category") String category);
 
-    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category% AND p.brand IN :brand")
+    @Query("SELECT MAX(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.category LIKE %:category% AND p.brand IN :brand")
     Integer findMaxPriceInCategoryByBrand(@Param("category") String category, @Param("brand") List<String> brand);
 
-    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.category LIKE %:category% AND p.brand IN :brand")
+    @Query("SELECT MIN(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.category LIKE %:category% AND p.brand IN :brand")
     Integer findMinPriceInCategoryByBrand(@Param("category") String category, @Param("brand") List<String> brand);
 
-    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName%")
+    @Query("SELECT MAX(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.productName LIKE %:productName%")
     Integer findMaxPriceByName(@Param("productName") String productName);
 
-    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName%")
+    @Query("SELECT MIN(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.productName LIKE %:productName%")
     Integer findMinPriceByName(@Param("productName") String productName);
 
-    @Query("SELECT MAX(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
+    @Query("SELECT MAX(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
     Integer findMaxPriceByNameAndBrand(@Param("productName") String productName, @Param("brand") List<String> brand);
 
-    @Query("SELECT MIN(p.retailPrice) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
+    @Query("SELECT MIN(LEAST(p.retailPrice, p.discountedPrice)) FROM ProductModel p WHERE p.productName LIKE %:productName% AND p.brand IN :brand")
     Integer findMinPriceByNameAndBrand(@Param("productName") String productName, @Param("brand") List<String> brand);
 
     @Query("SELECT DISTINCT p.brand FROM ProductModel p WHERE p.category LIKE %:name%")
