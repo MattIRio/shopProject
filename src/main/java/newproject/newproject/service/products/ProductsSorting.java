@@ -44,17 +44,31 @@ public class ProductsSorting {
         return brandsList;
     }
 
-    public List<String> findBrandsByName(String searchedProductName){
-        List<String> brandsByProductsStartsWith = productRepository.findBrandsStartingWithProductName(searchedProductName);
-        List<String> brandsByproductsContains = productRepository.findBrandsContainsProductName(searchedProductName);
-        brandsByproductsContains.removeAll(brandsByProductsStartsWith);
-        brandsByProductsStartsWith.addAll(brandsByproductsContains);
+    public HashSet<String> findBrands(String productName, String category, Integer minPrice, Integer maxPrice){
+        HashSet<String> brands = new HashSet<String>();
+        if (!productName.equals("") && category.equals("") && minPrice == null && maxPrice == null){
+            List<String> brandsByProductsStartsWith = productRepository.findBrandsStartingWithProductName(productName);
+            List<String> brandsByproductsContains = productRepository.findBrandsContainsProductName(productName);
+            brands.addAll(brandsByProductsStartsWith);
+            brands.addAll(brandsByproductsContains);
+        } else if (!productName.equals("") && category.equals("") && minPrice != null && maxPrice != null) {
+            List<String> brandsByProductsStartsWith = productRepository.findBrandsStartingWithProductNameAndPriceRange(productName, minPrice, maxPrice);
+            List<String> brandsByproductsContains = productRepository.findBrandsContainsProductNameAndPriceRange(productName, minPrice, maxPrice);
+            brands.addAll(brandsByProductsStartsWith);
+            brands.addAll(brandsByproductsContains);
+        } else if ((productName.equals("") && !category.equals("") && minPrice == null && maxPrice == null)){
+            brands.addAll(productRepository.findBrandByCategory(category));
+        } else if ((productName.equals("") && !category.equals("") && minPrice != null && maxPrice != null)){
+            brands.addAll(productRepository.findBrandByCategoryAndPrice(category, minPrice, maxPrice));
+        }
 
-        if (brandsByProductsStartsWith.isEmpty()) {
+
+
+        if (brands.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product data is missing or invalid.");
         }
 
-        return brandsByProductsStartsWith;
+        return brands;
     }
 
     public  Map<String, Integer> getMaxAndMinPriceByCategoryOrName(String category, List<String> brand, String productName ){

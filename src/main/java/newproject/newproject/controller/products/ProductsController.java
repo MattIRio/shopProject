@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.awt.*;
 import java.awt.print.Pageable;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -170,8 +171,10 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getbrandsbycategory/{searchedCategory}")
-    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory) {
+    @GetMapping("/get-brands-by-category/{searchedCategory}")
+    public ResponseEntity<List<String>> findBrandsByCategory(@PathVariable String searchedCategory,
+                                                             @RequestParam(required = false, defaultValue = "") Integer minPrice,
+                                                             @RequestParam(required = false, defaultValue = "") Integer maxPrice) {
         try {
             List<String> brands = productsSorting.findBrandsByCategory(searchedCategory);
             return ResponseEntity.ok(brands);
@@ -182,10 +185,13 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/getbrandsbyname/{searchedName}")
-    public ResponseEntity<List<String>> findBrandsByProductName(@PathVariable String searchedName) {
+    @GetMapping("/get-brands")
+    public ResponseEntity<HashSet<String>> findBrandsByProductName(@RequestParam(required = false, defaultValue = "") String searchedName,
+                                                                   @RequestParam(required = false, defaultValue = "") String searchedCategory,
+                                                                   @RequestParam(required = false) Integer minPrice,
+                                                                   @RequestParam(required = false) Integer maxPrice) {
         try {
-            List<String> brands = productsSorting.findBrandsByName(searchedName);
+            HashSet<String> brands = productsSorting.findBrands(searchedName, searchedCategory,minPrice, maxPrice);
             return ResponseEntity.ok(brands);
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e);
@@ -194,7 +200,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/findProductByBrandsCategoryInPriceRange")
+    @GetMapping("/find-Products-By-Brands-Category-Name-In-Price-Range")
     public ResponseEntity<List<ProductModel>> findProductByBrandsCategoryInPriceRange(@RequestParam(required = false, defaultValue = "") String category,
                                                                        @RequestParam(required = false, defaultValue = "") List<String> brand,
                                                                        @RequestParam(required = false, defaultValue = "") Integer minPrice,
@@ -229,7 +235,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/get-max-and-min-price-by-category-or-name")
+    @GetMapping("/get-max-and-min-price-by-category-brand-or-name")
     public ResponseEntity<Map<String, Integer>> getMaxAndMinPriceByCateory(@RequestParam(required = false, defaultValue = "") String category,
                                                                            @RequestParam(required = false, defaultValue = "") List<String> brand,
                                                                            @RequestParam(required = false, defaultValue = "") String productName) {
