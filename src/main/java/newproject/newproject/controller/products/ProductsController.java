@@ -218,7 +218,7 @@ import java.util.UUID;
         }
     }
 
-    @GetMapping("/count-Products-By-Brands-Category-In-Price-Range")
+    @GetMapping("/count-Products-By-Brands-Category-And-Name-In-Price-Range")
     public ResponseEntity<Integer> countProductByBrandsCategoryInPriceRange(@RequestParam(required = false, defaultValue = "") String category,
                                                                                       @RequestParam(required = false, defaultValue = "") List<String> brand,
                                                                                       @RequestParam(required = false, defaultValue = "") Integer minPrice,
