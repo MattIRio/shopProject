@@ -225,6 +225,48 @@ document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
 updateCartCount();
 updateCartModal();
 
+
+
+
+
+async function addOrder() {
+    const order = JSON.parse(localStorage.getItem('cart')) || [];
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    if (order.length > 0) {
+        for (const orderedItem of order) {
+            try {
+                const response = await fetch(`/addordertocurrentuser/${orderedItem.id}/${orderedItem.quantity}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+
+                console.log(`Order added: ${orderedItem.id}, Quantity: ${orderedItem.quantity}`);
+            } catch (error) {
+                console.error('Failed to add order:', error);
+            }
+        }
+    } else {
+        console.log("Cart is empty. No order added.");
+    }
+}
+
+document.getElementById('checkout-button').addEventListener('click', addOrder);
+
+
+
+
+
+
+// SEARCH //
 const searchBar = document.getElementById('search-bar');
 const searchResultsContainer = document.getElementById('results-container');
 const overlay = document.querySelector('.search-overlay');

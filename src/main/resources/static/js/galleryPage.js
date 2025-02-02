@@ -11,12 +11,12 @@ function getImages(product) {
         } else {
             try {
                 const fixedJson = product.image
-                .replace(/\\/g, '\\\\') 
-                .replace(/,\s*C:/g, ',"C:')
-                .replace(/\[C:/g, '["C:')
-                .replace(/\.jpg/g, '.jpg"')
-                .replace(/\.webp/g, '.webp"') 
-                .replace(/\.png/g, '.png"'); 
+                    .replace(/\\/g, '\\\\')
+                    .replace(/,\s*C:/g, ',"C:')
+                    .replace(/\[C:/g, '["C:')
+                    .replace(/\.jpg/g, '.jpg"')
+                    .replace(/\.webp/g, '.webp"')
+                    .replace(/\.png/g, '.png"');
 
                 imageArray = JSON.parse(fixedJson || '[]')
                     .map(imageUrl => imageUrl.includes("\\uploads")
@@ -92,6 +92,7 @@ const loadProducts = () => {
                     itemDiscountedPrice.classList.add('item-discounted-price');
                 } else {
                     itemPrice.innerHTML = item.retailPrice ? `${item.retailPrice} $` : 'Not available';
+                    itemPrice.style.paddingBottom = '28px';
                     if (!item.retailPrice) {
                         itemImage.classList.add('not-available-image');
                     }
@@ -113,7 +114,7 @@ const loadProducts = () => {
             });
 
             currentPage++;
-            isLoading = false; 
+            isLoading = false;
         })
         .catch(error => {
             console.error("Error loading products:", error);
@@ -136,56 +137,55 @@ window.addEventListener("scroll", handleScroll);
 // Завантажуємо перші товари
 loadProducts();
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3000/categories')
-        .then(response => response.json())
-        .then(data => {
-            console.log('API Response:', data); // Лог для перевірки
+fetch('http://localhost:3000/categories')
+    .then(response => response.json())
+    .then(data => {
+        console.log('API Response:', data); // Лог для перевірки
 
-            const categoryWrappers = document.querySelectorAll('.category-wrapper');
-            const allDetails = []; // Масив для зберігання всіх елементів details
+        const categoryWrappers = document.querySelectorAll('.category-wrapper');
+        const allDetails = []; // Масив для зберігання всіх елементів details
 
-            categoryWrappers.forEach(wrapper => {
-                const categoryLink = wrapper.querySelector('a.category');
-                const categoryName = categoryLink.textContent.trim();
+        categoryWrappers.forEach(wrapper => {
+            const categoryLink = wrapper.querySelector('a.category');
+            const categoryName = categoryLink.textContent.trim();
 
-                const categoryData = data.find(cat => cat.name === categoryName);
+            const categoryData = data.find(cat => cat.name === categoryName);
 
-                if (categoryData && categoryData.subcategories) {
-                    const details = document.createElement('details');
-                    details.className = 'category-item';
+            if (categoryData && categoryData.subcategories) {
+                const details = document.createElement('details');
+                details.className = 'category-item';
 
-                    const summary = document.createElement('summary');
-                    summary.appendChild(wrapper.cloneNode(true));
-                    details.appendChild(summary);
+                const summary = document.createElement('summary');
+                summary.appendChild(wrapper.cloneNode(true));
+                details.appendChild(summary);
 
-                    const ul = createSubcategoryList(categoryData.subcategories, categoryName);
-                    details.appendChild(ul);
+                const ul = createSubcategoryList(categoryData.subcategories, categoryName);
+                details.appendChild(ul);
 
-                    wrapper.replaceWith(details);
-                    
-                    // Додаємо details до масиву
-                    allDetails.push(details);
+                wrapper.replaceWith(details);
 
-                    // Додаємо подію для відкриття/закриття при натисканні на category-wrapper
-                    const categoryWrapper = details.querySelector('.category-wrapper');
-                    categoryWrapper.addEventListener('click', (event) => {
-                        event.preventDefault(); // Зупиняємо перехід за посиланням
-                        const isOpen = details.hasAttribute('open');
-                        details.open = !isOpen;
+                // Додаємо details до масиву
+                allDetails.push(details);
 
-                        // Закриваємо всі інші елементи details
-                        allDetails.forEach(d => {
-                            if (d !== details) {
-                                d.removeAttribute('open');
-                            }
-                        });
+                // Додаємо подію для відкриття/закриття при натисканні на category-wrapper
+                const categoryWrapper = details.querySelector('.category-wrapper');
+                categoryWrapper.addEventListener('click', (event) => {
+                    event.preventDefault(); // Зупиняємо перехід за посиланням
+                    const isOpen = details.hasAttribute('open');
+                    details.open = !isOpen;
+
+                    // Закриваємо всі інші елементи details
+                    allDetails.forEach(d => {
+                        if (d !== details) {
+                            d.removeAttribute('open');
+                        }
                     });
-                }
-            });
-        })
-        .catch(error => console.error('Error fetching categories:', error));
-});
+                });
+            }
+        });
+    })
+    .catch(error => console.error('Error fetching categories:', error));
+
 
 // Функція для створення списку підкатегорій з посиланнями
 function createSubcategoryList(subcategories, categoryName) {
@@ -194,7 +194,7 @@ function createSubcategoryList(subcategories, categoryName) {
 
     subcategories.forEach(subcategory => {
         const li = document.createElement('li');
-        
+
         // Створюємо посилання
         const link = document.createElement('a');
         const subcategoryName = subcategory.name;

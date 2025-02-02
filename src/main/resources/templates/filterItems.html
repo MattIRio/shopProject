@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/mainGallery.css">
     <link rel="stylesheet" href="/css/filterItems.css">
+    <link rel="stylesheet" href="/css/libraries/nouislider.min.css">
+
 
     <title>Document</title>
 </head>
@@ -83,13 +85,11 @@
                 <div class="price-filter">
                     <p class="price-filter-title filter-title">Price</p>
                     <input type="number" name="min-price-number" class="price-input" id="min-price-number-input">
-                    <span> — </span><input type="number" class="price-input" name="max-price-number" id="max-price-number-input">
+                    <span> — </span><input type="number" class="price-input" name="max-price-number"
+                        id="max-price-number-input">
                     <button id="price-filter-btn">OK</button>
                 </div>
-                <!-- <div class="seller-filter">
-                    <input type="text" name="" id="seller-filter-input">
-                    <div class="seller-filter-brands"></div>
-                </div> -->
+                <div id="slider"></div>
             </div>
             <div class="item-catalog"></div>
         </div>
@@ -98,10 +98,12 @@
 
 
 
-
+    <script src="/js/libraries/nouislider.min.js"></script>
     <script src="/js/shoppingCart.js"></script>
     <script src="/js/isUserAuthenticated.js"></script>
     <script src="/js/filterItems.js"></script>
+
+
 </body>
 
 </html>

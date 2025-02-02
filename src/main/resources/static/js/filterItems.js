@@ -154,7 +154,7 @@ async function fetchProductsFromFilterURL() {
 
 
 
-    await fetch(`/api/products/count-Products-By-Brands-Category-In-Price-Range?${searchParams.toString()}`)
+    await fetch(`/api/products/count-Products-By-Brands-Category-And-Name-In-Price-Range?${searchParams.toString()}`)
         .then(response => response.text()) // Очікуємо текстову відповідь
         .then(count => {
             document.querySelector('.filtered-amount').innerText = `Found ${count} items`;
@@ -169,7 +169,8 @@ async function fetchProductsFromFilterURL() {
 
     searchParams.delete('page');
 
-    getMaxAndMinPrice(searchParams.toString());
+    getMaxAndMinPrice(searchParams);
+    initialiseSlider(searchParams)
 
     try {
         const response = await fetch(url, {
@@ -287,7 +288,7 @@ function updateBrandList(filteredBrands) {
 
     if (!document.querySelector('.selected-price')) {
         initializeFiltersFromURL();
-    } 
+    }
 }
 
 function updateQueryParameters() {
@@ -398,7 +399,11 @@ const priceFilterButton = document.getElementById('price-filter-btn');
 
 async function getMaxAndMinPrice(query) {
     const baseUrl = "/api/products/get-max-and-min-price-by-category-brand-or-name?";
-    const url = `${baseUrl}${query}`;
+    
+    query.delete('minPrice');
+    query.delete('maxPrice');
+
+    const url = `${baseUrl}${query.toString()}`;
 
 
     const response = await fetch(url);
@@ -407,7 +412,7 @@ async function getMaxAndMinPrice(query) {
     }
 
     const data = await response.json();
-    
+
     const urlParams = new URLSearchParams(window.location.search);
     const minPrice = urlParams.get("minPrice");
     const maxPrice = urlParams.get("maxPrice");
@@ -515,6 +520,8 @@ function createPriceFilterBlock(minPrice, maxPrice) {
         const newUrl = `${window.location.pathname}?${params.toString()}`;
         window.history.replaceState(null, '', newUrl);
         updateQueryParameters();
+        getBrands();
+
     });
 
     updateQueryParameters();
@@ -540,7 +547,6 @@ function createBrandFilterBlock(brand) {
     document.getElementById("selected-filters").appendChild(brandBlock);
 
     // Знаходимо чекбокс і активуємо його
-    console.log("Всі чекбокси на сторінці:", document.querySelectorAll("input[type='checkbox']"));
     const checkbox = document.querySelector(`input[type="checkbox"][value="${brand}"]`);
     if (checkbox) checkbox.checked = true;
 
@@ -550,6 +556,7 @@ function createBrandFilterBlock(brand) {
         selectedFilters.delete(brand);
         if (checkbox) checkbox.checked = false;
         updateQueryParameters(); // Оновлюємо параметри в URL
+        getBrands();
     });
     updateQueryParameters(); // Оновлюємо параметри в URL
 }
@@ -570,7 +577,50 @@ function activateBrandCheckboxes() {
             }
         });
     }
-    
+
 }
 
 
+async function initialiseSlider(query) {
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const minPrice = urlParams.get('minPrice') || null;
+    const maxPrice = urlParams.get('maxPrice') || null;
+
+    query.delete('minPrice');
+    query.delete('maxPrice');
+
+    const url = `/api/products/get-max-and-min-price-by-category-brand-or-name?${query.toString()}`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    const slider = document.getElementById('slider');
+
+    if (slider.noUiSlider) {
+        slider.noUiSlider.destroy();
+    }
+
+    noUiSlider.create(slider, {
+        start: [
+            minPrice !== null ? Number(minPrice) : data.minValue,
+            maxPrice !== null ? Number(maxPrice) : data.maxValue
+        ],
+        connect: true,
+        range: {
+            'min': data.minValue,
+            'max': data.maxValue
+        }
+    });
+
+    slider.noUiSlider.on('update', function (values) {
+        minPriceInput.value = Math.round(values[0]);
+        maxPriceInput.value = Math.round(values[1]);
+
+    });
+}

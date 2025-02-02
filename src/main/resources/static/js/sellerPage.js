@@ -275,11 +275,12 @@ async function openEditModal(product, imageArray) {
             priceEditError.style.display = 'none';
         } else if (!isValidPrice(document.getElementById('edit-price').value) || document.getElementById('edit-price').value <= 0) {
             priceEditError.style.display = 'block';
-        } else if (document.getElementById('edit-price').value < document.getElementById('edit-discount-price').value && document.getElementById('edit-discount-price').value !== '') {
-            discountPriceAddError.style.display = 'block';
+        } else if (Number(document.getElementById('edit-price').value) < Number(document.getElementById('edit-discount-price').value) 
+            && document.getElementById('edit-discount-price').value !== '') {
+            discountPriceEditError.style.display = 'block';
         } else {
             priceEditError.style.display = 'none';
-            discountPriceAddError.style.display = 'none';
+            discountPriceEditError.style.display = 'none';
         }
     })
 
@@ -297,8 +298,8 @@ async function openEditModal(product, imageArray) {
         if (document.getElementById('edit-discount-price').value === '') {
             discountPriceEditError.style.display = 'none';
         } else if (!isValidPrice(document.getElementById('edit-discount-price').value)
-            || document.getElementById('edit-discount-price').value <= 0
-            || document.getElementById('edit-discount-price').value >= document.getElementById('edit-price').value) {
+            || Number(document.getElementById('edit-discount-price').value) <= 0
+            || Number(document.getElementById('edit-discount-price').value) >= Number(document.getElementById('edit-price').value)) {
             discountPriceEditError.style.display = 'block';
         } else {
             discountPriceEditError.style.display = 'none';
@@ -363,7 +364,6 @@ async function openEditModal(product, imageArray) {
     editForm.onsubmit = async (e) => {
         e.preventDefault();
         await saveEditedProduct(product.uniqId); // Зберігаємо зміни
-        modal.style.display = 'none';
     };
 
     // Закриття модального вікна
@@ -375,7 +375,7 @@ async function openEditModal(product, imageArray) {
 }
 
 let selectedAddCategoriesFullfilled = false;
-let selectedEditCategoriesFullfilled = false;
+let selectedEditCategoriesFullfilled = true;
 
 function loadCategories(categoryContainer, inputField, confirmButton) {
     fetch('http://localhost:3000/categories')
@@ -443,9 +443,9 @@ function loadCategories(categoryContainer, inputField, confirmButton) {
                 }
 
                 if (categoryContainer === 'add-category-list-container') {
-                    console.log(currentCategory);
-                    console.log(currentCategory.subcategories);
-                    console.log(currentCategory);
+                    // console.log(currentCategory);
+                    // console.log(currentCategory.subcategories);
+                    // console.log(currentCategory);
                     if ((currentCategory && currentCategory.subcategories && currentCategory.subcategories.length > 0) || inputField.value === '' || inputField.value === undefined) {
                         console.log(inputField.value);
                         document.querySelector('.add-item-category-error').style.display = 'block';
@@ -463,9 +463,9 @@ function loadCategories(categoryContainer, inputField, confirmButton) {
                 }
 
                 if (confirmButton.classList.value === 'confirm-edit-category-btn') {
-                    console.log(currentCategory);
-                    console.log(currentCategory.subcategories);
-                    console.log(currentCategory);
+                    // console.log(currentCategory);
+                    // console.log(currentCategory.subcategories);
+                    // console.log(currentCategory);
                     if ((currentCategory && currentCategory.subcategories && currentCategory.subcategories.length > 0) || inputField.value === '' || inputField.value === undefined) {
                         document.querySelector('.edit-item-category-error').style.display = 'block';
                         selectedEditCategoriesFullfilled = false;
@@ -550,15 +550,30 @@ function removeImageFromEditGallery(imageElement, product, imageArray) {
 
 async function saveEditedProduct(productId) {
 
+    const editNameValue = document.getElementById('edit-name').value;
+    const editRetailPriceValue = document.getElementById('edit-price').value;
+    const editDiscountPriceValue = document.getElementById('edit-discount-price').value;
+    const editDescriptionValue = document.getElementById('edit-description').value;
+    const editBrandValue = document.getElementById('edit-brand').value;
+    const editCategoryValue = document.getElementById('edit-category').value;
+    const editQuantityValue = document.getElementById('edit-quantity').value;
+
+    if (validateName(editNameValue) || editNameValue === "" || Number(editQuantityValue) < 1
+        || editRetailPriceValue === '' || !isValidPrice(editRetailPriceValue) || Number(editRetailPriceValue) <= 0
+        || (Number(editRetailPriceValue) < Number(editDiscountPriceValue) && editDiscountPriceValue !== '')
+        || editQuantityValue === '' || editCategoryValue === '' || !selectedEditCategoriesFullfilled) {
+        return;
+    }
+
     const updatedProduct = {
         uniqId: productId,
-        productName: document.getElementById('edit-name').value,
-        retailPrice: document.getElementById('edit-price').value,
-        discountedPrice: document.getElementById('edit-discount-price').value,
-        description: document.getElementById('edit-description').value,
-        brand: document.getElementById('edit-brand').value,
-        category: document.getElementById('edit-category').value,
-        quantity: document.getElementById('edit-quantity').value
+        productName: editNameValue,
+        retailPrice: editRetailPriceValue,
+        discountedPrice: editDiscountPriceValue,
+        description: editDescriptionValue,
+        brand: editBrandValue,
+        category: editCategoryValue,
+        quantity: editQuantityValue
     };
 
     const putResponse = await fetch(`/api/products/changeproductinfo`, {
@@ -607,6 +622,9 @@ async function saveEditedProduct(productId) {
         document.querySelector('.overlay').style.display = 'none';
         alert('Failed to update product');
     }
+
+    document.getElementById('edit-modal').style.display = 'none';
+
 }
 
 

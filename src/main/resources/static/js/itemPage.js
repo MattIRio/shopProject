@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 categoryData = JSON.parse(categoryData);
             } catch (e) {
                 // Якщо це не JSON, залишаємо як є
-                console.warn("Category is not JSON formatted. Proceeding as raw string.");
+                // console.warn("Category is not JSON formatted. Proceeding as raw string.");
             }
             
             // Нормалізуємо категорію до масиву
