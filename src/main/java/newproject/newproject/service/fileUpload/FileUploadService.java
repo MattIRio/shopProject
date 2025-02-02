@@ -60,41 +60,30 @@ public class FileUploadService {
 
 
     public String uploadProductPics(MultipartFile[] file, @PathVariable UUID productId, @AuthenticationPrincipal OAuth2User authentication) {
+        if (file.length > 10) {
+            throw new IllegalArgumentException();
+        }
 
         ProductModel currentProduct = productRepository.findByUniqId(productId);
-            List<String> urls = new ArrayList<>();
+        List<String> urls = new ArrayList<>();
         try {
-            for (MultipartFile image : file){
+            for (MultipartFile image : file) {
                 String fileName = image.getOriginalFilename();
                 Path fileNameAndPath = Paths.get("");
-                if (currentProduct.getImage() != null && currentProduct.getImage().contains(fileName)){
-                    fileNameAndPath = Paths.get(uploadDirecotry + "_" + fileName);
+                if (currentProduct.getImage() != null && currentProduct.getImage().contains(fileName)) {
+                    fileNameAndPath = Paths.get(uploadDirecotry + fileName);
+                    Files.delete(Path.of(fileNameAndPath.toUri()));
                 } else {
                     fileNameAndPath = Paths.get(uploadDirecotry, currentProduct.getUniqId() + "_" + fileName);
                 }
-
-                if (currentProduct.getImage() != null) {
-                    String imageString = currentProduct.getImage();
-                    String cleanedString = imageString.substring(1, imageString.length() - 1);
-                    String[] images = cleanedString.split(",\\s*");
-
-                    for (String oldImage : images) {
-                        if (Files.exists(Path.of(oldImage))) {
-                            Files.delete(Path.of(oldImage));
-                        }
-                    }
-                    currentProduct.setImage(null);
-                }
-
                 Files.write(fileNameAndPath, image.getBytes());
                 urls.add(String.valueOf(fileNameAndPath));
             }
-
-            currentProduct.setImage(urls.toString());
-            productRepository.save(currentProduct);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
+        currentProduct.setImage(urls.toString());
+        productRepository.save(currentProduct);
         return urls.toString();
     }
 

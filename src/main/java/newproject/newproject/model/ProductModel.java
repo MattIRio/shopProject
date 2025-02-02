@@ -25,9 +25,9 @@ public class ProductModel {
     @Column(name = "product_name")
     private String productName;
     @Column(name = "retail_price")
-    private Integer  retailPrice;
+    private Double  retailPrice;
     @Column(name = "discounted_price")
-    private Integer  discountedPrice;
+    private Double  discountedPrice;
     @Column(name = "image", columnDefinition = "text")
     private String image;
     @Column(name = "description", columnDefinition = "text")

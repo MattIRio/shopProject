@@ -55,6 +55,10 @@ public class FileUploadController {
             String fileNames = fileUploadService.uploadProductPics(file, productId, authentication);
             redirectAttributes.addFlashAttribute("uploadingResult", "Successfully saved files: " + fileNames);
             return ResponseEntity.ok("File saved");
+        } catch (IllegalArgumentException  e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("uploadingResult", "Too many files");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Too many files");
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("uploadingResult", "Failed to save file");
