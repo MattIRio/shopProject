@@ -67,18 +67,35 @@ public class FileUploadService {
         ProductModel currentProduct = productRepository.findByUniqId(productId);
         List<String> urls = new ArrayList<>();
         try {
-            for (MultipartFile image : file) {
-                String fileName = image.getOriginalFilename();
-                Path fileNameAndPath = Paths.get("");
-                if (currentProduct.getImage() != null && currentProduct.getImage().contains(fileName)) {
-                    fileNameAndPath = Paths.get(uploadDirecotry + fileName);
-                    Files.delete(Path.of(fileNameAndPath.toUri()));
-                } else {
-                    fileNameAndPath = Paths.get(uploadDirecotry, currentProduct.getUniqId() + "_" + fileName);
+            if (currentProduct.getImage() != null) {
+                String imageString = currentProduct.getImage();
+                String cleanedString = imageString.substring(1, imageString.length() - 1);
+                String[] images = cleanedString.split("(?<=\\S)(?=\\s)");
+
+                for (String oldImage : images) {
+                    oldImage = oldImage.trim();
+                    if (oldImage.endsWith(",")) {
+                        oldImage = oldImage.substring(0, oldImage.length() - 1);
+                    }
+                    Files.delete(Path.of(oldImage));
                 }
-                Files.write(fileNameAndPath, image.getBytes());
-                urls.add(String.valueOf(fileNameAndPath));
+                currentProduct.setImage(null);
+                productRepository.save(currentProduct);
             }
+
+                for (MultipartFile image : file) {
+
+                    String fileName = image.getOriginalFilename();
+                    Path fileNameAndPath = Paths.get("");
+                    if (fileName.contains(currentProduct.getUniqId().toString())){
+                        fileNameAndPath = Paths.get(uploadDirecotry, fileName);
+                    } else {
+                        fileNameAndPath = Paths.get(uploadDirecotry, currentProduct.getUniqId() + "_" + fileName);
+                    }
+
+                    Files.write(fileNameAndPath, image.getBytes());
+                    urls.add(String.valueOf(fileNameAndPath));
+                }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

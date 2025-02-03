@@ -39,6 +39,7 @@ public class UserOrdersService {
         List<ProductModel> userOrders = new ArrayList<>();
         for (UserOrderedProduct orderedProduct : currentUser.getOrderedProducts().stream().toList()) {
             ProductModel product = ProductModel.builder()
+                    .uniqId(orderedProduct.getProduct().getUniqId())
                     .productName(orderedProduct.getProduct().getProductName())
                     .image(orderedProduct.getProduct().getImage())
                     .brand(orderedProduct.getProduct().getBrand())
@@ -47,6 +48,7 @@ public class UserOrdersService {
                     .category(orderedProduct.getProduct().getCategory())
                     .retailPrice(orderedProduct.getProduct().getRetailPrice())
                     .quantity(orderedProduct.getQuantity())
+                    .sellerId(orderedProduct.getProduct().getSellerId())
                     .build();
             userOrders.add(product);
         }
